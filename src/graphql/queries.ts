@@ -1,0 +1,47 @@
+/* tslint:disable */
+/* eslint-disable */
+// this is an auto generated file. This will be overwritten
+
+import * as APITypes from "../API";
+type GeneratedQuery<InputType, OutputType> = string & {
+  __generatedQueryInput: InputType;
+  __generatedQueryOutput: OutputType;
+};
+
+export const getAlbum = /* GraphQL */ `query GetAlbum($id: ID!) {
+  getAlbum(id: $id) {
+    id
+    name
+    artist
+    spotifyUrl
+    imageUrl
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedQuery<APITypes.GetAlbumQueryVariables, APITypes.GetAlbumQuery>;
+export const listAlbums = /* GraphQL */ `query ListAlbums(
+  $filter: ModelAlbumFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listAlbums(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      name
+      artist
+      spotifyUrl
+      imageUrl
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListAlbumsQueryVariables,
+  APITypes.ListAlbumsQuery
+>;

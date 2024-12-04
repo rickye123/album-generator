@@ -1,0 +1,23 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-cybonyx-dev-b4c9f-authRole",
+      "UnauthRoleArn": "arn:aws:iam::383452018402:role/amplify-cybonyx-dev-b4c9f-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::383452018402:role/amplify-cybonyx-dev-b4c9f-authRole",
+      "Region": "eu-west-2",
+      "DeploymentBucketName": "amplify-cybonyx-dev-b4c9f-deployment",
+      "UnauthRoleName": "amplify-cybonyx-dev-b4c9f-unauthRole",
+      "StackName": "amplify-cybonyx-dev-b4c9f",
+      "StackId": "arn:aws:cloudformation:eu-west-2:383452018402:stack/amplify-cybonyx-dev-b4c9f/851e3930-b182-11ef-ad22-0ac48ae1c3a7",
+      "AmplifyAppId": "dnc0372v87nfw"
+    },
+    "categories": {
+      "api": {
+        "cybonyx": {}
+      },
+      "hosting": {
+        "S3AndCloudFront": {}
+      }
+    }
+  }
+}
