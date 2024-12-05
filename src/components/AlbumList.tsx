@@ -22,12 +22,28 @@ const AlbumList = () => {
         <ul>
           {albums.map((album: AlbumData) => (
             <li key={album.id}>
-              <img src={album.imageUrl} alt={album.name} style={{ width: 100, height: 100 }} />
               <div>
                 <h2>{album.name}</h2>
                 <p>{album.artist}</p>
-                <p>{album.imageUrl}</p>
-                <p>{album.spotifyUrl}</p>
+                <a
+                  href={album.spotifyUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    textDecoration: 'none',
+                    color: '#1DB954',
+                    fontWeight: 'bold',
+                  }}
+                >
+                  <img
+                    src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg"
+                    alt="Spotify"
+                    style={{ width: 24, height: 24, marginRight: '8px' }}
+                  />
+                  Listen on Spotify
+                </a>
               </div>
             </li>
           ))}
