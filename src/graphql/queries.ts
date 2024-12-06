@@ -8,6 +8,46 @@ type GeneratedQuery<InputType, OutputType> = string & {
   __generatedQueryOutput: OutputType;
 };
 
+export const getList = /* GraphQL */ `query GetList($id: ID!) {
+  getList(id: $id) {
+    id
+    name
+    albums {
+      id
+      name
+      artist
+      spotifyUrl
+      imageUrl
+      createdAt
+      updatedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    albumListsId
+    __typename
+  }
+}
+` as GeneratedQuery<APITypes.GetListQueryVariables, APITypes.GetListQuery>;
+export const listLists = /* GraphQL */ `query ListLists(
+  $filter: ModelListFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listLists(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      name
+      createdAt
+      updatedAt
+      albumListsId
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<APITypes.ListListsQueryVariables, APITypes.ListListsQuery>;
 export const getAlbum = /* GraphQL */ `query GetAlbum($id: ID!) {
   getAlbum(id: $id) {
     id
@@ -15,6 +55,10 @@ export const getAlbum = /* GraphQL */ `query GetAlbum($id: ID!) {
     artist
     spotifyUrl
     imageUrl
+    lists {
+      nextToken
+      __typename
+    }
     createdAt
     updatedAt
     __typename

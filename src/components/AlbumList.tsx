@@ -14,7 +14,7 @@ const AlbumList = () => {
     };
     loadAlbums();
   }, []);
-
+  
   return (
     <div className="album-list-page">
       <h1>Albums</h1>

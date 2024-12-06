@@ -8,6 +8,87 @@ type GeneratedMutation<InputType, OutputType> = string & {
   __generatedMutationOutput: OutputType;
 };
 
+export const createList = /* GraphQL */ `mutation CreateList(
+  $input: CreateListInput!
+  $condition: ModelListConditionInput
+) {
+  createList(input: $input, condition: $condition) {
+    id
+    name
+    albums {
+      id
+      name
+      artist
+      spotifyUrl
+      imageUrl
+      createdAt
+      updatedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    albumListsId
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateListMutationVariables,
+  APITypes.CreateListMutation
+>;
+export const updateList = /* GraphQL */ `mutation UpdateList(
+  $input: UpdateListInput!
+  $condition: ModelListConditionInput
+) {
+  updateList(input: $input, condition: $condition) {
+    id
+    name
+    albums {
+      id
+      name
+      artist
+      spotifyUrl
+      imageUrl
+      createdAt
+      updatedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    albumListsId
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateListMutationVariables,
+  APITypes.UpdateListMutation
+>;
+export const deleteList = /* GraphQL */ `mutation DeleteList(
+  $input: DeleteListInput!
+  $condition: ModelListConditionInput
+) {
+  deleteList(input: $input, condition: $condition) {
+    id
+    name
+    albums {
+      id
+      name
+      artist
+      spotifyUrl
+      imageUrl
+      createdAt
+      updatedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    albumListsId
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteListMutationVariables,
+  APITypes.DeleteListMutation
+>;
 export const createAlbum = /* GraphQL */ `mutation CreateAlbum(
   $input: CreateAlbumInput!
   $condition: ModelAlbumConditionInput
@@ -18,6 +99,10 @@ export const createAlbum = /* GraphQL */ `mutation CreateAlbum(
     artist
     spotifyUrl
     imageUrl
+    lists {
+      nextToken
+      __typename
+    }
     createdAt
     updatedAt
     __typename
@@ -37,6 +122,10 @@ export const updateAlbum = /* GraphQL */ `mutation UpdateAlbum(
     artist
     spotifyUrl
     imageUrl
+    lists {
+      nextToken
+      __typename
+    }
     createdAt
     updatedAt
     __typename
@@ -56,6 +145,10 @@ export const deleteAlbum = /* GraphQL */ `mutation DeleteAlbum(
     artist
     spotifyUrl
     imageUrl
+    lists {
+      nextToken
+      __typename
+    }
     createdAt
     updatedAt
     __typename
