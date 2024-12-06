@@ -1,0 +1,82 @@
+/* General container for the album list page */
+.album-list-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #f9f9f9; /* Light grey background */
+    padding: 20px;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    color: #333;
+  }
+  
+  /* Page title */
+  .album-list-page h1 {
+    font-size: 2.5rem;
+    color: #1DB954; /* Spotify green */
+    margin-bottom: 20px;
+  }
+  
+  /* No albums message */
+  .album-list-page .no-albums {
+    font-size: 1.5rem;
+    color: #666;
+    margin-top: 40px;
+  }
+  
+  /* Table styles */
+  .album-table {
+    width: 80%;
+    max-width: 800px;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .album-table th,
+  .album-table td {
+    padding: 12px 20px;
+    text-align: left;
+  }
+  
+  .album-table th {
+    background-color: #1DB954;
+    color: #fff;
+    font-size: 1.2rem;
+  }
+  
+  .album-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  .album-table tr:hover {
+    background-color: #e8f5e9;
+  }
+  
+  .album-table td {
+    font-size: 1rem;
+    color: #333;
+  }
+  
+  /* Spotify link styles */
+  .spotify-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #1DB954;
+    font-weight: bold;
+  }
+  
+  .spotify-link img {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+  }
+  
+  .spotify-link:hover {
+    opacity: 0.8;
+  }
+  

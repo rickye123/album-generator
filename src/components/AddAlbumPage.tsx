@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
 import { fetchAlbum } from '../api/spotifyApi';
 import { addAlbum } from '../api/amplifyApi';
-import { useNavigate } from 'react-router-dom';
+import './AddAlbumPage.css'; // Ensure the correct path
 
 const AddAlbumPage = () => {
   const [artist, setArtist] = useState('');
   const [name, setAlbumName] = useState('');
   const [loading, setLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
   const [error, setError] = useState('');
-  const navigate = useNavigate();
 
   const handleAddAlbum = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
+    setSuccessMessage('');
 
     try {
       // Fetch album details from Spotify API
@@ -35,8 +36,9 @@ const AddAlbumPage = () => {
 
       await addAlbum(newAlbum);
 
-      // Navigate back to the landing page
-      navigate('/');
+      setSuccessMessage('Album added successfully!');
+      setArtist('');
+      setAlbumName('');
     } catch (err) {
       console.error('Error adding album:', err);
       setError('Failed to add album. Please try again.');
@@ -46,10 +48,10 @@ const AddAlbumPage = () => {
   };
 
   return (
-    <div>
+    <div className="add-album-page">
       <h1>Add a New Album</h1>
-      <form onSubmit={handleAddAlbum}>
-        <div>
+      <form onSubmit={handleAddAlbum} className="add-album-form">
+        <div className="form-group">
           <label htmlFor="artist">Artist:</label>
           <input
             type="text"
@@ -59,7 +61,7 @@ const AddAlbumPage = () => {
             required
           />
         </div>
-        <div>
+        <div className="form-group">
           <label htmlFor="albumName">Album Name:</label>
           <input
             type="text"
@@ -72,7 +74,8 @@ const AddAlbumPage = () => {
         <button type="submit" disabled={loading}>
           {loading ? 'Adding Album...' : 'Add Album'}
         </button>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
+        {error && <p className="error-message">{error}</p>}
+        {successMessage && <p className="success-message">{successMessage}</p>}
       </form>
     </div>
   );

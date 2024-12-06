@@ -1,6 +1,6 @@
 import { GraphQLAPI, graphqlOperation } from '@aws-amplify/api-graphql';
 import { createAlbum } from '../graphql/mutations';
-import { listAlbums } from '../graphql/queries';
+import { getAlbum, listAlbums } from '../graphql/queries';
 import { GraphQLResult } from '@aws-amplify/api-graphql';
 import { Amplify } from '@aws-amplify/core';
 import { Observable } from 'rxjs';
@@ -29,6 +29,41 @@ export const addAlbum = async (albumData: AlbumData): Promise<GraphQLResult<any>
   }
 };
 
+export const fetchAlbumById = async(albumId: string): Promise<AlbumData | null> => {
+  try {
+    const response = await GraphQLAPI.graphql(
+      Amplify as any, 
+      graphqlOperation(getAlbum, { id : albumId }),
+      {}
+    );
+
+    // Check if the result is a Promise or Observable
+    if (response instanceof Observable) {
+      throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+    }
+
+    // Ensure response is properly typed
+    const typedResponse = response as GraphQLResult<any>;
+
+    // Access the `data` field
+    if (typedResponse.data && typedResponse.data.getAlbum) {
+      const album = typedResponse.data.getAlbum;
+      return {
+        id: album.id,
+        name: album.name,
+        artist: album.artist,
+        spotifyUrl: album.spotifyUrl,
+        imageUrl: album.imageUrl,
+      };
+    }
+
+    return null;
+  } catch (error) {
+    console.error('Error fetching album by ID:', error);
+    return null;
+  }
+}
+
 export const fetchAlbums = async () => {
   try {
     const response = await GraphQLAPI.graphql(
@@ -47,7 +82,6 @@ export const fetchAlbums = async () => {
 
     // Access the `data` field
     if (typedResponse.data && typedResponse.data.listAlbums) {
-      console.log(typedResponse.data.listAlbums.items);
       return typedResponse.data.listAlbums.items.map((item: any) => ({
         id: item.id,
         name: item.name,
