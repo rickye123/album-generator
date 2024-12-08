@@ -181,7 +181,7 @@ export const addAlbumToList = async (albumId: string, listId: string) => {
     throw new Error('Expected a non-subscription query/mutation but received a subscription.');
   }
 
-  return response.data.addAlbumToList;
+  return response;
 };
 
 export const fetchRandomAlbum = async () => {
