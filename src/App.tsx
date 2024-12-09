@@ -4,6 +4,8 @@ import AlbumList from './components/AlbumList';
 import AddAlbumPage from './components/AddAlbumPage';
 import Sidebar from './components/Sidebar';
 import AlbumPage from './components/AlbumPage';
+import Lists from './components/Lists';
+import ListPage from './components/ListPage';
 
 const App = () => {
   return (
@@ -15,7 +17,9 @@ const App = () => {
             <Route path="/" element={<LandingPage />} />
             <Route path="/albums" element={<AlbumList />} />
             <Route path="/add-album" element={<AddAlbumPage />} />
-            <Route path="/albums/:id" element={<AlbumPage />} /> {/* Dynamic album route */}
+            <Route path="/albums/:id" element={<AlbumPage />} />
+            <Route path="/lists" element={<Lists />} />
+            <Route path="/list/:listId" element={<ListPage />} />
           </Routes>
         </div>
       </div>

@@ -41,6 +41,11 @@ const Sidebar: React.FC = () => {
                 Add Album
               </Link>
             </li>
+            <li>
+              <Link to="/lists" onClick={toggleSidebar}>
+                View Lists
+              </Link>
+            </li>
           </ul>
         </nav>
       </div>
