@@ -1,5 +1,5 @@
 import { GraphQLAPI, graphqlOperation } from '@aws-amplify/api-graphql';
-import { createAlbum, createList, deleteList } from '../graphql/mutations';
+import { createAlbum, createList, deleteList, addAlbumToList as addAlbumToListMutation } from '../graphql/mutations';
 import { getAlbum, listAlbums, listLists } from '../graphql/queries';
 import { GraphQLResult } from '@aws-amplify/api-graphql';
 import { Amplify } from '@aws-amplify/core';
@@ -118,6 +118,7 @@ export const fetchLists = async () => {
 
     // Access the `data` field
     if (typedResponse.data && typedResponse.data.listLists) {
+      console.log(`typedResponse.data.listLists`);
       return typedResponse.data.listLists.items.map((item: List) => ({
         id: item.id,
         name: item.name,
@@ -173,7 +174,7 @@ export const removeList = async (id: string) => {
 
 export const addAlbumToList = async (albumId: string, listId: string) => {
   const response = await GraphQLAPI.graphql(Amplify as any, 
-    graphqlOperation(addAlbumToList, { albumId, listId }),
+    graphqlOperation(addAlbumToListMutation, { albumId, listId }),
     {}
   );
   // Check if the result is a Promise or Observable
@@ -181,6 +182,7 @@ export const addAlbumToList = async (albumId: string, listId: string) => {
     throw new Error('Expected a non-subscription query/mutation but received a subscription.');
   }
 
+  console.log(`Response ${response}`);
   return response;
 };
 

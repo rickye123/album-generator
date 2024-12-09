@@ -16,3 +16,7 @@ type Album @model {
   imageUrl: String
   lists: [List] @hasMany
 }
+
+type Mutation {
+  addAlbumToList(albumId: ID!, listId: ID!): List
+}

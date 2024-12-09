@@ -8,6 +8,30 @@ type GeneratedMutation<InputType, OutputType> = string & {
   __generatedMutationOutput: OutputType;
 };
 
+export const addAlbumToList = /* GraphQL */ `mutation AddAlbumToList($albumId: ID!, $listId: ID!) {
+  addAlbumToList(albumId: $albumId, listId: $listId) {
+    id
+    name
+    albums {
+      id
+      name
+      artist
+      spotifyUrl
+      imageUrl
+      createdAt
+      updatedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    albumListsId
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.AddAlbumToListMutationVariables,
+  APITypes.AddAlbumToListMutation
+>;
 export const createList = /* GraphQL */ `mutation CreateList(
   $input: CreateListInput!
   $condition: ModelListConditionInput

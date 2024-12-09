@@ -96,6 +96,7 @@ const Lists: React.FC = () => {
                 <div onClick={() => handleListClick(list.id)}>
                     <h3>{list.name}</h3>
                     <p>{list.albums?.items?.length || 0} Albums</p>
+                    <p>{list.albums?.length || 0} Albums</p>
                 </div>
                 <button
                     className="delete-button"

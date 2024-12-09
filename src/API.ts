@@ -2,6 +2,34 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
+export type List = {
+  __typename: "List",
+  id: string,
+  name: string,
+  albums?:  Array<Album | null > | null,
+  createdAt: string,
+  updatedAt: string,
+  albumListsId?: string | null,
+};
+
+export type Album = {
+  __typename: "Album",
+  id: string,
+  name: string,
+  artist: string,
+  spotifyUrl: string,
+  imageUrl?: string | null,
+  lists?: ModelListConnection | null,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export type ModelListConnection = {
+  __typename: "ModelListConnection",
+  items:  Array<List | null >,
+  nextToken?: string | null,
+};
+
 export type CreateListInput = {
   id?: string | null,
   name: string,
@@ -72,34 +100,6 @@ export type ModelIDInput = {
   attributeExists?: boolean | null,
   attributeType?: ModelAttributeTypes | null,
   size?: ModelSizeInput | null,
-};
-
-export type List = {
-  __typename: "List",
-  id: string,
-  name: string,
-  albums?:  Array<Album | null > | null,
-  createdAt: string,
-  updatedAt: string,
-  albumListsId?: string | null,
-};
-
-export type Album = {
-  __typename: "Album",
-  id: string,
-  name: string,
-  artist: string,
-  spotifyUrl: string,
-  imageUrl?: string | null,
-  lists?: ModelListConnection | null,
-  createdAt: string,
-  updatedAt: string,
-};
-
-export type ModelListConnection = {
-  __typename: "ModelListConnection",
-  items:  Array<List | null >,
-  nextToken?: string | null,
 };
 
 export type UpdateListInput = {
@@ -224,6 +224,32 @@ export type ModelSubscriptionAlbumFilterInput = {
   and?: Array< ModelSubscriptionAlbumFilterInput | null > | null,
   or?: Array< ModelSubscriptionAlbumFilterInput | null > | null,
   albumListsId?: ModelSubscriptionIDInput | null,
+};
+
+export type AddAlbumToListMutationVariables = {
+  albumId: string,
+  listId: string,
+};
+
+export type AddAlbumToListMutation = {
+  addAlbumToList?:  {
+    __typename: "List",
+    id: string,
+    name: string,
+    albums?:  Array< {
+      __typename: "Album",
+      id: string,
+      name: string,
+      artist: string,
+      spotifyUrl: string,
+      imageUrl?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null > | null,
+    createdAt: string,
+    updatedAt: string,
+    albumListsId?: string | null,
+  } | null,
 };
 
 export type CreateListMutationVariables = {
