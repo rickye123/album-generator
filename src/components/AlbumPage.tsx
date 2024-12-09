@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchAlbumById, fetchWikipediaLink } from '../api/amplifyApi';
-import { AlbumData } from '../model';
+import { fetchSpotifyAlbumDetails } from '../api/spotifyApi';
+import { AlbumData, SpotifyAlbumDetails } from '../model';
 import './AlbumPage.css';
 
 const AlbumPage = () => {
   const { id } = useParams<{ id: string }>();
   const [album, setAlbum] = useState<AlbumData | null>(null);
+  const [spotifyDetails, setSpotifyDetails] = useState<SpotifyAlbumDetails | null>(null);
   const [wikipediaLink, setWikipediaLink] = useState<string | null>(null);
 
   // Fetch album details
@@ -24,19 +26,22 @@ const AlbumPage = () => {
     loadAlbum();
   }, [id]);
 
-  // Fetch Wikipedia link after album is loaded
+  // Fetch Spotify and Wikipedia details after album is loaded
   useEffect(() => {
-    const fetchLink = async () => {
+    const fetchDetails = async () => {
       if (album) {
         try {
-          const link = await fetchWikipediaLink(album.name, album.artist);
-          setWikipediaLink(link);
+          const spotifyInfo = await fetchSpotifyAlbumDetails(album.id); 
+          setSpotifyDetails(spotifyInfo);
+
+          const wikiLink = await fetchWikipediaLink(album.name, album.artist);
+          setWikipediaLink(wikiLink);
         } catch (error) {
-          console.error('Error fetching Wikipedia link:', error);
+          console.error('Error fetching additional details:', error);
         }
       }
     };
-    fetchLink();
+    fetchDetails();
   }, [album]);
 
   if (!album) {
@@ -48,13 +53,10 @@ const AlbumPage = () => {
       {album ? (
         <>
           <div className="album-details">
-            <img
-              className="album-cover"
-              src={album.imageUrl}
-              alt={album.name}
-            />
+            <img className="album-cover" src={album.imageUrl} alt={album.name} />
             <h1>{album.name}</h1>
             <p className="album-artist">{album.artist}</p>
+            <p className="release-date">{spotifyDetails?.releaseDate?.split('-')[0]}</p>
             <a
               href={album.spotifyUrl}
               target="_blank"
@@ -68,7 +70,7 @@ const AlbumPage = () => {
               />
               Listen on Spotify
             </a>
-            {/* Render Wikipedia logo only if a link is found */}
+            {/* Wikipedia Link */}
             {wikipediaLink && (
               <a
                 href={wikipediaLink}
@@ -84,6 +86,30 @@ const AlbumPage = () => {
               </a>
             )}
           </div>
+          {/* Spotify Track List */}
+          {spotifyDetails && spotifyDetails.tracks && (
+            <div className="track-list-container">
+              <table className="track-table">
+                <thead>
+                  <tr>
+                    <th className="track-header">Track</th>
+                    <th className="duration-header">Duration</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {spotifyDetails.tracks.map((track, index) => (
+                    <tr
+                      key={track.id}
+                      className={index % 2 === 0 ? 'even-row' : 'odd-row'}
+                    >
+                      <td>{`${index + 1}. ${track.name}`}</td>
+                      <td className="duration">{msToMinutes(track.durationMs)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </>
       ) : (
         <p>No album found.</p>
@@ -91,5 +117,12 @@ const AlbumPage = () => {
     </div>
   );
 };
+
+// Utility to format milliseconds into minutes:seconds
+function msToMinutes(ms: number): string {
+  const minutes = Math.floor(ms / 60000);
+  const seconds = Math.floor((ms % 60000) / 1000);
+  return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+}
 
 export default AlbumPage;
