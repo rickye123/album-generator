@@ -1,5 +1,5 @@
 import { GraphQLAPI, graphqlOperation } from '@aws-amplify/api-graphql';
-import { createAlbum, createList, deleteList, addAlbumToList as addAlbumToListMutation } from '../graphql/mutations';
+import { createAlbum, createList, deleteList, addAlbumToList as addAlbumToListMutation, deleteAlbum } from '../graphql/mutations';
 import { getAlbum, listAlbums, listLists } from '../graphql/queries';
 import { GraphQLResult } from '@aws-amplify/api-graphql';
 import { Amplify } from '@aws-amplify/core';
@@ -145,6 +145,31 @@ export const addList = async (name: string) => {
 
     console.log(`Result ${response}, data ${response.data}, createList ${response.data.createList}`);
     return response.data.createList;
+};
+
+export const removeAlbum = async (id: string) => {
+  try {
+    const response = await GraphQLAPI.graphql(
+      Amplify as any,
+      graphqlOperation(deleteAlbum, { input: { id } }),
+      {}
+    );
+
+    if (response instanceof Observable) {
+      throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+    }
+
+    const typedResponse = response as GraphQLResult<any>;
+
+    if (typedResponse.data?.deleteAlbum) {
+      return typedResponse.data.deleteAlbum;
+    } else {
+      throw new Error('Unexpected response structure.');
+    }
+  } catch (error) {
+    console.error('Error deleting album:', error);
+    throw error;
+  }
 };
 
 export const removeList = async (id: string) => {
