@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { fetchAlbums, fetchLists, addAlbumToList } from '../api/amplifyApi';
+import { fetchAlbums, fetchLists, addAlbumToList, removeAlbum } from '../api/amplifyApi';
 import { AlbumData, ListData } from '../model';
 import './AlbumList.css'; // Ensure the correct path
 import { Link } from 'react-router-dom';
@@ -50,6 +50,16 @@ const AlbumList = () => {
     }
   };
 
+  const handleDeleteAlbum = async (albumId: string) => {
+    try {
+      await removeAlbum(albumId);
+      setAlbums((prevAlbums) => prevAlbums.filter((album) => album.id !== albumId));
+    } catch (err) {
+      console.error('Error deleting album:', err);
+      setError('Failed to delete the list. Please try again.');
+    }
+  };
+
   return (
     <div className="album-list-page">
       <h1>Albums</h1>
@@ -92,6 +102,12 @@ const AlbumList = () => {
                     onClick={() => openOverlay(album)}
                   >
                     Add to List
+                  </button>
+                  <button
+                    className="delete-album-button"
+                    onClick={() => handleDeleteAlbum(album.id)}
+                  >
+                    Delete
                   </button>
                 </td>
               </tr>
