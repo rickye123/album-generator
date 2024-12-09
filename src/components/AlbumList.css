@@ -189,3 +189,49 @@
 .delete-album-button:hover {
   background-color: #c82333; /* Darker red for hover */
 }
+
+/* Search Bar */
+.search-bar {
+  margin: 20px 0;
+  width: 100%;
+  text-align: center;
+}
+
+.search-bar input {
+  padding: 8px 12px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 300px;
+  transition: box-shadow 0.2s ease;
+}
+
+.search-bar input:focus {
+  box-shadow: 0 0 5px #1DB954;
+  outline: none;
+}
+
+/* Pagination Controls */
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+  gap: 10px;
+  font-size: 1rem;
+}
+
+.pagination-controls button {
+  background-color: #1DB954;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.pagination-controls button:disabled {
+  background-color: #b7b7b7;
+  cursor: not-allowed;
+}
