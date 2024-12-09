@@ -1,46 +1,139 @@
-# Getting Started with Create React App
+# 🎶 **Album Explorer App**
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Welcome to the **Album Explorer App**, a web application that allows users to explore albums, view details about them, find links to their Wikipedia pages, and check Spotify album details, including tracklists, genres, release dates, and more.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 🚀 **Features**
 
-### `yarn start`
+The app has the following features:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- **Album Search & Details:**
+  - View album details such as name, artist, and album cover.
+  - Fetch details about albums via Amplify's backend.
+  - Dynamically fetch relevant Wikipedia links based on album name and artist.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- **Spotify Integration:**
+  - Display details from Spotify, including:
+    - Release year
+    - Genres
+    - Total tracks
+    - Total running time of the album
+    - List of all tracks with their respective durations.
 
-### `yarn test`
+- **Responsive & Interactive UI:**
+  - Render all details with modern CSS animations.
+  - Display tables for track information with alternating row colors and hover effects.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **Wikipedia Link Integration:**
+  - If available, a clickable Wikipedia logo links to the album's Wikipedia page.
 
-### `yarn build`
+---
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🛠️ **Technologies Used**
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+The app has been built using the following stack:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- **Frontend:**
+  - React
+  - React Router
+  - CSS
+  - TypeScript
+- **Backend:**
+  - AWS Amplify
+- **Spotify Integration:**
+  - Spotify Web API
+- **CSS Styling:**
+  - Custom CSS with modern UX enhancements.
 
-### `yarn eject`
+---
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## ⚙️ **Setup & Installation**
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+To get started with development, follow the steps below:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### 1. Clone the Repository
+Clone this project locally:
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+git clone <repository-url>
+cd album-explorer
 
-## Learn More
+### 2. Install Dependencies
+Install all required dependencies:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Copy code
+yarn install
+### 3. Configure AWS Amplify
+To set up AWS Amplify integration:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Set up AWS Amplify credentials by running:
+
+amplify configure
+
+Then initialize Amplify in your project:
+
+amplify init
+Push changes to the backend:
+bash
+Copy code
+amplify push
+If you already have configured amplifyApi, ensure you import it correctly into your app.
+
+### 4. Set Environment Variables
+Configure environment variables for Spotify & other credentials. Create a .env file at the root of your project:
+
+env
+REACT_APP_SPOTIFY_CLIENT_ID=your_spotify_client_id
+REACT_APP_SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
+REACT_APP_SPOTIFY_REDIRECT_URI=http://localhost:3000/
+### 5. Start the Development Server
+To start the app in development mode:
+
+yarn start
+The app will be available at: http://localhost:3000/
+
+🔧 Build for Production
+To create a production-ready build:
+
+yarn build
+This will create optimized build files in the build/ directory.
+
+To test the production build locally:
+
+npx serve -s build
+
+📚 API Integration
+Spotify API
+We pull details such as:
+
+Release year from the release date.
+Total tracks and running times.
+List of tracks with their durations.
+AWS Amplify
+Amplify is used to fetch album details from a backend database. Ensure your backend is properly configured using amplify init and amplify push.
+
+💡 Key Commands
+Install dependencies:
+
+
+yarn install
+Start development server:
+
+
+yarn start
+Build for production:
+
+
+yarn build
+Clean the build cache:
+
+
+rm -rf build/
+yarn build
+Serve production build:
+
+
+npx serve -s build
+
+🧪 Testing
+There are no explicit tests yet. Future work will involve adding unit tests using Jest or React Testing Library to ensure the app remains stable during updates.
