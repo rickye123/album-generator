@@ -221,3 +221,46 @@ export const fetchRandomAlbum = async () => {
 };
 
 export { listLists };
+
+export const fetchWikipediaLink = async (albumName: string, artistName: string): Promise<string | null> => {
+  const queries = [
+    `${albumName}`,                // Search for album name first
+    `${albumName} ${artistName}`,  // Album and artist name combined
+    `${artistName}`                // Artist name as fallback
+  ];
+
+  const wikipediaApiUrl = (query: string) =>
+    `https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&list=search&srsearch=${encodeURIComponent(query)}`;
+
+  try {
+    for (const query of queries) {
+      const response = await fetch(wikipediaApiUrl(query));
+      const data = await response.json();
+      console.log(`Data ${data} for query ${query}`);
+
+      if (data.query && data.query.search && data.query.search.length > 0) {
+        // Search results found
+        const searchResults = data.query.search;
+
+        // Attempt to find the most relevant page
+        for (const result of searchResults) {
+          const pageTitle = result.title;
+
+          // Check if the page title matches closely with the album name
+          if (
+            pageTitle.toLowerCase().includes(albumName.toLowerCase()) ||
+            pageTitle.toLowerCase().includes(artistName.toLowerCase())
+          ) {
+            return `https://en.wikipedia.org/wiki/${encodeURIComponent(pageTitle)}`;
+          }
+        }
+      }
+    }
+
+    return null; // No relevant Wikipedia page found
+  } catch (error) {
+    console.error('Error fetching Wikipedia link:', error);
+    return null;
+  }
+};
+
