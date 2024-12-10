@@ -25,10 +25,6 @@ const AlbumList = () => {
   useEffect(() => {
     const loadAlbums = async () => {
       const albumList = await fetchAlbums();
-      console.log(`Artist ${artist}`);
-      if (artist) {
-        console.log(`${decodeURIComponent(artist)}`);
-      }
       const filteredAlbums = artist
         ? albumList.filter((album: AlbumData) => album.artist === decodeURIComponent(artist))
         : albumList;

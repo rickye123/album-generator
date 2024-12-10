@@ -11,7 +11,7 @@ const ArtistsPage = () => {
     const getArtists = async () => {
       try {
         const albums: AlbumData[] = await fetchAlbums();
-        const uniqueArtists = Array.from(new Set(albums.map(album => album.artist)));
+        const uniqueArtists = Array.from(new Set(albums.map(album => album.artist))).sort();
         setArtists(uniqueArtists);
       } catch (error) {
         console.error('Error fetching artists', error);
