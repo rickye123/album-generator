@@ -235,3 +235,15 @@
   background-color: #b7b7b7;
   cursor: not-allowed;
 }
+
+.album-table th {
+  cursor: pointer;
+  user-select: none;
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+.album-table th:hover {
+  color: #1a4d2c;
+}
+

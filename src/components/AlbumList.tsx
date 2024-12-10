@@ -4,6 +4,9 @@ import { AlbumData, ListData } from '../model';
 import './AlbumList.css';
 import { Link } from 'react-router-dom';
 
+type SortKeys = 'artist' | 'name';
+type SortDirection = 'asc' | 'desc';
+
 const AlbumList = () => {
   const [albums, setAlbums] = useState<AlbumData[]>([]);
   const [lists, setLists] = useState<ListData[]>([]);
@@ -11,9 +14,11 @@ const AlbumList = () => {
   const [showOverlay, setShowOverlay] = useState(false);
   const [error, setError] = useState('');
   
-  // Search and Pagination
+  // Search, Pagination, and Sorting
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [sortKey, setSortKey] = useState<SortKeys>('artist');
+  const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
   const albumsPerPage = 10;
 
   useEffect(() => {
@@ -23,31 +28,6 @@ const AlbumList = () => {
     };
     loadAlbums();
   }, []);
-
-  // Filter albums by search query dynamically
-  const filteredAlbums = albums.filter(
-    (album) =>
-      album.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      album.artist.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  // Pagination logic
-  const indexOfLastAlbum = currentPage * albumsPerPage;
-  const indexOfFirstAlbum = indexOfLastAlbum - albumsPerPage;
-  const currentAlbums = filteredAlbums.slice(indexOfFirstAlbum, indexOfLastAlbum);
-
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
-    setCurrentPage(1); // Reset to page 1 when a new search is entered
-  };
-
-  const handlePageChange = (direction: 'next' | 'prev') => {
-    if (direction === 'next' && indexOfLastAlbum < filteredAlbums.length) {
-      setCurrentPage((prev) => prev + 1);
-    } else if (direction === 'prev' && currentPage > 1) {
-      setCurrentPage((prev) => prev - 1);
-    }
-  };
 
   const openOverlay = async (album: AlbumData) => {
     try {
@@ -86,15 +66,55 @@ const AlbumList = () => {
       setAlbums((prevAlbums) => prevAlbums.filter((album) => album.id !== albumId));
     } catch (err) {
       console.error('Error deleting album:', err);
-      setError('Failed to delete the list. Please try again.');
+      setError('Failed to delete the album. Please try again.');
     }
   };
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+    setCurrentPage(1);
+  };
+
+  const handlePageChange = (direction: 'next' | 'prev') => {
+    if (direction === 'next' && indexOfLastAlbum < filteredAlbums.length) {
+      setCurrentPage((prev) => prev + 1);
+    } else if (direction === 'prev' && currentPage > 1) {
+      setCurrentPage((prev) => prev - 1);
+    }
+  };
+
+  const handleSortChange = (key: SortKeys) => {
+    if (sortKey === key) {
+      setSortDirection((prevDirection) => (prevDirection === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortKey(key);
+      setSortDirection('asc');
+    }
+  };
+
+  const indexOfLastAlbum = currentPage * albumsPerPage;
+  const indexOfFirstAlbum = indexOfLastAlbum - albumsPerPage;
+
+  const filteredAlbums = albums
+    .filter(
+      (album) =>
+        album.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        album.artist.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    .sort((a, b) => {
+      const comparison =
+        sortKey === 'artist'
+          ? a.artist.localeCompare(b.artist) || a.name.localeCompare(b.name)
+          : a.name.localeCompare(b.name);
+
+      return sortDirection === 'asc' ? comparison : -comparison;
+    });
+
+  const currentAlbums = filteredAlbums.slice(indexOfFirstAlbum, indexOfLastAlbum);
 
   return (
     <div className="album-list-page">
       <h1>Albums</h1>
-      
-      {/* Search Bar */}
       <div className="search-bar">
         <input
           type="text"
@@ -108,14 +128,17 @@ const AlbumList = () => {
         <p className="no-albums">No albums found.</p>
       ) : (
         <>
-          {/* Albums Table */}
           <table className="album-table">
             <thead>
               <tr>
-                <th>Album Name</th>
-                <th>Artist</th>
-                <th>Spotify</th>
-                <th>Actions</th>
+                <th onClick={() => handleSortChange('name')}>
+                  Album Name {sortKey === 'name' && (sortDirection === 'asc' ? '↑' : '↓')}
+                </th>
+                <th onClick={() => handleSortChange('artist')}>
+                  Artist {sortKey === 'artist' && (sortDirection === 'asc' ? '↑' : '↓')}
+                </th>
+                <th></th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -132,7 +155,10 @@ const AlbumList = () => {
                       rel="noopener noreferrer"
                       className="spotify-link"
                     >
-                      Spotify
+                      <img
+                        src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg"
+                        alt="Spotify"
+                      />
                     </a>
                   </td>
                   <td>
@@ -153,8 +179,6 @@ const AlbumList = () => {
               ))}
             </tbody>
           </table>
-
-          {/* Pagination Controls */}
           <div className="pagination-controls">
             <button onClick={() => handlePageChange('prev')} disabled={currentPage === 1}>
               Previous
@@ -170,6 +194,34 @@ const AlbumList = () => {
             </button>
           </div>
         </>
+      )}
+
+      {showOverlay && selectedAlbum && (
+        <div className="overlay">
+          <div className="overlay-content">
+            <h2>Add {selectedAlbum.name} to a List</h2>
+            {error && <p className="error-message">{error}</p>}
+            {lists.length === 0 ? (
+              <p>No lists available. Please create one first.</p>
+            ) : (
+              <ul className="list-table">
+                {lists.map((list) => (
+                  <li key={list.id}>
+                    <button
+                      className="list-select-button"
+                      onClick={() => handleAddAlbumToList(list.id)}
+                    >
+                      {list.name}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+            <button className="close-overlay-button" onClick={closeOverlay}>
+              Close
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );
