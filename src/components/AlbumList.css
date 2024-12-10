@@ -282,14 +282,18 @@
     display: none;
   }
 
+  .album-table tbody {
+    display: block
+  }
+
   .album-table tr {
     display: block;
     border-bottom: 1px solid #ccc;
   }
 
   .album-table td {
-    display: flex;
-    justify-content: space-between;
+    display: block; /* Stack each cell vertically */
+    padding: 8px 10px; /* Add padding instead of flexbox adjustments */
     font-size: 0.8rem;
   }
 
