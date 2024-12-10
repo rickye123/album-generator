@@ -1,0 +1,42 @@
+.artists-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    color: #333;
+  }
+  
+  .artists-page h1 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+  }
+  
+  .artist-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .artist-list li {
+    font-size: 1rem;
+  }
+  
+  .artist-list a {
+    text-decoration: none;
+    color: #1DB954;
+    padding: 8px 12px;
+    border: 1px solid #1DB954;
+    border-radius: 4px;
+    transition: background-color 0.2s, color 0.2s;
+  }
+  
+  .artist-list a:hover {
+    background-color: #1DB954;
+    color: white;
+  }
+  
