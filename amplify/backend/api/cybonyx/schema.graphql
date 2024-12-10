@@ -13,6 +13,7 @@ type Album @model {
   name: String!
   artist: String!
   spotifyUrl: String!
+  release_date: String!
   imageUrl: String
   lists: [List] @hasMany
 }

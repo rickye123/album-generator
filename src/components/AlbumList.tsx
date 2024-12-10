@@ -14,6 +14,7 @@ const AlbumList = () => {
   const [showOverlay, setShowOverlay] = useState(false);
   const [error, setError] = useState('');
   const { artist } = useParams<{ artist: string }>();
+  const { year } = useParams<{ year: string }>();
   
   // Search, Pagination, and Sorting
   const [searchQuery, setSearchQuery] = useState('');
@@ -28,11 +29,14 @@ const AlbumList = () => {
       const filteredAlbums = artist
         ? albumList.filter((album: AlbumData) => album.artist === decodeURIComponent(artist))
         : albumList;
-      setAlbums(filteredAlbums);
+      const filteredByYear = year
+        ? filteredAlbums.filter((album: AlbumData) => album.release_date.split('-')[0] === decodeURIComponent(year))
+        : filteredAlbums;        
+      setAlbums(filteredByYear);
     };
 
     loadAlbums();
-  }, [artist]);
+  }, [artist, year]);
 
   const openOverlay = async (album: AlbumData) => {
     try {
@@ -119,7 +123,13 @@ const AlbumList = () => {
 
   return (
     <div className="album-list-page">
-      <h1>{artist ? `${artist}'s Albums` : 'All Albums'}</h1>
+      <h1>
+        {year 
+          ? `${year}'s Albums` 
+          : artist 
+          ? `${artist}'s Albums` 
+          : 'All Albums'}
+      </h1>
       <div className="search-bar">
         <input
           type="text"
