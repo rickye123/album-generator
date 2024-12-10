@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { fetchAlbums, fetchLists, addAlbumToList, removeAlbum } from '../api/amplifyApi';
 import { AlbumData, ListData } from '../model';
 import './AlbumList.css';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 type SortKeys = 'artist' | 'name';
 type SortDirection = 'asc' | 'desc';
@@ -13,6 +13,7 @@ const AlbumList = () => {
   const [selectedAlbum, setSelectedAlbum] = useState<AlbumData | null>(null);
   const [showOverlay, setShowOverlay] = useState(false);
   const [error, setError] = useState('');
+  const { artist } = useParams<{ artist: string }>();
   
   // Search, Pagination, and Sorting
   const [searchQuery, setSearchQuery] = useState('');
@@ -24,10 +25,14 @@ const AlbumList = () => {
   useEffect(() => {
     const loadAlbums = async () => {
       const albumList = await fetchAlbums();
-      setAlbums(albumList);
+      const filteredAlbums = artist
+        ? albumList.filter((album: AlbumData) => album.artist === decodeURIComponent(artist))
+        : albumList;
+      setAlbums(filteredAlbums);
     };
+
     loadAlbums();
-  }, []);
+  }, [artist]);
 
   const openOverlay = async (album: AlbumData) => {
     try {
@@ -114,7 +119,7 @@ const AlbumList = () => {
 
   return (
     <div className="album-list-page">
-      <h1>Albums</h1>
+      <h1>{artist ? `${artist}'s Albums` : 'All Albums'}</h1>
       <div className="search-bar">
         <input
           type="text"
