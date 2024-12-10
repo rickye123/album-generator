@@ -266,8 +266,7 @@
 
   .add-to-list-button,
   .delete-album-button {
-    font-size: 0.8rem;
-    padding: 0.4rem 0.6rem;
+    display: none; /* Hide these buttons for tablets and smaller devices */
   }
 }
 
@@ -282,13 +281,22 @@
     display: none;
   }
 
+  .album-table td:first-child,
+  .album-table td:nth-child(2) {
+    flex: 1; /* Share available space equally */
+    padding: 8px 10px;
+    font-size: 0.9rem;
+  }
+
   .album-table tbody {
     display: block
   }
 
   .album-table tr {
-    display: block;
+    display: flex;
+    justify-content: space-between;
     border-bottom: 1px solid #ccc;
+    padding: 10px;
   }
 
   .album-table td {
@@ -297,9 +305,15 @@
     font-size: 0.8rem;
   }
 
+  /* Ensure Spotify link fits within this layout */
+  .spotify-link img {
+    width: 16px;
+    height: 16px;
+  }
+
   .pagination-controls {
     flex-direction: column;
-    gap: 5px;
+    gap: 10px;
   }
 
   .overlay-content {
