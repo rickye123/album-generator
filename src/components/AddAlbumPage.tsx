@@ -10,6 +10,18 @@ const AddAlbumPage = () => {
   const [successMessage, setSuccessMessage] = useState('');
   const [error, setError] = useState('');
 
+  const cleanAlbumName = (albumName: string): string => {
+    // Regex pattern to match specific unwanted suffixes, with context of parentheses or dash
+    const pattern = /\s*[\(\-\[]?(?:\d{4}\s+Remaster|Legacy Edition|Expanded Edition|Deluxe Edition|Special Edition|Anniversary Edition|Reissue)[\)\]]?\s*$/i;
+  
+    // If the pattern matches, remove it and trim any leftover whitespace
+    if (pattern.test(albumName)) {
+      return albumName.replace(pattern, '').trim();
+    }
+  
+    return albumName.trim();
+  };
+
   const handleAddAlbum = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -26,14 +38,16 @@ const AddAlbumPage = () => {
       }
 
       // Add album to AppSync
+      const cleanedName = cleanAlbumName(album.name);      
+      console.log('Cleaned name: ', cleanedName);
       const newAlbum = {
         id: album.id,
-        name: album.name,
+        name: cleanedName,
         artist: album.artists[0].name,
         spotifyUrl: album.external_urls.spotify,
         imageUrl: album.images[0]?.url || '',
       };
-
+      
       await addAlbum(newAlbum);
 
       setSuccessMessage('Album added successfully!');
