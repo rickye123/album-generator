@@ -7,6 +7,7 @@ import AlbumPage from './components/AlbumPage';
 import Lists from './components/Lists';
 import ListPage from './components/ListPage';
 import Artists from './components/Artists';
+import Years from './components/Years';
 
 const App = () => {
   return (
@@ -20,9 +21,11 @@ const App = () => {
             <Route path="/add-album" element={<AddAlbumPage />} />
             <Route path="/albums/:id" element={<AlbumPage />} />
             <Route path="/artists" element={<Artists />} />
+            <Route path="/years" element={<Years />} />
             <Route path="/lists" element={<Lists />} />
             <Route path="/list/:listId" element={<ListPage />} />
             <Route path="/albums/artist/:artist" element={<AlbumList />} />
+            <Route path="/albums/year/:year" element={<AlbumList />} />
           </Routes>
         </div>
       </div>

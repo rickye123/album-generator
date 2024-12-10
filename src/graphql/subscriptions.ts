@@ -17,6 +17,7 @@ export const onCreateList = /* GraphQL */ `subscription OnCreateList($filter: Mo
       name
       artist
       spotifyUrl
+      release_date
       imageUrl
       createdAt
       updatedAt
@@ -41,6 +42,7 @@ export const onUpdateList = /* GraphQL */ `subscription OnUpdateList($filter: Mo
       name
       artist
       spotifyUrl
+      release_date
       imageUrl
       createdAt
       updatedAt
@@ -65,6 +67,7 @@ export const onDeleteList = /* GraphQL */ `subscription OnDeleteList($filter: Mo
       name
       artist
       spotifyUrl
+      release_date
       imageUrl
       createdAt
       updatedAt
@@ -86,6 +89,7 @@ export const onCreateAlbum = /* GraphQL */ `subscription OnCreateAlbum($filter: 
     name
     artist
     spotifyUrl
+    release_date
     imageUrl
     lists {
       nextToken
@@ -106,6 +110,7 @@ export const onUpdateAlbum = /* GraphQL */ `subscription OnUpdateAlbum($filter: 
     name
     artist
     spotifyUrl
+    release_date
     imageUrl
     lists {
       nextToken
@@ -126,6 +131,7 @@ export const onDeleteAlbum = /* GraphQL */ `subscription OnDeleteAlbum($filter: 
     name
     artist
     spotifyUrl
+    release_date
     imageUrl
     lists {
       nextToken

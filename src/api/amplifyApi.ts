@@ -53,6 +53,7 @@ export const fetchAlbumById = async(albumId: string): Promise<AlbumData | null> 
         id: album.id,
         name: album.name,
         artist: album.artist,
+        release_date: album.release_date,
         spotifyUrl: album.spotifyUrl,
         imageUrl: album.imageUrl,
       };
@@ -87,6 +88,7 @@ export const fetchAlbums = async () => {
         id: item.id,
         name: item.name,
         artist: item.artist,
+        release_date: item.release_date,
         spotifyUrl: item.spotifyUrl,
         imageUrl: item.imageUrl,
       }));

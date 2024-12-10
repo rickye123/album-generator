@@ -3,6 +3,7 @@ export interface AlbumData {
     name: string;
     artist: string;
     spotifyUrl: string;
+    release_date: string;
     imageUrl: string;
     lists?: ListData[];
 }

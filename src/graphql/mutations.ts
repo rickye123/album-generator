@@ -17,6 +17,7 @@ export const addAlbumToList = /* GraphQL */ `mutation AddAlbumToList($albumId: I
       name
       artist
       spotifyUrl
+      release_date
       imageUrl
       createdAt
       updatedAt
@@ -44,6 +45,7 @@ export const createList = /* GraphQL */ `mutation CreateList(
       name
       artist
       spotifyUrl
+      release_date
       imageUrl
       createdAt
       updatedAt
@@ -71,6 +73,7 @@ export const updateList = /* GraphQL */ `mutation UpdateList(
       name
       artist
       spotifyUrl
+      release_date
       imageUrl
       createdAt
       updatedAt
@@ -98,6 +101,7 @@ export const deleteList = /* GraphQL */ `mutation DeleteList(
       name
       artist
       spotifyUrl
+      release_date
       imageUrl
       createdAt
       updatedAt
@@ -122,6 +126,7 @@ export const createAlbum = /* GraphQL */ `mutation CreateAlbum(
     name
     artist
     spotifyUrl
+    release_date
     imageUrl
     lists {
       nextToken
@@ -145,6 +150,7 @@ export const updateAlbum = /* GraphQL */ `mutation UpdateAlbum(
     name
     artist
     spotifyUrl
+    release_date
     imageUrl
     lists {
       nextToken
@@ -168,6 +174,7 @@ export const deleteAlbum = /* GraphQL */ `mutation DeleteAlbum(
     name
     artist
     spotifyUrl
+    release_date
     imageUrl
     lists {
       nextToken

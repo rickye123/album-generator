@@ -44,6 +44,7 @@ const AddAlbumPage = () => {
         id: album.id,
         name: cleanedName,
         artist: album.artists[0].name,
+        release_date: album.release_date,
         spotifyUrl: album.external_urls.spotify,
         imageUrl: album.images[0]?.url || '',
       };
