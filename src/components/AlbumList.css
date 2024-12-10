@@ -247,3 +247,77 @@
   color: #1a4d2c;
 }
 
+/* Responsive Design */
+@media (max-width: 768px) {
+  .album-table th,
+  .album-table td {
+    font-size: 0.8rem;
+    padding: 0.5rem;
+  }
+
+  .album-table {
+    font-size: 0.8rem;
+  }
+
+  .spotify-link img {
+    width: 16px;
+    height: 16px;
+  }
+
+  .add-to-list-button,
+  .delete-album-button {
+    display: none; /* Hide these buttons for tablets and smaller devices */
+  }
+}
+
+@media (max-width: 480px) {
+  .album-table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .album-table thead {
+    display: none;
+  }
+
+  .album-table td:first-child,
+  .album-table td:nth-child(2) {
+    flex: 1; /* Share available space equally */
+    padding: 8px 10px;
+    font-size: 0.9rem;
+  }
+
+  .album-table tbody {
+    display: block
+  }
+
+  .album-table tr {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #ccc;
+    padding: 10px;
+  }
+
+  .album-table td {
+    display: block; /* Stack each cell vertically */
+    padding: 8px 10px; /* Add padding instead of flexbox adjustments */
+    font-size: 0.8rem;
+  }
+
+  /* Ensure Spotify link fits within this layout */
+  .spotify-link img {
+    width: 16px;
+    height: 16px;
+  }
+
+  .pagination-controls {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .overlay-content {
+    max-width: 90vw;
+    max-height: 80vh;
+  }
+}
