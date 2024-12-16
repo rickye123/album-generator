@@ -31,7 +31,7 @@ const AlbumPage = () => {
     const fetchDetails = async () => {
       if (album) {
         try {
-          const spotifyInfo = await fetchSpotifyAlbumDetails(album.id); 
+          const spotifyInfo = await fetchSpotifyAlbumDetails(album.id);
           setSpotifyDetails(spotifyInfo);
 
           const wikiLink = await fetchWikipediaLink(album.name, album.artist);
@@ -50,7 +50,7 @@ const AlbumPage = () => {
 
   return (
     <div className="album-page">
-      {album ? (
+      {album && (
         <>
           <div className="album-details">
             <img className="album-cover" src={album.imageUrl} alt={album.name} />
@@ -86,6 +86,20 @@ const AlbumPage = () => {
               </a>
             )}
           </div>
+          {/* Spotify Embed */}
+          {album.spotifyUrl && (
+            <div className="spotify-embed">
+              <iframe
+                style={{ borderRadius: '12px' }}
+                src={`https://open.spotify.com/embed/album/${extractSpotifyAlbumId(album.spotifyUrl)}?utm_source=generator`}
+                width="100%"
+                height="352"
+                frameBorder="0"
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                loading="lazy"
+              ></iframe>
+            </div>
+          )}
           {/* Spotify Track List */}
           {spotifyDetails && spotifyDetails.tracks && (
             <div className="track-list-container">
@@ -111,12 +125,16 @@ const AlbumPage = () => {
             </div>
           )}
         </>
-      ) : (
-        <p>No album found.</p>
       )}
     </div>
   );
 };
+
+// Extract Spotify album ID from a URL
+function extractSpotifyAlbumId(url: string): string {
+  const match = url.match(/album\/([a-zA-Z0-9]+)(\?|$)/);
+  return match ? match[1] : '';
+}
 
 // Utility to format milliseconds into minutes:seconds
 function msToMinutes(ms: number): string {
