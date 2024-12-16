@@ -30,6 +30,35 @@ export const fetchAlbum = async (albumName: string, artistName: string) => {
   return response.data.albums.items[0];
 };
 
+// Utility to extract the Spotify Album ID from a URL
+const extractSpotifyAlbumId = (url: string): string | null => {
+  const match = url.match(/album\/([a-zA-Z0-9]+)(\?|$)/);
+  return match ? match[1] : null;
+};
+
+export const fetchAlbumBySpotifyUrl = async (spotifyUrl: string) => {
+  try {
+    const albumId = extractSpotifyAlbumId(spotifyUrl);
+
+    if (!albumId) {
+      throw new Error('Invalid Spotify URL. Could not extract album ID.');
+    }
+
+    const accessToken = await getSpotifyToken(); // Assume you have a function to fetch Spotify API access token.
+
+    const response = await axios.get(`https://api.spotify.com/v1/albums/${albumId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching album by Spotify URL:', error);
+    return null;
+  }
+};
+
 export const fetchSpotifyAlbumDetails = async (spotifyId: string): Promise<SpotifyAlbumDetails> => {
   const url = `https://api.spotify.com/v1/albums/${spotifyId}`;
   const token = await getSpotifyToken();
