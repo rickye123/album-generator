@@ -26,43 +26,58 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.album-artist {
+/* Collapsible Section Styles */
+.collapsible-section {
+  width: 80%;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.collapsible-section.open .section-content {
+  max-height: 1000px;
+  padding: 20px;
+  transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out;
+}
+
+.collapsible-section.closed .section-content {
+  max-height: 0;
+  padding: 0;
+  transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out;
+}
+
+.section-content {
+  background-color: #f9f9f9;
+  overflow: hidden;
+}
+
+.toggle-header {
   font-size: 1.2rem;
-  color: #555;
-}
-
-.release-date {
-  font-size: 1rem;
-  color: #555;
-}
-
-.spotify-link {
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-  color: #1DB954;
   font-weight: bold;
+  padding: 10px 20px;
+  background-color: #eee;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.spotify-icon {
-  width: 24px;
-  height: 24px;
-  margin-right: 8px;
+.arrow {
+  border: solid #333;
+  border-width: 0 2px 2px 0;
+  display: inline-block;
+  padding: 4px;
 }
 
-.wikipedia-link {
-  margin-top: 10px;
+.arrow.right {
+  transform: rotate(45deg);
 }
 
-.wikipedia-icon {
-  width: 30px;
-  height: auto;
-  transition: opacity 0.3s, transform 0.3s;
-}
-
-.wikipedia-link:hover .wikipedia-icon {
-  opacity: 0.8;
-  transform: scale(1.1);
+.arrow.down {
+  transform: rotate(135deg);
 }
 
 /* Track Table Styles */

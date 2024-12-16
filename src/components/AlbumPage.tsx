@@ -10,6 +10,7 @@ const AlbumPage = () => {
   const [album, setAlbum] = useState<AlbumData | null>(null);
   const [spotifyDetails, setSpotifyDetails] = useState<SpotifyAlbumDetails | null>(null);
   const [wikipediaLink, setWikipediaLink] = useState<string | null>(null);
+  const [isTrackListOpen, setIsTrackListOpen] = useState(false); // Track Listing toggle state
 
   // Fetch album details
   useEffect(() => {
@@ -50,82 +51,90 @@ const AlbumPage = () => {
 
   return (
     <div className="album-page">
-      {album && (
-        <>
-          <div className="album-details">
-            <img className="album-cover" src={album.imageUrl} alt={album.name} />
-            <h1>{album.name}</h1>
-            <p className="album-artist">{album.artist}</p>
-            <p className="release-date">{spotifyDetails?.releaseDate?.split('-')[0]}</p>
-            <a
-              href={album.spotifyUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="spotify-link"
-            >
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg"
-                alt="Spotify"
-                className="spotify-icon"
-              />
-              Listen on Spotify
-            </a>
-            {/* Wikipedia Link */}
-            {wikipediaLink && (
-              <a
-                href={wikipediaLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="wikipedia-link"
-              >
-                <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/6/63/Wikipedia-logo.png"
-                  alt="Wikipedia"
-                  className="wikipedia-icon"
-                />
-              </a>
-            )}
-          </div>
-          {/* Spotify Embed */}
+      <div className="album-details">
+        <img className="album-cover" src={album.imageUrl} alt={album.name} />
+        <h1>{album.name}</h1>
+        <p className="album-artist">{album.artist}</p>
+        <p className="release-date">{spotifyDetails?.releaseDate?.split('-')[0]}</p>
+        <a
+          href={album.spotifyUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="spotify-link"
+        >
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg"
+            alt="Spotify"
+            className="spotify-icon"
+          />
+          Listen on Spotify
+        </a>
+        {wikipediaLink && (
+          <a
+            href={wikipediaLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="wikipedia-link"
+          >
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/6/63/Wikipedia-logo.png"
+              alt="Wikipedia"
+              className="wikipedia-icon"
+            />
+          </a>
+        )}
+      </div>
+
+      {/* Listen Section (without title) */}
+      <div className="collapsible-section">
+        <div className="section-content">
           {album.spotifyUrl && (
-            <div className="spotify-embed">
-              <iframe
-                style={{ borderRadius: '12px' }}
-                src={`https://open.spotify.com/embed/album/${extractSpotifyAlbumId(album.spotifyUrl)}?utm_source=generator`}
-                width="100%"
-                height="352"
-                frameBorder="0"
-                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                loading="lazy"
-              ></iframe>
-            </div>
+            <iframe
+              style={{ borderRadius: '12px' }}
+              src={`https://open.spotify.com/embed/album/${extractSpotifyAlbumId(album.spotifyUrl)}?utm_source=generator`}
+              width="100%"
+              height="352"
+              frameBorder="0"
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+              loading="lazy"
+            ></iframe>
           )}
-          {/* Spotify Track List */}
-          {spotifyDetails && spotifyDetails.tracks && (
-            <div className="track-list-container">
-              <table className="track-table">
-                <thead>
-                  <tr>
-                    <th className="track-header">Track</th>
-                    <th className="duration-header">Duration</th>
+        </div>
+      </div>
+
+      {/* Track Listing Section */}
+      <div className={`collapsible-section ${isTrackListOpen ? 'open' : 'closed'}`}>
+        <h2
+          className="toggle-header"
+          onClick={() => setIsTrackListOpen((prev) => !prev)}
+        >
+          Track Listing
+          <span className={`arrow ${isTrackListOpen ? 'down' : 'right'}`}></span>
+        </h2>
+        {isTrackListOpen && spotifyDetails?.tracks && (
+          <div className="section-content">
+            <table className="track-table">
+              <thead>
+                <tr>
+                  <th className="track-header">Track</th>
+                  <th className="duration-header">Duration</th>
+                </tr>
+              </thead>
+              <tbody>
+                {spotifyDetails.tracks.map((track, index) => (
+                  <tr
+                    key={track.id}
+                    className={index % 2 === 0 ? 'even-row' : 'odd-row'}
+                  >
+                    <td>{`${index + 1}. ${track.name}`}</td>
+                    <td className="duration">{msToMinutes(track.durationMs)}</td>
                   </tr>
-                </thead>
-                <tbody>
-                  {spotifyDetails.tracks.map((track, index) => (
-                    <tr
-                      key={track.id}
-                      className={index % 2 === 0 ? 'even-row' : 'odd-row'}
-                    >
-                      <td>{`${index + 1}. ${track.name}`}</td>
-                      <td className="duration">{msToMinutes(track.durationMs)}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </>
-      )}
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

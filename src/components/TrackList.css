@@ -1,0 +1,48 @@
+.track-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1rem;
+  }
+  
+  .track-table th {
+    text-align: right;
+    padding: 8px;
+  }
+  
+  .track-table th.track-header {
+    text-align: left;
+  }
+  
+  .track-table th.duration-header {
+    text-align: right;
+  }
+  
+  .track-table td {
+    padding: 8px 12px;
+  }
+  
+  .track-table td:first-child {
+    text-align: left;
+  }
+  
+  .track-table td:last-child {
+    text-align: right;
+  }
+  
+  .even-row {
+    background-color: #e3e3e3;
+  }
+  
+  .odd-row {
+    background-color: #ffffff;
+  }
+  
+  .track-table tr:hover {
+    background-color: #d1e7ff;
+    cursor: pointer;
+  }
+  
+  .duration {
+    text-align: right;
+  }
+  
