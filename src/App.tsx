@@ -1,13 +1,13 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import LandingPage from './components/LandingPage';
-import AlbumList from './components/AlbumList';
-import AddAlbumPage from './components/AddAlbumPage';
+import LandingPage from './pages/LandingPage';
+import AlbumList from './pages/AlbumList';
+import AddAlbumPage from './pages/AddAlbumPage';
 import Sidebar from './components/Sidebar';
-import AlbumPage from './components/AlbumPage';
-import Lists from './components/Lists';
-import ListPage from './components/ListPage';
-import Artists from './components/Artists';
-import Years from './components/Years';
+import AlbumPage from './pages/AlbumPage';
+import Lists from './pages/Lists';
+import ListPage from './pages/ListPage';
+import Artists from './pages/Artists';
+import Years from './pages/Years';
 
 const App = () => {
   return (
