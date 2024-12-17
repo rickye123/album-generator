@@ -13,10 +13,10 @@ const AlbumList = () => {
   const [selectedAlbum, setSelectedAlbum] = useState<AlbumData | null>(null);
   const [showOverlay, setShowOverlay] = useState(false);
   const [error, setError] = useState('');
+  const [menuOpen, setMenuOpen] = useState<{ [key: string]: boolean }>({});
   const { artist } = useParams<{ artist: string }>();
   const { year } = useParams<{ year: string }>();
-  
-  // Search, Pagination, and Sorting
+
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [sortKey, setSortKey] = useState<SortKeys>('artist');
@@ -31,7 +31,7 @@ const AlbumList = () => {
         : albumList;
       const filteredByYear = year
         ? filteredAlbums.filter((album: AlbumData) => album.release_date.split('-')[0] === decodeURIComponent(year))
-        : filteredAlbums;        
+        : filteredAlbums;
       setAlbums(filteredByYear);
     };
 
@@ -79,6 +79,13 @@ const AlbumList = () => {
     }
   };
 
+  const toggleMenu = (albumId: string) => {
+    setMenuOpen((prev) => ({
+      ...prev,
+      [albumId]: !prev[albumId],
+    }));
+  };
+
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
     setCurrentPage(1);
@@ -124,10 +131,10 @@ const AlbumList = () => {
   return (
     <div className="album-list-page">
       <h1>
-        {year 
-          ? `${year}'s Albums` 
-          : artist 
-          ? `${artist}'s Albums` 
+        {year
+          ? `${year}'s Albums`
+          : artist
+          ? `${artist}'s Albums`
           : 'All Albums'}
       </h1>
       <div className="search-bar">
@@ -153,42 +160,35 @@ const AlbumList = () => {
                   Artist {sortKey === 'artist' && (sortDirection === 'asc' ? '↑' : '↓')}
                 </th>
                 <th></th>
-                <th></th>
               </tr>
             </thead>
             <tbody>
               {currentAlbums.map((album: AlbumData) => (
                 <tr key={album.id}>
-                  <td>
+                  <td className="artist-album-cell">
                     <Link to={`/albums/${album.id}`}>{album.name}</Link>
                   </td>
-                  <td>{album.artist}</td>
-                  <td>
-                    <a
-                      href={album.spotifyUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="spotify-link"
-                    >
+                  <td className="artist-album-cell">{album.artist}</td>
+                  <td className="more-options-cell">
+                    <div className="more-options-container">
                       <img
                         src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg"
                         alt="Spotify"
+                        className="spotify-link"
                       />
-                    </a>
-                  </td>
-                  <td>
-                    <button
-                      className="add-to-list-button"
-                      onClick={() => openOverlay(album)}
-                    >
-                      Add to List
-                    </button>
-                    <button
-                      className="delete-album-button"
-                      onClick={() => handleDeleteAlbum(album.id)}
-                    >
-                      Delete
-                    </button>
+                      <button
+                        className="more-options-button"
+                        onClick={() => toggleMenu(album.id)}
+                      >
+                        ⋮
+                      </button>
+                      {menuOpen[album.id] && (
+                        <div className="dropdown-menu">
+                          <button onClick={() => openOverlay(album)}>Add to List</button>
+                          <button onClick={() => handleDeleteAlbum(album.id)}>Delete</button>
+                        </div>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}

@@ -6,9 +6,9 @@ import AlbumDetails from '../components/AlbumDetails';
 import CollapsibleSection from '../components/CollapsibleSection';
 import './AlbumPage.css';
 import { AlbumData, SpotifyAlbumDetails } from '../model';
-import TrackList from '../components/Tracklist';
 import Wikipedia from '../components/Wikipedia';
 import Discogs from '../components/Discogs';
+import TrackList from '../components/TrackList';
 
 const AlbumPage = () => {
   const { id } = useParams<{ id: string }>();
