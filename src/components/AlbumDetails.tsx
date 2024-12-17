@@ -7,7 +7,6 @@ interface AlbumDetailsProps {
   artist: string;
   releaseYear?: string;
   spotifyUrl?: string;
-  wikipediaUrl?: string;
 }
 
 const AlbumDetails: React.FC<AlbumDetailsProps> = ({
@@ -15,8 +14,7 @@ const AlbumDetails: React.FC<AlbumDetailsProps> = ({
   name,
   artist,
   releaseYear,
-  spotifyUrl,
-  wikipediaUrl,
+  spotifyUrl
 }) => (
   <div className="album-details">
     <img className="album-cover" src={imageUrl} alt={name} />
@@ -31,20 +29,6 @@ const AlbumDetails: React.FC<AlbumDetailsProps> = ({
           className="spotify-icon"
         />
         Listen on Spotify
-      </a>
-    )}
-    {wikipediaUrl && (
-      <a
-        href={wikipediaUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="wikipedia-link"
-      >
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/6/63/Wikipedia-logo.png"
-          alt="Wikipedia"
-          className="wikipedia-icon"
-        />
       </a>
     )}
   </div>

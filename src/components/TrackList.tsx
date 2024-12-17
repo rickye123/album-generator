@@ -1,5 +1,5 @@
 import React from 'react';
-import './TrackList.css';
+import './Tracklist.css';
 
 interface Track {
   id: string;
