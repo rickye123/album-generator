@@ -28,7 +28,6 @@ const AlbumDetails: React.FC<AlbumDetailsProps> = ({
           alt="Spotify"
           className="spotify-icon"
         />
-        Listen on Spotify
       </a>
     )}
   </div>

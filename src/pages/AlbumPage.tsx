@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchAlbumById, fetchWikipediaLink } from '../api/amplifyApi';
 import { fetchSpotifyAlbumDetails } from '../api/spotifyApi';
-import AlbumDetails from './AlbumDetails';
-import CollapsibleSection from './CollapsibleSection';
+import AlbumDetails from '../components/AlbumDetails';
+import CollapsibleSection from '../components/CollapsibleSection';
 import './AlbumPage.css';
 import { AlbumData, SpotifyAlbumDetails } from '../model';
-import TrackList from './Tracklist';
-import Wikipedia from './Wikipedia';
+import TrackList from '../components/Tracklist';
+import Wikipedia from '../components/Wikipedia';
+import Discogs from '../components/Discogs';
 
 const AlbumPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -50,8 +51,7 @@ const AlbumPage = () => {
         spotifyUrl={album.spotifyUrl}
       />
 
-      <CollapsibleSection title="Listen" 
-        defaultOpen>
+      <CollapsibleSection title="Listen">
         <iframe
           src={`https://open.spotify.com/embed/album/${extractSpotifyAlbumId(album.spotifyUrl)}`}
           width="100%"
@@ -66,6 +66,9 @@ const AlbumPage = () => {
       )}
       <CollapsibleSection title="Wikipedia">
           {wikipediaLink && (<Wikipedia wikipediaUrl={wikipediaLink} />)}
+      </CollapsibleSection>
+      <CollapsibleSection title="Discogs">
+          <Discogs/>
       </CollapsibleSection>
     </div>
   );
