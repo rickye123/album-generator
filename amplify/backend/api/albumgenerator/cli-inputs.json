@@ -1,7 +1,7 @@
 {
   "version": 1,
   "serviceConfiguration": {
-    "apiName": "cybonyx",
+    "apiName": "albumgenerator",
     "serviceName": "AppSync",
     "defaultAuthType": {
       "mode": "API_KEY",

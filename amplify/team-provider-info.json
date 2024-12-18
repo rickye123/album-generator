@@ -1,19 +1,19 @@
 {
   "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-cybonyx-dev-b4c9f-authRole",
-      "UnauthRoleArn": "arn:aws:iam::383452018402:role/amplify-cybonyx-dev-b4c9f-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::383452018402:role/amplify-cybonyx-dev-b4c9f-authRole",
+      "AuthRoleName": "amplify-albumgenerator-dev-e4cde-authRole",
+      "UnauthRoleArn": "arn:aws:iam::383452018402:role/amplify-albumgenerator-dev-e4cde-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::383452018402:role/amplify-albumgenerator-dev-e4cde-authRole",
       "Region": "eu-west-2",
-      "DeploymentBucketName": "amplify-cybonyx-dev-b4c9f-deployment",
-      "UnauthRoleName": "amplify-cybonyx-dev-b4c9f-unauthRole",
-      "StackName": "amplify-cybonyx-dev-b4c9f",
-      "StackId": "arn:aws:cloudformation:eu-west-2:383452018402:stack/amplify-cybonyx-dev-b4c9f/851e3930-b182-11ef-ad22-0ac48ae1c3a7",
-      "AmplifyAppId": "dnc0372v87nfw"
+      "DeploymentBucketName": "amplify-albumgenerator-dev-e4cde-deployment",
+      "UnauthRoleName": "amplify-albumgenerator-dev-e4cde-unauthRole",
+      "StackName": "amplify-albumgenerator-dev-e4cde",
+      "StackId": "arn:aws:cloudformation:eu-west-2:383452018402:stack/amplify-albumgenerator-dev-e4cde/78907f70-bc86-11ef-b3ba-024a6f1a2edd",
+      "AmplifyAppId": "dvbgulc1b8a1x"
     },
     "categories": {
       "api": {
-        "cybonyx": {}
+        "albumgenerator": {}
       },
       "hosting": {
         "S3AndCloudFront": {}

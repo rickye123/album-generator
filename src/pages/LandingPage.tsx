@@ -37,7 +37,7 @@ const LandingPage = () => {
             src={
               album.imageUrl && album.imageUrl.startsWith('http')
                 ? album.imageUrl
-                : `${process.env.REACT_APP_IMAGE_BASE_URL || 'https://cybonyx-20241203172447-hostingbucket.s3.amazonaws.com/'}${album.imageUrl}`
+                : `${process.env.REACT_APP_IMAGE_BASE_URL || 'https://albumgenerator-20241217153103-hostingbucket.s3.amazonaws.com/'}${album.imageUrl}`
             }
             alt={album.name}
           />
