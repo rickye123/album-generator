@@ -1,6 +1,6 @@
 import { GraphQLAPI, graphqlOperation } from '@aws-amplify/api-graphql';
 import { createAlbum, createList, deleteList, addAlbumToList as addAlbumToListMutation, deleteAlbum, createAlbumList, deleteAlbumList } from '../graphql/mutations';
-import { albumListsByListIdAndId, getAlbum, listAlbums, listLists, listListsWithAlbums } from '../graphql/queries';
+import { albumListsByAlbumIdAndId, albumListsByListIdAndId, getAlbum, listAlbums, listLists, listListsWithAlbums } from '../graphql/queries';
 import { GraphQLResult } from '@aws-amplify/api-graphql';
 import { Amplify } from '@aws-amplify/core';
 import { Observable } from 'rxjs';
@@ -22,7 +22,6 @@ export const addAlbum = async (albumData: AlbumData): Promise<GraphQLResult<any>
       throw new Error('Expected a non-subscription query/mutation but received a subscription.');
     }
 
-    console.log('Album added:', result);
     return result;
   } catch (error) {
     console.error('Error adding album:', error);
@@ -118,7 +117,6 @@ export const fetchLists = async () => {
     // Ensure response is properly typed
     const typedResponse = response as GraphQLResult<any>;
 
-    console.log('typedReponse', typedResponse);
     // Access the `data` field
     if (typedResponse.data && typedResponse.data.listLists) {
       return typedResponse.data.listLists.items.map((item: List) => ({
@@ -152,7 +150,6 @@ export const addList = async (name: string) => {
       throw new Error('Expected a non-subscription query/mutation but received a subscription.');
     }
 
-    console.log(`Result ${response}, data ${response.data}, createList ${response.data.createList}`);
     return response.data.createList;
 };
 
@@ -206,6 +203,51 @@ export const removeList = async (id: string) => {
   }
 };
 
+
+export const fetchAlbumListEntriesForAlbumId = async (albumId: string) => {
+  try {
+    const response = await GraphQLAPI.graphql(
+      Amplify as any,
+      graphqlOperation(albumListsByAlbumIdAndId, {
+        albumId
+      }),
+      {}
+    );
+
+    const typedResponse = response as GraphQLResult<any>;
+    if (typedResponse.data?.albumListsByAlbumIdAndId?.items?.length) {
+      return typedResponse.data.albumListsByAlbumIdAndId.items;
+    }
+    console.debug('AlbumList entries not found for album with id: ', albumId);
+    return undefined;
+  } catch (error) {
+    console.error('Error fetching AlbumList entries:', error);
+    throw error;
+  }
+};
+
+export const fetchAlbumListEntriesForListId = async (listId: string) => {
+  try {
+    const response = await GraphQLAPI.graphql(
+      Amplify as any,
+      graphqlOperation(albumListsByListIdAndId, {
+        listId
+      }),
+      {}
+    );
+
+    const typedResponse = response as GraphQLResult<any>;
+    if (typedResponse.data?.albumListsByListIdAndId?.items?.length) {
+      return typedResponse.data.albumListsByListIdAndId.items;
+    }
+    console.debug('AlbumList entries not found for list with id: ', listId);
+    return undefined;
+  } catch (error) {
+    console.error('Error fetching AlbumList entries:', error);
+    throw error;
+  }
+};
+
 export const fetchAlbumListEntry = async (listId: string, albumId: string) => {
   try {
     const response = await GraphQLAPI.graphql(
@@ -230,7 +272,6 @@ export const fetchAlbumListEntry = async (listId: string, albumId: string) => {
 
 export const removeAlbumFromList = async (id: string) => {
 
-  console.log('input', id);
   try {
     const response = await GraphQLAPI.graphql(
       Amplify as any,
@@ -243,7 +284,6 @@ export const removeAlbumFromList = async (id: string) => {
     }
 
     const typedResponse = response as GraphQLResult<any>;
-    console.log('typed response:', typedResponse);
     if (typedResponse.data?.deleteAlbumList) {
       return typedResponse.data.deleteAlbumList;
     } else {
@@ -266,7 +306,6 @@ export const addAlbumToList = async (albumId: string, listId: string) => {
     throw new Error('Expected a non-subscription query/mutation but received a subscription.');
   }
 
-  console.log(`Response ${response}`);
   return response;
 };
 
@@ -295,7 +334,6 @@ export const fetchWikipediaLink = async (albumName: string, artistName: string):
     for (const query of queries) {
       const response = await fetch(wikipediaApiUrl(query));
       const data = await response.json();
-      console.log(`Data ${data} for query ${query}`);
 
       if (data.query && data.query.search && data.query.search.length > 0) {
         // Search results found

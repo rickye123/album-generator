@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { fetchAlbums, fetchLists, addAlbumToList, removeAlbum } from '../api/amplifyApi';
+import { fetchAlbums, fetchLists, addAlbumToList, removeAlbum, fetchAlbumListEntriesForAlbumId, removeAlbumFromList } from '../api/amplifyApi';
 import { AlbumData, ListData } from '../model';
 import './AlbumList.css';
 import { Link, useParams } from 'react-router-dom';
@@ -71,6 +71,16 @@ const AlbumList = () => {
 
   const handleDeleteAlbum = async (albumId: string) => {
     try {
+      // get album list entry (if one exists) and delete it
+      const results = await fetchAlbumListEntriesForAlbumId(albumId);
+      console.log('Result: ', results);
+      if(results) {
+        // delete each album list entry
+        results.forEach(async (element: { id: string; }) => {
+          await removeAlbumFromList(element.id);
+        });
+      }
+
       await removeAlbum(albumId);
       setAlbums((prevAlbums) => prevAlbums.filter((album) => album.id !== albumId));
     } catch (err) {
