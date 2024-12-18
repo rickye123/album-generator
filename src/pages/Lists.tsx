@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { fetchLists, addList, removeList } from '../api/amplifyApi';
+import { fetchLists, addList, removeList, fetchAlbumListEntriesForListId, removeAlbumFromList } from '../api/amplifyApi';
 import { ListData } from '../model';
 import './Lists.css'; // Ensure this file is now only for Lists
 
@@ -47,6 +47,17 @@ const Lists: React.FC = () => {
 
   const handleDeleteList = async (id: string) => {
     try {
+
+      // get album list entry (if one exists) and delete it
+      const results = await fetchAlbumListEntriesForListId(id);
+      console.log('Result: ', results);
+      if(results) {
+        // delete each album list entry
+        results.forEach(async (element: { id: string; }) => {
+          await removeAlbumFromList(element.id);
+        });
+      }
+
       await removeList(id);
       setLists(lists.filter((list) => list.id !== id));
     } catch (error) {
