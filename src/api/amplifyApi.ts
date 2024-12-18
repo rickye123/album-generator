@@ -1,6 +1,6 @@
 import { GraphQLAPI, graphqlOperation } from '@aws-amplify/api-graphql';
-import { createAlbum, createList, deleteList, addAlbumToList as addAlbumToListMutation, deleteAlbum } from '../graphql/mutations';
-import { getAlbum, listAlbums, listLists } from '../graphql/queries';
+import { createAlbum, createList, deleteList, addAlbumToList as addAlbumToListMutation, deleteAlbum, createAlbumList, deleteAlbumList } from '../graphql/mutations';
+import { albumListsByListIdAndId, getAlbum, listAlbums, listLists, listListsWithAlbums } from '../graphql/queries';
 import { GraphQLResult } from '@aws-amplify/api-graphql';
 import { Amplify } from '@aws-amplify/core';
 import { Observable } from 'rxjs';
@@ -106,7 +106,7 @@ export const fetchLists = async () => {
   try {
     const response = await GraphQLAPI.graphql(
       Amplify as any, 
-      graphqlOperation(listLists),
+      graphqlOperation(listListsWithAlbums),
       {}
     );
 
@@ -118,13 +118,20 @@ export const fetchLists = async () => {
     // Ensure response is properly typed
     const typedResponse = response as GraphQLResult<any>;
 
+    console.log('typedReponse', typedResponse);
     // Access the `data` field
     if (typedResponse.data && typedResponse.data.listLists) {
-      console.log(`typedResponse.data.listLists`);
       return typedResponse.data.listLists.items.map((item: List) => ({
         id: item.id,
         name: item.name,
-        albums: item.albums
+        albums: item.albums?.items.map((albumListItem: any) => ({
+          id: albumListItem.album.id,
+          name: albumListItem.album.name,
+          artist: albumListItem.album.artist,
+          spotifyUrl: albumListItem.album.spotifyUrl,
+          releaseDate: albumListItem.album.release_date,
+          imageUrl: albumListItem.album.imageUrl,
+        })),
       }));
     }
 
@@ -199,9 +206,59 @@ export const removeList = async (id: string) => {
   }
 };
 
+export const fetchAlbumListEntry = async (listId: string, albumId: string) => {
+  try {
+    const response = await GraphQLAPI.graphql(
+      Amplify as any,
+      graphqlOperation(albumListsByListIdAndId, {
+        listId,
+        filter: { albumId: { eq: albumId } },
+      }),
+      {}
+    );
+
+    const typedResponse = response as GraphQLResult<any>;
+    if (typedResponse.data?.albumListsByListIdAndId?.items?.length) {
+      return typedResponse.data.albumListsByListIdAndId.items[0]; // Return the first match
+    }
+    throw new Error('AlbumList entry not found');
+  } catch (error) {
+    console.error('Error fetching AlbumList entry:', error);
+    throw error;
+  }
+};
+
+export const removeAlbumFromList = async (id: string) => {
+
+  console.log('input', id);
+  try {
+    const response = await GraphQLAPI.graphql(
+      Amplify as any,
+      graphqlOperation(deleteAlbumList, { input: { id } }),
+      {}
+    );
+
+    if (response instanceof Observable) {
+      throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+    }
+
+    const typedResponse = response as GraphQLResult<any>;
+    console.log('typed response:', typedResponse);
+    if (typedResponse.data?.deleteAlbumList) {
+      return typedResponse.data.deleteAlbumList;
+    } else {
+      throw new Error('Unexpected response structure.');
+    }
+  } catch (error) {
+    console.error('Error removing album from list:', error);
+    throw error;
+  }
+
+};
+
 export const addAlbumToList = async (albumId: string, listId: string) => {
   const response = await GraphQLAPI.graphql(Amplify as any, 
-    graphqlOperation(addAlbumToListMutation, { albumId, listId }),
+    graphqlOperation(createAlbumList, { input: { albumId, listId } }),
     {}
   );
   // Check if the result is a Promise or Observable

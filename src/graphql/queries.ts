@@ -13,19 +13,11 @@ export const getList = /* GraphQL */ `query GetList($id: ID!) {
     id
     name
     albums {
-      id
-      name
-      artist
-      spotifyUrl
-      release_date
-      imageUrl
-      createdAt
-      updatedAt
+      nextToken
       __typename
     }
     createdAt
     updatedAt
-    albumListsId
     __typename
   }
 }
@@ -41,7 +33,6 @@ export const listLists = /* GraphQL */ `query ListLists(
       name
       createdAt
       updatedAt
-      albumListsId
       __typename
     }
     nextToken
@@ -92,3 +83,149 @@ export const listAlbums = /* GraphQL */ `query ListAlbums(
   APITypes.ListAlbumsQueryVariables,
   APITypes.ListAlbumsQuery
 >;
+export const getAlbumList = /* GraphQL */ `query GetAlbumList($id: ID!) {
+  getAlbumList(id: $id) {
+    id
+    albumId
+    listId
+    album {
+      id
+      name
+      artist
+      spotifyUrl
+      release_date
+      imageUrl
+      createdAt
+      updatedAt
+      __typename
+    }
+    list {
+      id
+      name
+      createdAt
+      updatedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetAlbumListQueryVariables,
+  APITypes.GetAlbumListQuery
+>;
+export const listAlbumLists = /* GraphQL */ `query ListAlbumLists(
+  $filter: ModelAlbumListFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listAlbumLists(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      albumId
+      listId
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListAlbumListsQueryVariables,
+  APITypes.ListAlbumListsQuery
+>;
+export const albumListsByAlbumIdAndId = /* GraphQL */ `query AlbumListsByAlbumIdAndId(
+  $albumId: ID!
+  $id: ModelIDKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelAlbumListFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  albumListsByAlbumIdAndId(
+    albumId: $albumId
+    id: $id
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      albumId
+      listId
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.AlbumListsByAlbumIdAndIdQueryVariables,
+  APITypes.AlbumListsByAlbumIdAndIdQuery
+>;
+export const albumListsByListIdAndId = /* GraphQL */ `query AlbumListsByListIdAndId(
+  $listId: ID!
+  $id: ModelIDKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelAlbumListFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  albumListsByListIdAndId(
+    listId: $listId
+    id: $id
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      albumId
+      listId
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.AlbumListsByListIdAndIdQueryVariables,
+  APITypes.AlbumListsByListIdAndIdQuery
+>;
+
+export const listListsWithAlbums = /* GraphQL */ `
+  query ListListsWithAlbums($filter: ModelListFilterInput, $limit: Int, $nextToken: String) {
+    listLists(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        albums {
+          items {
+            album {
+              id
+              name
+              artist
+              spotifyUrl
+              release_date
+              imageUrl
+              createdAt
+              updatedAt
+            }
+          }
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;

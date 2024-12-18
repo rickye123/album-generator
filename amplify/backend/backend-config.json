@@ -1,6 +1,6 @@
 {
   "api": {
-    "cybonyx": {
+    "albumgenerator": {
       "dependsOn": [],
       "output": {
         "authConfig": {

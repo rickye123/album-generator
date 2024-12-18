@@ -13,19 +13,11 @@ export const addAlbumToList = /* GraphQL */ `mutation AddAlbumToList($albumId: I
     id
     name
     albums {
-      id
-      name
-      artist
-      spotifyUrl
-      release_date
-      imageUrl
-      createdAt
-      updatedAt
+      nextToken
       __typename
     }
     createdAt
     updatedAt
-    albumListsId
     __typename
   }
 }
@@ -41,19 +33,11 @@ export const createList = /* GraphQL */ `mutation CreateList(
     id
     name
     albums {
-      id
-      name
-      artist
-      spotifyUrl
-      release_date
-      imageUrl
-      createdAt
-      updatedAt
+      nextToken
       __typename
     }
     createdAt
     updatedAt
-    albumListsId
     __typename
   }
 }
@@ -69,19 +53,11 @@ export const updateList = /* GraphQL */ `mutation UpdateList(
     id
     name
     albums {
-      id
-      name
-      artist
-      spotifyUrl
-      release_date
-      imageUrl
-      createdAt
-      updatedAt
+      nextToken
       __typename
     }
     createdAt
     updatedAt
-    albumListsId
     __typename
   }
 }
@@ -97,19 +73,11 @@ export const deleteList = /* GraphQL */ `mutation DeleteList(
     id
     name
     albums {
-      id
-      name
-      artist
-      spotifyUrl
-      release_date
-      imageUrl
-      createdAt
-      updatedAt
+      nextToken
       __typename
     }
     createdAt
     updatedAt
-    albumListsId
     __typename
   }
 }
@@ -188,4 +156,109 @@ export const deleteAlbum = /* GraphQL */ `mutation DeleteAlbum(
 ` as GeneratedMutation<
   APITypes.DeleteAlbumMutationVariables,
   APITypes.DeleteAlbumMutation
+>;
+export const createAlbumList = /* GraphQL */ `mutation CreateAlbumList(
+  $input: CreateAlbumListInput!
+  $condition: ModelAlbumListConditionInput
+) {
+  createAlbumList(input: $input, condition: $condition) {
+    id
+    albumId
+    listId
+    album {
+      id
+      name
+      artist
+      spotifyUrl
+      release_date
+      imageUrl
+      createdAt
+      updatedAt
+      __typename
+    }
+    list {
+      id
+      name
+      createdAt
+      updatedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateAlbumListMutationVariables,
+  APITypes.CreateAlbumListMutation
+>;
+export const updateAlbumList = /* GraphQL */ `mutation UpdateAlbumList(
+  $input: UpdateAlbumListInput!
+  $condition: ModelAlbumListConditionInput
+) {
+  updateAlbumList(input: $input, condition: $condition) {
+    id
+    albumId
+    listId
+    album {
+      id
+      name
+      artist
+      spotifyUrl
+      release_date
+      imageUrl
+      createdAt
+      updatedAt
+      __typename
+    }
+    list {
+      id
+      name
+      createdAt
+      updatedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateAlbumListMutationVariables,
+  APITypes.UpdateAlbumListMutation
+>;
+export const deleteAlbumList = /* GraphQL */ `mutation DeleteAlbumList(
+  $input: DeleteAlbumListInput!
+  $condition: ModelAlbumListConditionInput
+) {
+  deleteAlbumList(input: $input, condition: $condition) {
+    id
+    albumId
+    listId
+    album {
+      id
+      name
+      artist
+      spotifyUrl
+      release_date
+      imageUrl
+      createdAt
+      updatedAt
+      __typename
+    }
+    list {
+      id
+      name
+      createdAt
+      updatedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteAlbumListMutationVariables,
+  APITypes.DeleteAlbumListMutation
 >;

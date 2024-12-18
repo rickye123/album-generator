@@ -13,19 +13,11 @@ export const onCreateList = /* GraphQL */ `subscription OnCreateList($filter: Mo
     id
     name
     albums {
-      id
-      name
-      artist
-      spotifyUrl
-      release_date
-      imageUrl
-      createdAt
-      updatedAt
+      nextToken
       __typename
     }
     createdAt
     updatedAt
-    albumListsId
     __typename
   }
 }
@@ -38,19 +30,11 @@ export const onUpdateList = /* GraphQL */ `subscription OnUpdateList($filter: Mo
     id
     name
     albums {
-      id
-      name
-      artist
-      spotifyUrl
-      release_date
-      imageUrl
-      createdAt
-      updatedAt
+      nextToken
       __typename
     }
     createdAt
     updatedAt
-    albumListsId
     __typename
   }
 }
@@ -63,19 +47,11 @@ export const onDeleteList = /* GraphQL */ `subscription OnDeleteList($filter: Mo
     id
     name
     albums {
-      id
-      name
-      artist
-      spotifyUrl
-      release_date
-      imageUrl
-      createdAt
-      updatedAt
+      nextToken
       __typename
     }
     createdAt
     updatedAt
-    albumListsId
     __typename
   }
 }
@@ -145,4 +121,100 @@ export const onDeleteAlbum = /* GraphQL */ `subscription OnDeleteAlbum($filter: 
 ` as GeneratedSubscription<
   APITypes.OnDeleteAlbumSubscriptionVariables,
   APITypes.OnDeleteAlbumSubscription
+>;
+export const onCreateAlbumList = /* GraphQL */ `subscription OnCreateAlbumList($filter: ModelSubscriptionAlbumListFilterInput) {
+  onCreateAlbumList(filter: $filter) {
+    id
+    albumId
+    listId
+    album {
+      id
+      name
+      artist
+      spotifyUrl
+      release_date
+      imageUrl
+      createdAt
+      updatedAt
+      __typename
+    }
+    list {
+      id
+      name
+      createdAt
+      updatedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateAlbumListSubscriptionVariables,
+  APITypes.OnCreateAlbumListSubscription
+>;
+export const onUpdateAlbumList = /* GraphQL */ `subscription OnUpdateAlbumList($filter: ModelSubscriptionAlbumListFilterInput) {
+  onUpdateAlbumList(filter: $filter) {
+    id
+    albumId
+    listId
+    album {
+      id
+      name
+      artist
+      spotifyUrl
+      release_date
+      imageUrl
+      createdAt
+      updatedAt
+      __typename
+    }
+    list {
+      id
+      name
+      createdAt
+      updatedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateAlbumListSubscriptionVariables,
+  APITypes.OnUpdateAlbumListSubscription
+>;
+export const onDeleteAlbumList = /* GraphQL */ `subscription OnDeleteAlbumList($filter: ModelSubscriptionAlbumListFilterInput) {
+  onDeleteAlbumList(filter: $filter) {
+    id
+    albumId
+    listId
+    album {
+      id
+      name
+      artist
+      spotifyUrl
+      release_date
+      imageUrl
+      createdAt
+      updatedAt
+      __typename
+    }
+    list {
+      id
+      name
+      createdAt
+      updatedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteAlbumListSubscriptionVariables,
+  APITypes.OnDeleteAlbumListSubscription
 >;
