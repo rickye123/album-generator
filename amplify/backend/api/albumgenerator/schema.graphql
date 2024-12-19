@@ -22,6 +22,7 @@ type AlbumList @model {
   id: ID!
   albumId: ID! @index(name: "byAlbum", sortKeyFields: ["id"])
   listId: ID! @index(name: "byList", sortKeyFields: ["id"])
+  played: Boolean!
   album: Album! @belongsTo(fields: ["albumId"])
   list: List! @belongsTo(fields: ["listId"])
 }

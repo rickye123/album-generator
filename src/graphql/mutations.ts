@@ -165,6 +165,7 @@ export const createAlbumList = /* GraphQL */ `mutation CreateAlbumList(
     id
     albumId
     listId
+    played
     album {
       id
       name
@@ -200,6 +201,7 @@ export const updateAlbumList = /* GraphQL */ `mutation UpdateAlbumList(
     id
     albumId
     listId
+    played
     album {
       id
       name
@@ -235,6 +237,7 @@ export const deleteAlbumList = /* GraphQL */ `mutation DeleteAlbumList(
     id
     albumId
     listId
+    played
     album {
       id
       name

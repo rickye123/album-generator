@@ -6,7 +6,8 @@ import { Amplify } from '@aws-amplify/core';
 import { Observable } from 'rxjs';
 import { AlbumData } from '../model';
 import { List } from '../API';
-import { listListsWithAlbums } from '../graphql/customQueries';
+import { getUnplayedAlbums, listListsWithAlbums } from '../graphql/customQueries';
+import { togglePlayed } from '../graphql/customMutations';
 
 export const addAlbum = async (albumData: AlbumData): Promise<GraphQLResult<any>> => {
   try {
@@ -118,6 +119,7 @@ export const fetchLists = async () => {
     // Ensure response is properly typed
     const typedResponse = response as GraphQLResult<any>;
 
+    console.log('typedResponse', typedResponse);
     // Access the `data` field
     if (typedResponse.data && typedResponse.data.listLists) {
       return typedResponse.data.listLists.items.map((item: List) => ({
@@ -130,6 +132,7 @@ export const fetchLists = async () => {
           spotifyUrl: albumListItem.album.spotifyUrl,
           releaseDate: albumListItem.album.release_date,
           imageUrl: albumListItem.album.imageUrl,
+          played: albumListItem.played
         })),
       }));
     }
@@ -299,7 +302,7 @@ export const removeAlbumFromList = async (id: string) => {
 
 export const addAlbumToList = async (albumId: string, listId: string) => {
   const response = await GraphQLAPI.graphql(Amplify as any, 
-    graphqlOperation(createAlbumList, { input: { albumId, listId } }),
+    graphqlOperation(createAlbumList, { input: { albumId, listId, played: false } }),
     {}
   );
   // Check if the result is a Promise or Observable
@@ -362,3 +365,46 @@ export const fetchWikipediaLink = async (albumName: string, artistName: string):
   }
 };
 
+export const togglePlayedAlbumList = async (albumListId: string, played: boolean) => {
+  try {
+    console.log(`Toggling with ${albumListId} ${played}`);
+    const response = await GraphQLAPI.graphql(
+      Amplify as any,
+      graphqlOperation(togglePlayed, { id: albumListId, played }), // Use `id` as expected by the mutation
+      {}
+    );
+
+    if (response instanceof Observable) {
+      throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+    }
+
+    console.log('togglePlayedAlbumList Response', response);
+    return response;
+  } catch (error) {
+    console.error('Error toggling played album list:', error);
+    return null;
+  }
+};
+
+
+export const getUnplayedAlbumsInList = async (listId: string) => {
+  try {
+    const response = await GraphQLAPI.graphql(Amplify as any, 
+      graphqlOperation(getUnplayedAlbums, { listId }),
+      {}
+    );
+
+  // Check if the result is a Promise or Observable
+  if (response instanceof Observable) {
+    throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+  }
+
+  console.log('Response:', response);
+  
+  console.log('Response items:', response.data.listAlbumLists.items);
+  return response.data.listAlbumLists.items;
+  } catch (err) {
+    console.error('Error fetching unplayed albums:', err);
+    throw err;
+  }
+};

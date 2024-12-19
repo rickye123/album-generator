@@ -127,6 +127,7 @@ export const onCreateAlbumList = /* GraphQL */ `subscription OnCreateAlbumList($
     id
     albumId
     listId
+    played
     album {
       id
       name
@@ -159,6 +160,7 @@ export const onUpdateAlbumList = /* GraphQL */ `subscription OnUpdateAlbumList($
     id
     albumId
     listId
+    played
     album {
       id
       name
@@ -191,6 +193,7 @@ export const onDeleteAlbumList = /* GraphQL */ `subscription OnDeleteAlbumList($
     id
     albumId
     listId
+    played
     album {
       id
       name
