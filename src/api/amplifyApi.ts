@@ -1,11 +1,12 @@
 import { GraphQLAPI, graphqlOperation } from '@aws-amplify/api-graphql';
 import { createAlbum, createList, deleteList, addAlbumToList as addAlbumToListMutation, deleteAlbum, createAlbumList, deleteAlbumList } from '../graphql/mutations';
-import { albumListsByAlbumIdAndId, albumListsByListIdAndId, getAlbum, listAlbums, listLists, listListsWithAlbums } from '../graphql/queries';
+import { albumListsByAlbumIdAndId, albumListsByListIdAndId, getAlbum, listAlbums, listLists } from '../graphql/queries';
 import { GraphQLResult } from '@aws-amplify/api-graphql';
 import { Amplify } from '@aws-amplify/core';
 import { Observable } from 'rxjs';
 import { AlbumData } from '../model';
 import { List } from '../API';
+import { listListsWithAlbums } from '../graphql/customQueries';
 
 export const addAlbum = async (albumData: AlbumData): Promise<GraphQLResult<any>> => {
   try {
