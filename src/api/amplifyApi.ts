@@ -1,5 +1,5 @@
 import { GraphQLAPI, graphqlOperation } from '@aws-amplify/api-graphql';
-import { createAlbum, createList, deleteList, addAlbumToList as addAlbumToListMutation, deleteAlbum, createAlbumList, deleteAlbumList } from '../graphql/mutations';
+import { createAlbum, createList, deleteList, addAlbumToList as addAlbumToListMutation, deleteAlbum, createAlbumList, deleteAlbumList, updateAlbum } from '../graphql/mutations';
 import { albumListsByAlbumIdAndId, albumListsByListIdAndId, getAlbum, listAlbums, listLists } from '../graphql/queries';
 import { GraphQLResult } from '@aws-amplify/api-graphql';
 import { Amplify } from '@aws-amplify/core';
@@ -8,6 +8,35 @@ import { AlbumData } from '../model';
 import { List } from '../API';
 import { getUnplayedAlbums, listListsWithAlbums } from '../graphql/customQueries';
 import { togglePlayed } from '../graphql/customMutations';
+
+export const updateAlbumDetails = async (albumData: AlbumData): Promise<GraphQLResult<any>> => {
+  try {
+    const graphqlParams = graphqlOperation(updateAlbum, { input: albumData });
+
+    const response = await GraphQLAPI.graphql(
+      Amplify as any, // Pass the Amplify class instance
+      graphqlParams,  // GraphQL options
+      {}              // Additional headers
+    );
+
+    // Check if the result is a Promise or Observable
+    if (response instanceof Observable) {
+      throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+    }
+
+    const typedResponse = response as GraphQLResult<any>;
+
+    if (typedResponse.data?.updateAlbum) {
+      return typedResponse.data.updateAlbum;
+    } else {
+      throw new Error('Unexpected response structure.');
+    }
+  } catch (error) {
+    console.error('Error updating album:', error);
+    throw new Error('Error updating album');
+  }
+};
+
 
 export const addAlbum = async (albumData: AlbumData): Promise<GraphQLResult<any>> => {
   try {

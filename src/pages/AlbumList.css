@@ -28,7 +28,7 @@
 
 /* Table styles */
 .album-table {
-  width: 80%;
+  width: 100%;
   max-width: 800px;
   border-collapse: collapse;
   margin: 20px 0;
@@ -403,4 +403,177 @@
 
 .dropdown-menu {
   display: none; /* Hidden by default */
+}
+
+.list-page-wrapper {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  margin: 20px auto;
+}
+
+.list-page-container {
+  max-width: 800px;
+  margin: 0 auto;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.list-page-title {
+  margin-bottom: 20px;
+  font-size: 1.8em;
+  color: #333;
+}
+
+.list-page-error {
+  color: red;
+}
+
+.list-page-randomize-button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-bottom: 20px;
+  font-size: 1em;
+}
+
+.list-page-randomize-button:hover {
+  background-color: #2980b9;
+}
+
+.list-page-album-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.list-page-album-table th,
+.list-page-album-table td {
+  padding: 12px 10px;
+}
+
+.list-page-even-row {
+  background-color: #f9f9f9;
+}
+
+.list-page-odd-row {
+  background-color: #ffffff;
+}
+
+.list-page-album-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.list-page-remove-button {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.list-page-remove-button:hover {
+  background-color: #c0392b;
+}
+
+.list-page-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.list-page-overlay-content {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.list-page-overlay-image {
+  width: 100%;
+  max-width: 300px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  object-fit: cover;
+}
+
+.list-page-overlay-title,
+.list-page-overlay-artist,
+.list-page-overlay-year {
+  margin: 10px 0;
+}
+
+.list-page-overlay-link {
+  display: inline-block;
+  color: white;
+  text-decoration: none;
+  padding: 10px 16px;
+  border-radius: 4px;
+  margin: 20px 0;
+  transition: background-color 0.3s;
+}
+
+.list-page-overlay-link:hover {
+  background-color: #2980b9;
+}
+
+.list-page-close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 1.5em;
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+}
+
+.list-page-switch {
+  position: relative;
+  display: inline-block;
+  width: 34px;
+  height: 20px;
+}
+
+.list-page-slider {
+  position: absolute;
+  cursor: pointer;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 20px;
+}
+
+.list-page-slider:before {
+  content: '';
+  position: absolute;
+  background-color: white;
+  border-radius: 50%;
+  transition: 0.4s;
+}
+
+input:checked + .list-page-slider {
+  background-color: #2196f3;
+}
+
+input:checked + .list-page-slider:before {
+  transform: translateX(14px);
 }

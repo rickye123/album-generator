@@ -26,6 +26,8 @@ const AlbumList = () => {
   useEffect(() => {
     const loadAlbums = async () => {
       const albumList = await fetchAlbums();
+      // think this is filtering out albums that contains ... in it for instance
+      // needs fixing
       const filteredAlbums = artist
         ? albumList.filter((album: AlbumData) => album.artist === decodeURIComponent(artist))
         : albumList;
@@ -181,11 +183,18 @@ const AlbumList = () => {
                   <td className="artist-album-cell">{album.artist}</td>
                   <td className="more-options-cell">
                     <div className="more-options-container">
-                      <img
-                        src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg"
-                        alt="Spotify"
+                      <a
+                        href={album.spotifyUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="spotify-link"
-                      />
+                      >
+                        <img
+                          src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg"
+                          alt="Spotify"
+                          className="spotify-link"
+                        />
+                      </a>
                       <button
                         className="more-options-button"
                         onClick={() => toggleMenu(album.id)}
