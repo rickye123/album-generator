@@ -123,6 +123,11 @@ const AlbumList = () => {
   const indexOfLastAlbum = currentPage * albumsPerPage;
   const indexOfFirstAlbum = indexOfLastAlbum - albumsPerPage;
 
+  const stripThePrefix = (name: string) => {
+    const lowerCaseName = name.toLowerCase();
+    return lowerCaseName.startsWith("the ") ? name.slice(4) : name;
+  };
+
   const filteredAlbums = albums
     .filter(
       (album) =>
@@ -130,10 +135,10 @@ const AlbumList = () => {
         album.artist.toLowerCase().includes(searchQuery.toLowerCase())
     )
     .sort((a, b) => {
-      const comparison =
-        sortKey === 'artist'
-          ? a.artist.localeCompare(b.artist) || a.name.localeCompare(b.name)
-          : a.name.localeCompare(b.name);
+      const aKey = sortKey === 'artist' ? stripThePrefix(a.artist) : a.name;
+      const bKey = sortKey === 'artist' ? stripThePrefix(b.artist) : b.name;
+
+      const comparison = aKey.localeCompare(bKey);
 
       return sortDirection === 'asc' ? comparison : -comparison;
     });

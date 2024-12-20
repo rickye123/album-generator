@@ -86,6 +86,26 @@ const ListPage: React.FC = () => {
     }
   };
 
+  const bulkSetUnplayed = async () => {
+    const confirmed = window.confirm('Are you sure you want to mark all albums as unplayed?');
+    if (!confirmed) return;
+
+    try {
+      for (const album of list!.albums) {
+        const albumListEntry = await fetchAlbumListEntry(list!.id, album.id);
+        if (albumListEntry?.id && albumListEntry.played) {
+          await togglePlayedAlbumList(albumListEntry.id, false);
+        }
+      }
+      const results = await fetchLists();
+      const foundList = results.find((l: ListData) => l.id === listId);
+      setList(foundList || null);
+    } catch (err) {
+      console.error('Error marking albums as unplayed:', err);
+      setError('Failed to update albums. Please try again.');
+    }
+  };
+
   const randomizeAlbum = async () => {
     try {
       const unplayedAlbums = await getUnplayedAlbumsInList(listId!);
@@ -162,6 +182,10 @@ const ListPage: React.FC = () => {
 
         <button className="list-page-randomize-button" onClick={randomizeAlbum}>
           Randomize Album
+        </button>
+
+        <button className="list-page-unplayed-button" onClick={bulkSetUnplayed}>
+          Mark All as Unplayed
         </button>
 
         <div className="search-bar">

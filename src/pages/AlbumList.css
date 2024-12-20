@@ -442,6 +442,10 @@
   font-size: 1em;
 }
 
+.list-page-unplayed-button {
+  background-color: red;
+}
+
 .list-page-randomize-button:hover {
   background-color: #2980b9;
 }
@@ -530,10 +534,6 @@
   border-radius: 4px;
   margin: 20px 0;
   transition: background-color 0.3s;
-}
-
-.list-page-overlay-link:hover {
-  background-color: #2980b9;
 }
 
 .list-page-close-button {

@@ -14,7 +14,10 @@ const Lists: React.FC = () => {
     const loadLists = async () => {
       try {
         const result = await fetchLists();
-        setLists(result || []);
+        const sortedLists = result 
+          ? result.sort((a: ListData, b: ListData) => a.name.localeCompare(b.name)) 
+          : [];
+        setLists(sortedLists);
       } catch (err) {
         console.error('Error fetching lists:', err);
         setError('Error loading lists.');

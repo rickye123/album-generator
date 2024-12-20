@@ -1,6 +1,6 @@
 import { GraphQLAPI, graphqlOperation } from '@aws-amplify/api-graphql';
 import { createAlbum, createList, deleteList, addAlbumToList as addAlbumToListMutation, deleteAlbum, createAlbumList, deleteAlbumList, updateAlbum } from '../graphql/mutations';
-import { albumListsByAlbumIdAndId, albumListsByListIdAndId, getAlbum, listAlbums, listLists } from '../graphql/queries';
+import { albumListsByAlbumIdAndId, albumListsByListIdAndId, getAlbum, listAlbumLists, listAlbums, listLists } from '../graphql/queries';
 import { GraphQLResult } from '@aws-amplify/api-graphql';
 import { Amplify } from '@aws-amplify/core';
 import { Observable } from 'rxjs';
@@ -330,6 +330,27 @@ export const removeAlbumFromList = async (id: string) => {
 };
 
 export const addAlbumToList = async (albumId: string, listId: string) => {
+
+  const existingEntries = await GraphQLAPI.graphql(Amplify as any, 
+    graphqlOperation(listAlbumLists, {
+      filter: {
+        albumId: { eq: albumId },
+        listId: { eq: listId },
+      },
+    }),
+    {}
+  );
+
+  if (existingEntries instanceof Observable) {
+    throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+  }
+
+  // Check if the response contains existing entries
+  const existingAlbumListEntries = existingEntries.data?.listAlbumLists?.items || [];
+  if (existingAlbumListEntries.length > 0) {
+    throw new Error('This album is already in the list.');
+  }
+
   const response = await GraphQLAPI.graphql(Amplify as any, 
     graphqlOperation(createAlbumList, { input: { albumId, listId, played: false } }),
     {}
@@ -396,7 +417,6 @@ export const fetchWikipediaLink = async (albumName: string, artistName: string):
 
 export const togglePlayedAlbumList = async (albumListId: string, played: boolean) => {
   try {
-    console.log(`Toggling with ${albumListId} ${played}`);
     const response = await GraphQLAPI.graphql(
       Amplify as any,
       graphqlOperation(togglePlayed, { id: albumListId, played }), // Use `id` as expected by the mutation
