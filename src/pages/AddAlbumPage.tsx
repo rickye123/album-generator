@@ -1,7 +1,15 @@
-import React, { useState } from 'react';
-import { fetchAlbum, fetchAlbumBySpotifyUrl } from '../api/spotifyApi';
-import { addAlbum } from '../api/amplifyApi';
+import React, { useState, useEffect } from 'react';
+import {
+  fetchAlbum,
+  fetchAlbumBySpotifyUrl
+} from '../api/spotifyApi';
+import {
+  addAlbum,
+  fetchLists,
+  addAlbumToList
+} from '../api/amplifyApi';
 import './AddAlbumPage.css';
+import { ListData } from '../model';
 
 const AddAlbumPage = () => {
   const [artist, setArtist] = useState('');
@@ -10,11 +18,22 @@ const AddAlbumPage = () => {
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [error, setError] = useState('');
+  const [lists, setLists] = useState([]);
+  const [selectedListId, setSelectedListId] = useState('');
 
-  const cleanAlbumName = (albumName: string): string => {
-    const pattern = /\s*[\(\-\[]?(?:\d{4}\s+Remaster|Legacy Edition|Expanded Edition|Deluxe Edition|Special Edition|Anniversary Edition|Reissue|Remastered|Deluxe)[\)\]]?\s*$/i;
-    return albumName.replace(pattern, '').trim();
-  };
+  useEffect(() => {
+    const loadLists = async () => {
+      try {
+        const result = await fetchLists();
+        setLists(result || []);
+      } catch (err) {
+        console.error('Error fetching lists:', err);
+        setError('Error loading lists.');
+      }
+    };
+
+    loadLists();
+  }, []);
 
   const handleAddAlbum = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,10 +55,9 @@ const AddAlbumPage = () => {
         return;
       }
 
-      const cleanedName = cleanAlbumName(album.name);
       const newAlbum = {
         id: album.id,
-        name: cleanedName,
+        name: album.name,
         artist: album.artists[0].name,
         release_date: album.release_date,
         spotifyUrl: album.external_urls.spotify,
@@ -47,10 +65,20 @@ const AddAlbumPage = () => {
       };
 
       await addAlbum(newAlbum);
-      setSuccessMessage(`Album ${newAlbum.name} added successfully!`);
+
+      if (selectedListId) {
+        await addAlbumToList(newAlbum.id, selectedListId);
+        setSuccessMessage(
+          `Album ${newAlbum.name} added successfully to the selected list!`
+        );
+      } else {
+        setSuccessMessage(`Album ${newAlbum.name} added successfully!`);
+      }
+
       setArtist('');
       setAlbumName('');
       setSpotifyUrl('');
+      setSelectedListId('');
     } catch (err) {
       console.error('Error adding album:', err);
       setError('Failed to add album. Please try again.');
@@ -95,11 +123,28 @@ const AddAlbumPage = () => {
             disabled={!!spotifyUrl}
           />
         </div>
+        <div className="form-group">
+          <label htmlFor="list">Add to List (Optional):</label>
+          <select
+            id="list"
+            value={selectedListId}
+            onChange={(e) => setSelectedListId(e.target.value)}
+          >
+            <option value="">None</option>
+            {lists.map((list: ListData) => (
+              <option key={list.id} value={list.id}>
+                {list.name}
+              </option>
+            ))}
+          </select>
+        </div>
         <button type="submit" disabled={loading}>
           {loading ? 'Adding Album...' : 'Add Album'}
         </button>
         {error && <p className="error-message">{error}</p>}
-        {successMessage && <p className="success-message">{successMessage}</p>}
+        {successMessage && (
+          <p className="success-message">{successMessage}</p>
+        )}
       </form>
     </div>
   );

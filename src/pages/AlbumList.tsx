@@ -26,6 +26,8 @@ const AlbumList = () => {
   useEffect(() => {
     const loadAlbums = async () => {
       const albumList = await fetchAlbums();
+      // think this is filtering out albums that contains ... in it for instance
+      // needs fixing
       const filteredAlbums = artist
         ? albumList.filter((album: AlbumData) => album.artist === decodeURIComponent(artist))
         : albumList;
@@ -121,6 +123,11 @@ const AlbumList = () => {
   const indexOfLastAlbum = currentPage * albumsPerPage;
   const indexOfFirstAlbum = indexOfLastAlbum - albumsPerPage;
 
+  const stripThePrefix = (name: string) => {
+    const lowerCaseName = name.toLowerCase();
+    return lowerCaseName.startsWith("the ") ? name.slice(4) : name;
+  };
+
   const filteredAlbums = albums
     .filter(
       (album) =>
@@ -128,10 +135,10 @@ const AlbumList = () => {
         album.artist.toLowerCase().includes(searchQuery.toLowerCase())
     )
     .sort((a, b) => {
-      const comparison =
-        sortKey === 'artist'
-          ? a.artist.localeCompare(b.artist) || a.name.localeCompare(b.name)
-          : a.name.localeCompare(b.name);
+      const aKey = sortKey === 'artist' ? stripThePrefix(a.artist) : a.name;
+      const bKey = sortKey === 'artist' ? stripThePrefix(b.artist) : b.name;
+
+      const comparison = aKey.localeCompare(bKey);
 
       return sortDirection === 'asc' ? comparison : -comparison;
     });
@@ -181,11 +188,18 @@ const AlbumList = () => {
                   <td className="artist-album-cell">{album.artist}</td>
                   <td className="more-options-cell">
                     <div className="more-options-container">
-                      <img
-                        src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg"
-                        alt="Spotify"
+                      <a
+                        href={album.spotifyUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="spotify-link"
-                      />
+                      >
+                        <img
+                          src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg"
+                          alt="Spotify"
+                          className="spotify-link"
+                        />
+                      </a>
                       <button
                         className="more-options-button"
                         onClick={() => toggleMenu(album.id)}

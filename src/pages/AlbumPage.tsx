@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { fetchAlbumById, fetchWikipediaLink } from '../api/amplifyApi';
+import { fetchAlbumById, fetchWikipediaLink, updateAlbumDetails } from '../api/amplifyApi';
 import { fetchSpotifyAlbumDetails } from '../api/spotifyApi';
 import AlbumDetails from '../components/AlbumDetails';
 import CollapsibleSection from '../components/CollapsibleSection';
@@ -39,6 +39,20 @@ const AlbumPage = () => {
     loadDetails();
   }, [album]);
 
+  const handleEditName = async (updatedName: string) => {
+    if (album) {
+      const updatedAlbum = { ...album, name: updatedName };
+      setAlbum(updatedAlbum);
+
+      try {
+        await updateAlbumDetails(updatedAlbum);
+        console.log('Album updated successfully');
+      } catch (error) {
+        console.error('Failed to update album:', error);
+      }
+    }
+  };
+
   if (!album) return <p>Loading...</p>;
 
   return (
@@ -49,6 +63,7 @@ const AlbumPage = () => {
         artist={album.artist}
         releaseYear={spotifyDetails?.releaseDate?.split('-')[0]}
         spotifyUrl={album.spotifyUrl}
+        onEdit={handleEditName}
       />
 
       <CollapsibleSection title="Listen">
@@ -65,10 +80,10 @@ const AlbumPage = () => {
         </CollapsibleSection>
       )}
       <CollapsibleSection title="Wikipedia">
-          {wikipediaLink && (<Wikipedia wikipediaUrl={wikipediaLink} />)}
+        {wikipediaLink && <Wikipedia wikipediaUrl={wikipediaLink} />}
       </CollapsibleSection>
       <CollapsibleSection title="Discogs">
-          <Discogs/>
+        <Discogs />
       </CollapsibleSection>
     </div>
   );

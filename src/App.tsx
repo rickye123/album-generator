@@ -8,6 +8,7 @@ import Lists from './pages/Lists';
 import ListPage from './pages/ListPage';
 import Artists from './pages/Artists';
 import Years from './pages/Years';
+import Settings from './pages/Settings';
 
 const App = () => {
   return (
@@ -26,6 +27,7 @@ const App = () => {
             <Route path="/list/:listId" element={<ListPage />} />
             <Route path="/albums/artist/:artist" element={<AlbumList />} />
             <Route path="/albums/year/:year" element={<AlbumList />} />
+            <Route path="/settings" element={<Settings />} />
           </Routes>
         </div>
       </div>

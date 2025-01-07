@@ -88,6 +88,7 @@ export const getAlbumList = /* GraphQL */ `query GetAlbumList($id: ID!) {
     id
     albumId
     listId
+    played
     album {
       id
       name
@@ -125,6 +126,7 @@ export const listAlbumLists = /* GraphQL */ `query ListAlbumLists(
       id
       albumId
       listId
+      played
       createdAt
       updatedAt
       __typename
@@ -157,6 +159,7 @@ export const albumListsByAlbumIdAndId = /* GraphQL */ `query AlbumListsByAlbumId
       id
       albumId
       listId
+      played
       createdAt
       updatedAt
       __typename
@@ -189,6 +192,7 @@ export const albumListsByListIdAndId = /* GraphQL */ `query AlbumListsByListIdAn
       id
       albumId
       listId
+      played
       createdAt
       updatedAt
       __typename
