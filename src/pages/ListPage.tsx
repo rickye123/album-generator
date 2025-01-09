@@ -33,6 +33,7 @@ const ListPage: React.FC = () => {
     const loadLists = async () => {
       try {
         const foundList = await fetchAlbumsByListId(listId!);
+        console.log('FoundList', foundList);
         setList(foundList || null);
       } catch (err) {
         console.error('Error fetching list:', err);

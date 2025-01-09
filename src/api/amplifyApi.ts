@@ -314,7 +314,6 @@ export const removeList = async (id: string) => {
   }
 };
 
-
 export const fetchAlbumListEntriesForAlbumId = async (albumId: string) => {
   let allEntries: any[] = [];
   let nextToken: string | null = null;
@@ -534,7 +533,7 @@ export const togglePlayedAlbumList = async (albumListId: string, played: boolean
 };
 
 
-export const getUnplayedAlbumsInList2 = async (listId: string) => {
+export const getUnplayedAlbumsInList = async (listId: string) => {
   let allUnplayedAlbums: any[] = [];
   let nextToken: string | null = null;
 
@@ -543,7 +542,7 @@ export const getUnplayedAlbumsInList2 = async (listId: string) => {
       console.log(`Fetching unplayed albums with nextToken: ${nextToken}`);
       const response = await GraphQLAPI.graphql(
         Amplify as any,
-        graphqlOperation(getUnplayedAlbums, { listId, nextToken }),
+        graphqlOperation(getUnplayedAlbums, { listId, nextToken, limit: 10000 }),
         {}
       );
 
@@ -566,26 +565,4 @@ export const getUnplayedAlbumsInList2 = async (listId: string) => {
 
   console.log(`Total albums fetched: ${allUnplayedAlbums.length}`);
   return allUnplayedAlbums;
-};
-
-export const getUnplayedAlbumsInList = async (listId: string) => {
-  try {
-    const response = await GraphQLAPI.graphql(Amplify as any, 
-      graphqlOperation(getUnplayedAlbums, { listId }),
-      {}
-    );
-
-  // Check if the result is a Promise or Observable
-  if (response instanceof Observable) {
-    throw new Error('Expected a non-subscription query/mutation but received a subscription.');
-  }
-
-  console.log('Response:', response);
-  
-  console.log('Response items:', response.data.listAlbumLists.items);
-  return response.data.listAlbumLists.items;
-  } catch (err) {
-    console.error('Error fetching unplayed albums:', err);
-    throw err;
-  }
 };

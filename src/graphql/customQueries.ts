@@ -29,8 +29,12 @@ query ListListsWithAlbums($filter: ModelListFilterInput, $limit: Int, $nextToken
 }`;
 
 export const getUnplayedAlbums = /* GraphQL */ `
-query GetUnplayedAlbums($listId: ID!) {
-    listAlbumLists(filter: { listId: { eq: $listId }, played: { eq: false } }) {
+  query GetUnplayedAlbums($listId: ID!, $nextToken: String, $limit: Int) {
+    listAlbumLists(
+      filter: { listId: { eq: $listId }, played: { eq: false } }
+      nextToken: $nextToken
+      limit: $limit
+    ) {
       items {
         id
         album {
@@ -44,6 +48,7 @@ query GetUnplayedAlbums($listId: ID!) {
           updatedAt 
         }
       }
+      nextToken
     }
   }
 `;
