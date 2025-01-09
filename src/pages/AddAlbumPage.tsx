@@ -18,7 +18,7 @@ const AddAlbumPage = () => {
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [error, setError] = useState('');
-  const [lists, setLists] = useState([]);
+  const [lists, setLists] = useState<ListData[]>([]); // Explicit type here
   const [selectedListId, setSelectedListId] = useState('');
 
   useEffect(() => {

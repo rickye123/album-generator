@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import {
   fetchAlbumListEntry,
+  fetchAlbumsByListId,
   fetchLists,
   getUnplayedAlbumsInList,
   removeAlbumFromList,
@@ -19,12 +20,7 @@ const ListPage: React.FC = () => {
   const [error, setError] = useState('');
   const [randomAlbum, setRandomAlbum] = useState<any | null>(null);
 
-  const [albums, setAlbums] = useState<AlbumData[]>([]);
-  const [lists, setLists] = useState<ListData[]>([]);
-  const [selectedAlbum, setSelectedAlbum] = useState<AlbumData | null>(null);
   const [menuOpen, setMenuOpen] = useState<{ [key: string]: boolean }>({});
-  const { artist } = useParams<{ artist: string }>();
-  const { year } = useParams<{ year: string }>();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -36,8 +32,7 @@ const ListPage: React.FC = () => {
   useEffect(() => {
     const loadLists = async () => {
       try {
-        const results = await fetchLists();
-        const foundList = results.find((l: ListData) => l.id === listId);
+        const foundList = await fetchAlbumsByListId(listId!);
         console.log('FoundList', foundList);
         setList(foundList || null);
       } catch (err) {
@@ -60,8 +55,7 @@ const ListPage: React.FC = () => {
       }
 
       await removeAlbumFromList(albumListEntry.id);
-      const results = await fetchLists();
-      const foundList = results.find((l: ListData) => l.id === listId);
+      const foundList = await fetchAlbumsByListId(listId!);
       setList(foundList || null);
     } catch (err) {
       console.error('Error removing album:', err);
@@ -78,8 +72,7 @@ const ListPage: React.FC = () => {
         throw new Error('Failed to find AlbumList entry for toggle.');
       }
       await togglePlayedAlbumList(albumListEntry.id, !played);
-      const results = await fetchLists();
-      const foundList = results.find((l: ListData) => l.id === listId);
+      const foundList = await fetchAlbumsByListId(listId!);
       setList(foundList || null);
     } catch (err) {
       console.error('Error toggling played status:', err);
@@ -97,8 +90,7 @@ const ListPage: React.FC = () => {
           await togglePlayedAlbumList(albumListEntry.id, false);
         }
       }
-      const results = await fetchLists();
-      const foundList = results.find((l: ListData) => l.id === listId);
+      const foundList = await fetchAlbumsByListId(listId!);
       setList(foundList || null);
     } catch (err) {
       console.error('Error marking albums as unplayed:', err);
