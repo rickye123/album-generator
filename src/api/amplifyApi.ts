@@ -84,6 +84,7 @@ export const fetchAlbumById = async(albumId: string): Promise<AlbumData | null> 
         name: album.name,
         artist: album.artist,
         release_date: album.release_date,
+        genres: album.genres,
         spotifyUrl: album.spotifyUrl,
         imageUrl: album.imageUrl,
       };
@@ -120,6 +121,7 @@ export const fetchAlbums = async () => {
             name: item.name,
             artist: item.artist,
             release_date: item.release_date,
+            genres: item.genres,
             spotifyUrl: item.spotifyUrl,
             imageUrl: item.imageUrl,
           }))
@@ -165,6 +167,7 @@ export const fetchLists = async () => {
               artist: albumListItem.album.artist,
               spotifyUrl: albumListItem.album.spotifyUrl,
               releaseDate: albumListItem.album.release_date,
+              genres: albumListItem.album.genres,
               imageUrl: albumListItem.album.imageUrl,
               played: albumListItem.played,
             })),
@@ -216,6 +219,7 @@ export const fetchAlbumsByListId = async (listId: string): Promise<ListData> => 
               artist: albumListItem.album.artist,
               spotifyUrl: albumListItem.album.spotifyUrl,
               releaseDate: albumListItem.album.release_date,
+              genres: albumListItem.album.genres,
               imageUrl: albumListItem.album.imageUrl,
               played: albumListItem.played,
             }))

@@ -48,6 +48,7 @@ export const getAlbum = /* GraphQL */ `query GetAlbum($id: ID!) {
     spotifyUrl
     release_date
     imageUrl
+    genres
     lists {
       nextToken
       __typename
@@ -71,6 +72,7 @@ export const listAlbums = /* GraphQL */ `query ListAlbums(
       spotifyUrl
       release_date
       imageUrl
+      genres
       createdAt
       updatedAt
       __typename
@@ -96,6 +98,7 @@ export const getAlbumList = /* GraphQL */ `query GetAlbumList($id: ID!) {
       spotifyUrl
       release_date
       imageUrl
+      genres
       createdAt
       updatedAt
       __typename

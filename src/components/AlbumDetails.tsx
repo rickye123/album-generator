@@ -7,7 +7,8 @@ interface AlbumDetailsProps {
   artist: string;
   releaseYear?: string;
   spotifyUrl?: string;
-  onEdit?: (updatedName: string) => void;
+  genres?: string[];
+  onEdit?: (updatedName: string, updatedGenres: string[]) => void;
 }
 
 const AlbumDetails: React.FC<AlbumDetailsProps> = ({
@@ -16,14 +17,20 @@ const AlbumDetails: React.FC<AlbumDetailsProps> = ({
   artist,
   releaseYear,
   spotifyUrl,
+  genres = [],
   onEdit,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedName, setEditedName] = useState(name);
+  const [editedGenres, setEditedGenres] = useState(genres.join(', '));
 
   const handleSave = () => {
     if (onEdit) {
-      onEdit(editedName);
+      const genreArray = editedGenres
+        .split(',')
+        .map((genre) => genre.trim())
+        .filter((genre) => genre !== ''); // Ensure no empty strings
+      onEdit(editedName, genreArray);
     }
     setIsEditing(false);
   };
@@ -39,6 +46,12 @@ const AlbumDetails: React.FC<AlbumDetailsProps> = ({
             onChange={(e) => setEditedName(e.target.value)}
             className="edit-input"
           />
+          <textarea
+            value={editedGenres}
+            onChange={(e) => setEditedGenres(e.target.value)}
+            className="edit-input"
+            placeholder="Enter genres, separated by commas"
+          />
           <button onClick={handleSave}>Save</button>
           <button onClick={() => setIsEditing(false)}>Cancel</button>
         </div>
@@ -47,6 +60,7 @@ const AlbumDetails: React.FC<AlbumDetailsProps> = ({
       )}
       <p className="album-artist">{artist}</p>
       {releaseYear && <p className="release-date">{releaseYear}</p>}
+      {genres.length > 0 && <p className="album-genres">Genres: {genres.join(', ')}</p>}
       {spotifyUrl && (
         <a href={spotifyUrl} target="_blank" rel="noopener noreferrer" className="spotify-link">
           <img

@@ -9,6 +9,7 @@ import ListPage from './pages/ListPage';
 import Artists from './pages/Artists';
 import Years from './pages/Years';
 import Settings from './pages/Settings';
+import Genres from './pages/Genres';
 
 const App = () => {
   return (
@@ -28,6 +29,8 @@ const App = () => {
             <Route path="/albums/artist/:artist" element={<AlbumList />} />
             <Route path="/albums/year/:year" element={<AlbumList />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/genres" element={<Genres />} />
+            <Route path="/albums/genre/:genre" element={<AlbumList />} />
           </Routes>
         </div>
       </div>

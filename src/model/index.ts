@@ -5,6 +5,7 @@ export interface AlbumData {
     spotifyUrl: string;
     release_date: string;
     imageUrl: string;
+    genres?: string[];
     lists?: ListData[];
 }
 
