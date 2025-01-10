@@ -16,6 +16,7 @@ const AlbumList = () => {
   const [menuOpen, setMenuOpen] = useState<{ [key: string]: boolean }>({});
   const { artist } = useParams<{ artist: string }>();
   const { year } = useParams<{ year: string }>();
+  const { genre } = useParams<{ genre: string }>();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -34,11 +35,16 @@ const AlbumList = () => {
       const filteredByYear = year
         ? filteredAlbums.filter((album: AlbumData) => album.release_date.split('-')[0] === decodeURIComponent(year))
         : filteredAlbums;
-      setAlbums(filteredByYear);
+        console.log('filteredByYear', filteredByYear);
+        console.log('decodeURIComponent', decodeURIComponent(genre!));
+      const filteredByGenre = genre
+        ? filteredByYear.filter((album: AlbumData) => album.genres?.includes(decodeURIComponent(genre)))
+        : filteredByYear;
+      setAlbums(filteredByGenre);
     };
 
     loadAlbums();
-  }, [artist, year]);
+  }, [artist, year, genre]);
 
   const openOverlay = async (album: AlbumData) => {
     try {
@@ -148,7 +154,9 @@ const AlbumList = () => {
   return (
     <div className="album-list-page">
       <h1>
-        {year
+        {genre 
+          ? `${genre} Albums`
+          : year
           ? `${year}'s Albums`
           : artist
           ? `${artist}'s Albums`

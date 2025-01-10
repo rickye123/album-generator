@@ -15,6 +15,7 @@ type Album @model {
   spotifyUrl: String!
   release_date: String!
   imageUrl: String
+  genres: [String] # New optional array field for genres
   lists: [AlbumList] @hasMany(indexName: "byAlbum", fields: ["id"])
 }
 

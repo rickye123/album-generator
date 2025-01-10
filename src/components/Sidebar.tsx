@@ -78,6 +78,11 @@ const Sidebar: React.FC = () => {
               </Link>
             </li>
             <li>
+              <Link to="/genres" onClick={toggleSidebar}>
+                Genres
+              </Link>
+            </li>
+            <li>
               <Link to="/add-album" onClick={toggleSidebar}>
                 Add Album
               </Link>
