@@ -9,6 +9,11 @@ export interface AlbumData {
     lists?: ListData[];
 }
 
+export interface AlbumListData {
+  played: boolean;
+  album: AlbumData;
+}
+
 export interface SpotifyAlbumDetails {
     id: string;
     name: string;
@@ -29,5 +34,5 @@ export interface SpotifyAlbumDetails {
 export interface ListData {
     id: string;
     name: string;
-    albums: AlbumData[];
+    albums: AlbumListData[];
 }

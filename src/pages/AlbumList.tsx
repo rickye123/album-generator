@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { fetchAlbums, fetchLists, addAlbumToList, removeAlbum, fetchAlbumListEntriesForAlbumId, removeAlbumFromList } from '../api/amplifyApi';
-import { AlbumData, ListData } from '../model';
+import { AlbumData, AlbumListData, ListData } from '../model';
 import './AlbumList.css';
-import { Link, useParams } from 'react-router-dom';
-
-type SortKeys = 'artist' | 'name';
-type SortDirection = 'asc' | 'desc';
+import { useParams } from 'react-router-dom';
+import AlbumTable from '../components/AlbumTable';
+import AlbumTableList from '../components/AlbumTableList';
+import AlbumTableBlock from '../components/AlbumTableBlock'; // Import the new component
 
 const AlbumList = () => {
   const [albums, setAlbums] = useState<AlbumData[]>([]);
@@ -17,18 +17,12 @@ const AlbumList = () => {
   const { artist } = useParams<{ artist: string }>();
   const { year } = useParams<{ year: string }>();
   const { genre } = useParams<{ genre: string }>();
-
-  const [searchQuery, setSearchQuery] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [sortKey, setSortKey] = useState<SortKeys>('artist');
-  const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
-  const albumsPerPage = 10;
+  const [view, setView] = useState<'table' | 'list' | 'block'>('table'); // State to manage view
 
   useEffect(() => {
     const loadAlbums = async () => {
       const albumList = await fetchAlbums();
-      // think this is filtering out albums that contains ... in it for instance
-      // needs fixing
+
       const filteredAlbums = artist
         ? albumList.filter((album: AlbumData) => album.artist === decodeURIComponent(artist))
         : albumList;
@@ -77,7 +71,7 @@ const AlbumList = () => {
     }
   };
 
-  const handleDeleteAlbum = async (albumId: string) => {
+  const handleDeleteAlbum = async (albumId: string, listId: string) => {
     try {
       // get album list entry (if one exists) and delete it
       const results = await fetchAlbumListEntriesForAlbumId(albumId);
@@ -104,52 +98,39 @@ const AlbumList = () => {
     }));
   };
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
-    setCurrentPage(1);
-  };
+  const albumListData: AlbumListData[] = albums.map(album => ({
+    album,
+    played: false,
+  }));
 
-  const handlePageChange = (direction: 'next' | 'prev') => {
-    if (direction === 'next' && indexOfLastAlbum < filteredAlbums.length) {
-      setCurrentPage((prev) => prev + 1);
-    } else if (direction === 'prev' && currentPage > 1) {
-      setCurrentPage((prev) => prev - 1);
+  const renderView = () => {
+    switch (view) {
+      case 'table':
+        return (
+          <AlbumTable
+            albums={albumListData}
+            handleRemove={handleDeleteAlbum}
+            toggleMenu={toggleMenu}
+            menuOpen={menuOpen}
+            openOverlay={openOverlay}
+          />
+        );
+      case 'list':
+        return (
+          <AlbumTableList
+            albums={albumListData}
+            handleRemove={handleDeleteAlbum}
+            toggleMenu={toggleMenu}
+            menuOpen={menuOpen}
+            openOverlay={openOverlay}
+          />
+        );
+      case 'block':
+        return <AlbumTableBlock albums={albumListData} />;
+      default:
+        return null;
     }
   };
-
-  const handleSortChange = (key: SortKeys) => {
-    if (sortKey === key) {
-      setSortDirection((prevDirection) => (prevDirection === 'asc' ? 'desc' : 'asc'));
-    } else {
-      setSortKey(key);
-      setSortDirection('asc');
-    }
-  };
-
-  const indexOfLastAlbum = currentPage * albumsPerPage;
-  const indexOfFirstAlbum = indexOfLastAlbum - albumsPerPage;
-
-  const stripThePrefix = (name: string) => {
-    const lowerCaseName = name.toLowerCase();
-    return lowerCaseName.startsWith("the ") ? name.slice(4) : name;
-  };
-
-  const filteredAlbums = albums
-    .filter(
-      (album) =>
-        album.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        album.artist.toLowerCase().includes(searchQuery.toLowerCase())
-    )
-    .sort((a, b) => {
-      const aKey = sortKey === 'artist' ? stripThePrefix(a.artist) : a.name;
-      const bKey = sortKey === 'artist' ? stripThePrefix(b.artist) : b.name;
-
-      const comparison = aKey.localeCompare(bKey);
-
-      return sortDirection === 'asc' ? comparison : -comparison;
-    });
-
-  const currentAlbums = filteredAlbums.slice(indexOfFirstAlbum, indexOfLastAlbum);
 
   return (
     <div className="album-list-page">
@@ -162,87 +143,16 @@ const AlbumList = () => {
           ? `${artist}'s Albums`
           : 'All Albums'}
       </h1>
-      <div className="search-bar">
-        <input
-          type="text"
-          placeholder="Search albums or artists..."
-          value={searchQuery}
-          onChange={handleSearch}
-        />
+      <div className="view-toggle">
+        <button onClick={() => setView('table')} className={view === 'table' ? 'active' : ''}>Table View</button>
+        <button onClick={() => setView('list')} className={view === 'list' ? 'active' : ''}>List View</button>
+        <button onClick={() => setView('block')} className={view === 'block' ? 'active' : ''}>Block View</button>
       </div>
-
       {albums.length === 0 ? (
         <p className="no-albums">No albums found.</p>
       ) : (
-        <>
-          <table className="album-table">
-            <thead>
-              <tr>
-                <th onClick={() => handleSortChange('name')}>
-                  Album Name {sortKey === 'name' && (sortDirection === 'asc' ? '↑' : '↓')}
-                </th>
-                <th onClick={() => handleSortChange('artist')}>
-                  Artist {sortKey === 'artist' && (sortDirection === 'asc' ? '↑' : '↓')}
-                </th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentAlbums.map((album: AlbumData) => (
-                <tr key={album.id}>
-                  <td className="artist-album-cell">
-                    <Link to={`/albums/${album.id}`}>{album.name}</Link>
-                  </td>
-                  <td className="artist-album-cell">{album.artist}</td>
-                  <td className="more-options-cell">
-                    <div className="more-options-container">
-                      <a
-                        href={album.spotifyUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="spotify-link"
-                      >
-                        <img
-                          src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg"
-                          alt="Spotify"
-                          className="spotify-link"
-                        />
-                      </a>
-                      <button
-                        className="more-options-button"
-                        onClick={() => toggleMenu(album.id)}
-                      >
-                        ⋮
-                      </button>
-                      {menuOpen[album.id] && (
-                        <div className="dropdown-menu">
-                          <button onClick={() => openOverlay(album)}>Add to List</button>
-                          <button onClick={() => handleDeleteAlbum(album.id)}>Delete</button>
-                        </div>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <div className="pagination-controls">
-            <button onClick={() => handlePageChange('prev')} disabled={currentPage === 1}>
-              Previous
-            </button>
-            <span>
-              Page {currentPage} of {Math.ceil(filteredAlbums.length / albumsPerPage)}
-            </span>
-            <button
-              onClick={() => handlePageChange('next')}
-              disabled={indexOfLastAlbum >= filteredAlbums.length}
-            >
-              Next
-            </button>
-          </div>
-        </>
+        renderView()
       )}
-
       {showOverlay && selectedAlbum && (
         <div className="overlay">
           <div className="overlay-content">
