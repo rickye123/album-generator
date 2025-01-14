@@ -35,6 +35,12 @@ const AlbumTableBlock: React.FC<AlbumTableBlockProps> = ({ albums }) => {
           <div key={albumList.album.id} className="album-block">
             <a href={albumList.album.spotifyUrl} target="_blank" rel="noopener noreferrer">
               <img src={albumList.album.imageUrl} alt={albumList.album.name} className="album-block-image" />
+              <div className="album-block-overlay">
+                <div className="album-block-text">
+                  <p>{albumList.album.name}</p>
+                  <p>{albumList.album.artist}</p>
+                </div>
+              </div>
             </a>
           </div>
         ))}
