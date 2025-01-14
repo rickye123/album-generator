@@ -4,7 +4,7 @@ import { albumListsByAlbumIdAndId, albumListsByListIdAndId, getAlbum, getList, l
 import { GraphQLResult } from '@aws-amplify/api-graphql';
 import { Amplify } from '@aws-amplify/core';
 import { Observable } from 'rxjs';
-import { AlbumData, ListData } from '../model';
+import { AlbumData, AlbumListData, ListData } from '../model';
 import { AlbumList, List } from '../API';
 import { getUnplayedAlbums, listListsWithAlbums } from '../graphql/customQueries';
 import { togglePlayed } from '../graphql/customMutations';
@@ -213,14 +213,16 @@ export const fetchAlbumsByListId = async (listId: string): Promise<ListData> => 
         if (listData?.albums) {
           albumName = listData.name;
           allAlbums = allAlbums.concat(
-            listData.albums.items.map((albumListItem: AlbumList) => ({
-              id: albumListItem.album.id,
-              name: albumListItem.album.name,
-              artist: albumListItem.album.artist,
-              spotifyUrl: albumListItem.album.spotifyUrl,
-              releaseDate: albumListItem.album.release_date,
-              genres: albumListItem.album.genres,
-              imageUrl: albumListItem.album.imageUrl,
+            listData.albums.items.map((albumListItem: AlbumListData) => ({
+              album: {
+                id: albumListItem.album.id,
+                name: albumListItem.album.name,
+                artist: albumListItem.album.artist,
+                spotifyUrl: albumListItem.album.spotifyUrl,
+                releaseDate: albumListItem.album.release_date,
+                genres: albumListItem.album.genres,
+                imageUrl: albumListItem.album.imageUrl,
+              },
               played: albumListItem.played,
             }))
           );
