@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { AlbumListData, AlbumData } from '../model';
 import { Link } from 'react-router-dom';
 import '../pages/AlbumList.css';
+import useAlbumTable from '../hooks/useAlbumTable';
 
 interface AlbumTableListProps {
   albums: AlbumListData[];
@@ -14,75 +15,28 @@ interface AlbumTableListProps {
 }
 
 const AlbumTableList: React.FC<AlbumTableListProps> = ({
-  albums,
-  listId,
-  handleRemove,
-  togglePlayed,
-  toggleMenu,
-  menuOpen,
-  openOverlay,
-}) => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [albumsPerPage] = useState(10);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [sortKey, setSortKey] = useState('artist');
-  const [sortDirection, setSortDirection] = useState('asc');
-
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
-    setCurrentPage(1);
-  };
-
-  const handlePageChange = (direction: 'next' | 'prev') => {
-    if (direction === 'next' && indexOfLastAlbum < filteredAlbums.length) {
-      setCurrentPage((prev) => prev + 1);
-    } else if (direction === 'prev' && currentPage > 1) {
-      setCurrentPage((prev) => prev - 1);
-    }
-  };
-
-  const handleSortChange = (key: string) => {
-    if (sortKey === key) {
-      setSortDirection((prevDirection) => (prevDirection === 'asc' ? 'desc' : 'asc'));
-    } else {
-      setSortKey(key);
-      setSortDirection('asc');
-    }
-  };
-
-  const stripThePrefix = (name: string) => {
-    const lowerCaseName = name.toLowerCase();
-    return lowerCaseName.startsWith("the ") ? name.slice(4) : name;
-  };
-
-  const indexOfLastAlbum = currentPage * albumsPerPage;
-  const indexOfFirstAlbum = indexOfLastAlbum - albumsPerPage;
-
-  const filteredAlbums = albums.filter((album) => 
-    album.album.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    album.album.artist.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  const sortedAlbums = filteredAlbums.sort((a, b) => {
-    const getSortValue = (album: AlbumListData) => {
-      if (sortKey === 'name') {
-        return stripThePrefix(album.album.name);
-      } else if (sortKey === 'artist') {
-        return stripThePrefix(album.album.artist);
-      }
-      return '';
-    };
-
-    const valueA = getSortValue(a);
-    const valueB = getSortValue(b);
-
-    return sortDirection === 'asc'
-      ? valueA.localeCompare(valueB)
-      : valueB.localeCompare(valueA);
-  });
-
-  const currentAlbums = sortedAlbums.slice(indexOfFirstAlbum, indexOfLastAlbum);
-
+    albums,
+    listId,
+    handleRemove,
+    togglePlayed,
+    toggleMenu,
+    menuOpen,
+    openOverlay,
+  }) => {
+    const {
+      currentPage,
+      searchQuery,
+      sortKey,
+      sortDirection,
+      handleSearch,
+      handlePageChange,
+      handleSortChange,
+      currentAlbums,
+      filteredAlbums,
+      indexOfLastAlbum,
+    } = useAlbumTable(albums);
+  
+    const albumsPerPage = 10; // Define the number of albums per page
   return (
     <>
             <div className="search-bar">

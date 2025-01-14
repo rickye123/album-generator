@@ -5,6 +5,7 @@ import './AlbumList.css';
 import { useParams } from 'react-router-dom';
 import AlbumTable from '../components/AlbumTable';
 import AlbumTableList from '../components/AlbumTableList';
+import AlbumTableBlock from '../components/AlbumTableBlock'; // Import the new component
 
 const AlbumList = () => {
   const [albums, setAlbums] = useState<AlbumData[]>([]);
@@ -125,7 +126,7 @@ const AlbumList = () => {
           />
         );
       case 'block':
-        return <div>Block view is not implemented yet.</div>;
+        return <AlbumTableBlock albums={albumListData} />;
       default:
         return null;
     }

@@ -11,6 +11,7 @@ import './AlbumList';
 import { ListData } from '../model';
 import AlbumTable from '../components/AlbumTable';
 import AlbumTableList from '../components/AlbumTableList';
+import AlbumTableBlock from '../components/AlbumTableBlock';
 
 const ListPage: React.FC = () => {
   const { listId } = useParams<{ listId: string }>();
@@ -137,7 +138,9 @@ const ListPage: React.FC = () => {
           />
         );
       case 'block':
-        return <div>Block view is not implemented yet.</div>;
+        return (
+          <AlbumTableBlock albums={list.albums} />
+        );
       default:
         return null;
     }
