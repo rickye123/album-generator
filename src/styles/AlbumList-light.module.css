@@ -68,7 +68,7 @@
   text-decoration: none;
   color: #1DB954;
   font-weight: bold;
-  height: 20px
+  height: 20px;
 }
 
 .spotify-link img {
@@ -290,7 +290,7 @@
   }
 
   .album-table tbody {
-    display: block
+    display: block;
   }
 
   .album-table tr {
@@ -341,7 +341,6 @@
     margin-top: 0px;
     padding: 0px;
   }
-
 }
 
 /* For more options dropdown */

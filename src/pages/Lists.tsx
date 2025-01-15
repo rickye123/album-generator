@@ -2,14 +2,21 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchLists, addList, removeList, fetchAlbumListEntriesForListId, removeAlbumFromList } from '../api/amplifyApi';
 import { ListData } from '../model';
-import './Lists.css'; // Ensure this file is now only for Lists
-
+import '../styles/Lists.css'; // Ensure this file is now only for Lists
+import darkStyles from '../styles/Lists-dark.module.css';
+import lightStyles from '../styles/Lists-light.module.css';
 const Lists: React.FC = () => {
   const [listName, setListName] = useState('');
   const [lists, setLists] = useState<ListData[]>([]);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const [theme] = useState<'light' | 'dark'>(() => {
+    // Load theme preference from localStorage or default to 'light'
+    return (localStorage.getItem('theme') as 'light' | 'dark') || 'light';
+  });
 
+  // Use the appropriate styles based on the current theme
+  const styles = theme === 'dark' ? darkStyles : lightStyles;
   useEffect(() => {
     const loadLists = async () => {
       try {
@@ -74,15 +81,15 @@ const Lists: React.FC = () => {
   };
 
   return (
-    <div className="lists-page">
-      <div className="container">
+    <div className={styles['lists-page']}>
+      <div className={styles['container']}>
         <h1>My Lists</h1>
         <form onSubmit={handleCreateList}>
           <div>
-            <label htmlFor="listName">New List Name:</label>
+            <label htmlFor={styles['listName']}>New List Name:</label>
             <input
               type="text"
-              id="listName"
+              id={styles['listName']}
               value={listName}
               onChange={(e) => setListName(e.target.value)}
               required
@@ -93,7 +100,7 @@ const Lists: React.FC = () => {
         {error && <p style={{ color: 'red' }}>{error}</p>}
         <h2>Existing Lists</h2>
         {lists.length === 0 ? (
-          <p className="no-lists">No Lists found.</p>
+          <p className={styles['no-lists']}>No Lists found.</p>
         ) : (
           <ul>
             {lists.map((list) => (
@@ -103,7 +110,7 @@ const Lists: React.FC = () => {
                   <p>{list.albums?.length > 100 ? '>100' : list.albums?.length || 0} Albums</p>
                 </div>
                 <button
-                  className="delete-button"
+                  className={styles['delete-button']}
                   onClick={(e) => {
                     e.stopPropagation();
                     handleDeleteList(list.id);

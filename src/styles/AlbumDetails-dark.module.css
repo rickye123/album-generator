@@ -1,0 +1,65 @@
+.album-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  max-width: 600px;
+  background: #464545;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px #737373;
+}
+
+  .album-cover {
+    width: 300px;
+    height: 300px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px #736969;
+  }
+  
+  .album-details p {
+    font-size: 1.2rem;
+    color: #ffffff;
+    margin: 0;
+  }
+
+  .album-artist {
+    font-size: 1.2rem;
+    color: #555;
+  }
+  
+  .release-date {
+    font-size: 1rem;
+    color: #555;
+  }
+  
+  .spotify-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #1db954;
+    font-weight: bold;
+  }
+  
+  .spotify-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+  }
+  
+  .wikipedia-link {
+    margin-top: 10px;
+  }
+  
+  .wikipedia-icon {
+    width: 30px;
+    height: auto;
+    transition: opacity 0.3s, transform 0.3s;
+  }
+  
+  .wikipedia-link:hover .wikipedia-icon {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+  

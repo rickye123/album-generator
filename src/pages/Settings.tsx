@@ -1,11 +1,25 @@
-import React, { useState } from 'react';
-import './Settings.css';
+import React, { useEffect, useState } from 'react';
+import '../styles/Settings.css'; // Ensure this path is correct
 
 const Settings: React.FC = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [landingPage, setLandingPage] = useState<'list' | 'albums' | 'year'>('list');
   const [selectedList, setSelectedList] = useState<string>('defaultList');
   const [randomizationMethod, setRandomizationMethod] = useState<'alphabetical' | 'popularity' | 'custom'>('alphabetical');
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    setTheme(savedTheme as 'light' | 'dark');
+  
+    // CSS Modules will handle class scoping, so no need for dynamic imports
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  }, []);
+  
+  const handleThemeChange = (newTheme: 'light' | 'dark') => {
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+    document.documentElement.setAttribute('data-theme', newTheme);
+  };  
 
   return (
     <div className="settings-page">
@@ -21,7 +35,7 @@ const Settings: React.FC = () => {
               name="theme"
               value="light"
               checked={theme === 'light'}
-              onChange={() => setTheme('light')}
+              onChange={() => handleThemeChange('light')}
             />
             Light Mode
           </label>
@@ -31,7 +45,7 @@ const Settings: React.FC = () => {
               name="theme"
               value="dark"
               checked={theme === 'dark'}
-              onChange={() => setTheme('dark')}
+              onChange={() => handleThemeChange('dark')}
             />
             Dark Mode
           </label>

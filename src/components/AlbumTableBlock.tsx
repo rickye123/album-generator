@@ -1,7 +1,7 @@
 import React from 'react';
 import { AlbumListData } from '../model';
 import useAlbumTable from '../hooks/useAlbumTable';
-import '../pages/AlbumList.css';
+import '../styles/AlbumList.css';
 
 interface AlbumTableBlockProps {
   albums: AlbumListData[];

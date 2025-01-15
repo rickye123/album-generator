@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Tracklist.css';
+import '../styles/Tracklist.css';
 
 interface Track {
   id: string;

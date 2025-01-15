@@ -1,5 +1,3 @@
-import './Discogs.css';
-
 const Discogs: React.FC = () => {
 
   return (

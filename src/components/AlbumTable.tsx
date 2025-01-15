@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { AlbumListData, AlbumData } from '../model';
 import useAlbumTable from '../hooks/useAlbumTable';
-import '../pages/AlbumList.css';
+import '../styles/AlbumList.css';
 
 interface AlbumTableProps {
   albums: AlbumListData[];

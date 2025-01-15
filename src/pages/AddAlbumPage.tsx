@@ -8,7 +8,7 @@ import {
   fetchLists,
   addAlbumToList
 } from '../api/amplifyApi';
-import './AddAlbumPage.css';
+import '../styles/AddAlbumPage.css';
 import { ListData } from '../model';
 
 const AddAlbumPage = () => {

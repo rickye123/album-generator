@@ -1,0 +1,55 @@
+@import './AddAlbumPage-common.module.css';
+
+/* General container for the page */
+.add-album-page {
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+/* Page title */
+.add-album-page h1 {
+  color: #1DB954;
+}
+
+/* Form styles */
+.add-album-form {
+  background: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+label {
+  color: #666;
+}
+
+input, select {
+  background-color: #fff;
+  border: 1px solid #ccc;
+}
+
+select {
+  appearance: none; /* Removes default OS styling for consistency */
+  background: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="5" viewBox="0 0 10 5"><path fill="none" stroke="%23666" stroke-width="1.5" d="M1 1l4 4 4-4"/></svg>') no-repeat right 10px center;
+  background-size: 10px;
+}
+
+button {
+  background-color: #1DB954;
+  color: #fff;
+}
+
+button:disabled {
+  background-color: #b3d7bf;
+}
+
+button:hover:not(:disabled) {
+  background-color: #169c44;
+}
+
+/* Success and error messages */
+.error-message {
+  color: red;
+}
+
+.success-message {
+  color: green;
+}

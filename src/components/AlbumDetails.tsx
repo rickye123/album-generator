@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import './AlbumDetails.css';
+import '../styles/AlbumDetails.css';
+import darkStyles from '../styles/AlbumDetails-dark.module.css';
+import lightStyles from '../styles/AlbumDetails-light.module.css';
 
 interface AlbumDetailsProps {
   imageUrl: string;
@@ -23,7 +25,14 @@ const AlbumDetails: React.FC<AlbumDetailsProps> = ({
   const [isEditing, setIsEditing] = useState(false);
   const [editedName, setEditedName] = useState(name);
   const [editedGenres, setEditedGenres] = useState(genres.join(', '));
+  const [theme] = useState<'light' | 'dark'>(() => {
+    // Load theme preference from localStorage or default to 'light'
+    return (localStorage.getItem('theme') as 'light' | 'dark') || 'light';
+  });
 
+  // Use the appropriate styles based on the current theme
+  const styles = theme === 'dark' ? darkStyles : lightStyles;
+  
   const handleSave = () => {
     if (onEdit) {
       const genreArray = editedGenres
@@ -36,8 +45,8 @@ const AlbumDetails: React.FC<AlbumDetailsProps> = ({
   };
 
   return (
-    <div className="album-details">
-      <img className="album-cover" src={imageUrl} alt={name} />
+    <div className={styles['album-details']}>
+      <img className={styles['album-cover']} src={imageUrl} alt={name} />
       {isEditing ? (
         <div>
           <input
@@ -58,9 +67,9 @@ const AlbumDetails: React.FC<AlbumDetailsProps> = ({
       ) : (
         <h1 onClick={() => setIsEditing(true)}>{name}</h1>
       )}
-      <p className="album-artist">{artist}</p>
-      {releaseYear && <p className="release-date">{releaseYear}</p>}
-      {genres.length > 0 && <p className="album-genres">Genres: {genres.join(', ')}</p>}
+      <p className={styles['album-artist']}>{artist}</p>
+      {releaseYear && <p className={styles['release-date']}>{releaseYear}</p>}
+      {genres.length > 0 && <p className={styles['album-genres']}>Genres: {genres.join(', ')}</p>}
       {spotifyUrl && (
         <a href={spotifyUrl} target="_blank" rel="noopener noreferrer" className="spotify-link">
           <img

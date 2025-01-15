@@ -1,5 +1,3 @@
-import './Wikipedia.css';
-
 interface WikipediaProps {
     wikipediaUrl: string;
 }

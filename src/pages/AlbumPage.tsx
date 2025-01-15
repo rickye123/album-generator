@@ -4,7 +4,9 @@ import { fetchAlbumById, fetchWikipediaLink, updateAlbumDetails } from '../api/a
 import { fetchSpotifyAlbumDetails } from '../api/spotifyApi';
 import AlbumDetails from '../components/AlbumDetails';
 import CollapsibleSection from '../components/CollapsibleSection';
-import './AlbumPage.css';
+import darkStyles from '../styles/AlbumPage-dark.module.css';
+import lightStyles from '../styles/AlbumPage-light.module.css';
+import '../styles/AlbumPage.css';
 import { AlbumData, SpotifyAlbumDetails } from '../model';
 import Wikipedia from '../components/Wikipedia';
 import Discogs from '../components/Discogs';
@@ -15,6 +17,13 @@ const AlbumPage = () => {
   const [album, setAlbum] = useState<AlbumData | null>(null);
   const [spotifyDetails, setSpotifyDetails] = useState<SpotifyAlbumDetails | null>(null);
   const [wikipediaLink, setWikipediaLink] = useState<string | null>(null);
+  const [theme] = useState<'light' | 'dark'>(() => {
+    // Load theme preference from localStorage or default to 'light'
+    return (localStorage.getItem('theme') as 'light' | 'dark') || 'light';
+  });
+
+  // Use the appropriate styles based on the current theme
+  const styles = theme === 'dark' ? darkStyles : lightStyles;
 
   useEffect(() => {
     const loadAlbum = async () => {
@@ -56,7 +65,7 @@ const AlbumPage = () => {
   if (!album) return <p>Loading...</p>;
 
   return (
-    <div className="album-page">
+    <div className={styles['album-page']}>
       <AlbumDetails
         imageUrl={album.imageUrl}
         name={album.name}

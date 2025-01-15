@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { AlbumListData, AlbumData } from '../model';
 import { Link } from 'react-router-dom';
-import '../pages/AlbumList.css';
+import '../styles/AlbumList.css';
 import useAlbumTable from '../hooks/useAlbumTable';
 
 interface AlbumTableListProps {
