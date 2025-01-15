@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import '../styles/AlbumDetails.css';
-import darkStyles from '../styles/AlbumDetails-dark.module.css';
-import lightStyles from '../styles/AlbumDetails-light.module.css';
+import darkStyles from '../styles/modules/AlbumDetails-dark.module.css';
+import lightStyles from '../styles/modules/AlbumDetails-light.module.css';
 
 interface AlbumDetailsProps {
   imageUrl: string;
@@ -53,12 +52,12 @@ const AlbumDetails: React.FC<AlbumDetailsProps> = ({
             type="text"
             value={editedName}
             onChange={(e) => setEditedName(e.target.value)}
-            className="edit-input"
+            className={styles['edit-input']}
           />
           <textarea
             value={editedGenres}
             onChange={(e) => setEditedGenres(e.target.value)}
-            className="edit-input"
+            className={styles['edit-input']}
             placeholder="Enter genres, separated by commas"
           />
           <button onClick={handleSave}>Save</button>
@@ -71,11 +70,11 @@ const AlbumDetails: React.FC<AlbumDetailsProps> = ({
       {releaseYear && <p className={styles['release-date']}>{releaseYear}</p>}
       {genres.length > 0 && <p className={styles['album-genres']}>Genres: {genres.join(', ')}</p>}
       {spotifyUrl && (
-        <a href={spotifyUrl} target="_blank" rel="noopener noreferrer" className="spotify-link">
+        <a href={spotifyUrl} target="_blank" rel="noopener noreferrer" className={styles['spotify-link']}>
           <img
             src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg"
             alt="Spotify"
-            className="spotify-icon"
+            className={styles['spotify-icon']}
           />
         </a>
       )}

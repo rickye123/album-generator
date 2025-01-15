@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchAlbumById, fetchWikipediaLink, updateAlbumDetails } from '../api/amplifyApi';
 import { fetchSpotifyAlbumDetails } from '../api/spotifyApi';
 import AlbumDetails from '../components/AlbumDetails';
 import CollapsibleSection from '../components/CollapsibleSection';
-import darkStyles from '../styles/AlbumPage-dark.module.css';
-import lightStyles from '../styles/AlbumPage-light.module.css';
-import '../styles/AlbumPage.css';
+import darkStyles from '../styles/modules/AlbumPage-dark.module.css';
+import lightStyles from '../styles/modules/AlbumPage-light.module.css';
 import { AlbumData, SpotifyAlbumDetails } from '../model';
 import Wikipedia from '../components/Wikipedia';
 import Discogs from '../components/Discogs';

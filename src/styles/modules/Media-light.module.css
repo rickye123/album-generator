@@ -1,38 +1,38 @@
-.artists-page {
+.media-page {
     padding: 20px;
     font-family: Arial, sans-serif;
-    color: #c5c4c4;
+    color: #333;
   }
   
-  .artists-page h1 {
+  .media-page h1 {
     font-size: 2rem;
     margin-bottom: 20px;
     text-align: center;
   }
   
-  .artist-list {
+  .media-list {
     list-style: none;
     padding: 0;
     margin: 0 auto;
     max-width: 600px;
   }
   
-  .artist-item {
+  .media-item {
     margin-bottom: 10px;
     font-size: 1.2rem;
     text-align: left;
   }
   
-  .artist-item a {
+  .media-item a {
     text-decoration: none;
     color: #1db954;
     padding: 5px 0;
     display: block;
-    border-bottom: 1px solid #444444;
+    border-bottom: 1px solid #ccc;
     transition: color 0.2s, border-color 0.2s;
   }
   
-  .artist-item a:hover {
+  .media-item a:hover {
     color: #14833b;
     border-color: #14833b;
   }

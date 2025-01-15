@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { fetchAlbums } from '../api/amplifyApi';
 import { Link } from 'react-router-dom';
-import '../styles/Media.css';
-import darkStyles from '../styles/Media-dark.module.css';
-import lightStyles from '../styles/Media-light.module.css';
+import darkStyles from '../styles/modules/Media-dark.module.css';
+import lightStyles from '../styles/modules/Media-light.module.css';
 import { AlbumData } from '../model';
 
 const ArtistsPage = () => {
@@ -30,14 +29,14 @@ const ArtistsPage = () => {
   }, []);
 
   return (
-    <div className={styles['artists-page']}>
+    <div className={styles['media-page']}>
       <h1>Artists</h1>
       {artists.length === 0 ? (
         <p>No artists found.</p>
       ) : (
-        <ul className={styles['artist-list']}>
+        <ul className={styles['media-list']}>
           {artists.map((artist) => (
-            <li key={artist} className={styles['artist-item']}>
+            <li key={artist} className={styles['media-item']}>
               <Link to={`/albums/artist/${encodeURIComponent(artist)}`}>{artist}</Link>
             </li>
           ))}

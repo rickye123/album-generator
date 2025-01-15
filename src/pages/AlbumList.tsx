@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 import { fetchAlbums, fetchLists, addAlbumToList, removeAlbum, fetchAlbumListEntriesForAlbumId, removeAlbumFromList } from '../api/amplifyApi';
 import { AlbumData, AlbumListData, ListData } from '../model';
-import '../styles/AlbumList.css'; // Update the import statement
-import darkStyles from '../styles/AlbumList-dark.module.css';
-import lightStyles from '../styles/AlbumList-light.module.css';
+import darkStyles from '../styles/modules/AlbumList-dark.module.css';
+import lightStyles from '../styles/modules/AlbumList-light.module.css';
 import { useParams } from 'react-router-dom';
 import AlbumTable from '../components/AlbumTable';
 import AlbumTableList from '../components/AlbumTableList';
@@ -170,18 +169,19 @@ const AlbumList = () => {
             {lists.length === 0 ? (
               <p>No lists available. Please create one first.</p>
             ) : (
-              <ul className={styles['list-table']}>
-                {lists.map((list) => (
-                  <li key={list.id}>
-                    <button
-                      className={styles['list-select-button']}
-                      onClick={() => handleAddAlbumToList(list.id)}
-                    >
+              <select
+                  className={styles['list-select-dropdown']}
+                  onChange={(e) => handleAddAlbumToList(e.target.value)}
+                >
+                  <option value="" disabled selected>
+                    Select a list
+                  </option>
+                  {lists.map((list) => (
+                    <option key={list.id} value={list.id}>
                       {list.name}
-                    </button>
-                  </li>
-                ))}
-              </ul>
+                    </option>
+                  ))}
+              </select>
             )}
             <button className={styles['close-overlay-button']} onClick={closeOverlay}>
               Close

@@ -8,7 +8,8 @@ import {
   fetchLists,
   addAlbumToList
 } from '../api/amplifyApi';
-import '../styles/AddAlbumPage.css';
+import darkStyles from '../styles/modules/AddAlbumPage-dark.module.css';
+import lightStyles from '../styles/modules/AddAlbumPage-light.module.css';
 import { ListData } from '../model';
 
 const AddAlbumPage = () => {
@@ -20,7 +21,13 @@ const AddAlbumPage = () => {
   const [error, setError] = useState('');
   const [lists, setLists] = useState<ListData[]>([]); // Explicit type here
   const [selectedListId, setSelectedListId] = useState('');
+  const [theme] = useState<'light' | 'dark'>(() => {
+    // Load theme preference from localStorage or default to 'light'
+    return (localStorage.getItem('theme') as 'light' | 'dark') || 'light';
+  });
 
+  // Use the appropriate styles based on the current theme
+  const styles = theme === 'dark' ? darkStyles : lightStyles;
   useEffect(() => {
     const loadLists = async () => {
       try {
@@ -88,45 +95,45 @@ const AddAlbumPage = () => {
   };
 
   return (
-    <div className="add-album-page">
+    <div className={styles['add-album-page']}>
       <h1>Add a New Album</h1>
-      <form onSubmit={handleAddAlbum} className="add-album-form">
-        <div className="form-group">
+      <form onSubmit={handleAddAlbum} className={styles['add-album-form']}>
+        <div className={styles['form-group']}>
           <label htmlFor="spotifyUrl">Spotify URL (Optional):</label>
           <input
             type="text"
-            id="spotifyUrl"
+            id={styles['spotifyUrl']}
             value={spotifyUrl}
             onChange={(e) => setSpotifyUrl(e.target.value)}
           />
         </div>
         <p>Or enter details below:</p>
-        <div className="form-group">
+        <div className={styles['form-group']}>
           <label htmlFor="artist">Artist:</label>
           <input
             type="text"
-            id="artist"
+            id={styles['artist']}
             value={artist}
             onChange={(e) => setArtist(e.target.value)}
             required={!spotifyUrl}
             disabled={!!spotifyUrl}
           />
         </div>
-        <div className="form-group">
+        <div className={styles['form-group']}>
           <label htmlFor="albumName">Album Name:</label>
           <input
             type="text"
-            id="albumName"
+            id={styles['albumName']}
             value={name}
             onChange={(e) => setAlbumName(e.target.value)}
             required={!spotifyUrl}
             disabled={!!spotifyUrl}
           />
         </div>
-        <div className="form-group">
+        <div className={styles['form-group']}>
           <label htmlFor="list">Add to List (Optional):</label>
           <select
-            id="list"
+            id={styles['list']}
             value={selectedListId}
             onChange={(e) => setSelectedListId(e.target.value)}
           >
@@ -141,9 +148,9 @@ const AddAlbumPage = () => {
         <button type="submit" disabled={loading}>
           {loading ? 'Adding Album...' : 'Add Album'}
         </button>
-        {error && <p className="error-message">{error}</p>}
+        {error && <p className={styles['error-message']}>{error}</p>}
         {successMessage && (
-          <p className="success-message">{successMessage}</p>
+          <p className={styles['success-message']}>{successMessage}</p>
         )}
       </form>
     </div>

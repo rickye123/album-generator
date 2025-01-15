@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { fetchRandomAlbum } from '../api/amplifyApi';
 import { AlbumData } from '../model';
-import darkStyles from '../styles/LandingPage-dark.module.css';
-import lightStyles from '../styles/LandingPage.module.css';
+import darkStyles from '../styles/modules/LandingPage-dark.module.css';
+import lightStyles from '../styles/modules/LandingPage-light.module.css';
 
 const LandingPage = () => {
   const [album, setAlbum] = useState<AlbumData | null>(null);

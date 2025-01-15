@@ -7,9 +7,8 @@ import {
   removeAlbumFromList,
   togglePlayedAlbumList,
 } from '../api/amplifyApi';
-import '../styles/AlbumList.css'; // Update the import statement
-import darkStyles from '../styles/AlbumList-dark.module.css';
-import lightStyles from '../styles/AlbumList-light.module.css';
+import darkStyles from '../styles/modules/AlbumList-dark.module.css';
+import lightStyles from '../styles/modules/AlbumList-light.module.css';
 import { ListData } from '../model';
 import AlbumTable from '../components/AlbumTable';
 import AlbumTableList from '../components/AlbumTableList';
@@ -174,7 +173,7 @@ const ListPage: React.FC = () => {
       </div>
 
       {list.albums?.length === 0 ? (
-        <p className="no-albums">No albums found.</p>
+        <p className={styles['no-albums']}>No albums found.</p>
       ) : (
         renderView()
       )}
@@ -193,12 +192,12 @@ const ListPage: React.FC = () => {
               href={randomAlbum.album.spotifyUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="list-page-overlay-link"
+              className={styles['list-page-overlay-link']}
             >
               <img
                 src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg"
                 alt="Spotify"
-                className="spotify-icon"
+                className={styles['spotify-icon']}
               />
             </a>
             <label className={styles['list-page-switch']}>

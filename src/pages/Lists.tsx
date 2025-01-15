@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchLists, addList, removeList, fetchAlbumListEntriesForListId, removeAlbumFromList } from '../api/amplifyApi';
 import { ListData } from '../model';
-import '../styles/Lists.css'; // Ensure this file is now only for Lists
-import darkStyles from '../styles/Lists-dark.module.css';
-import lightStyles from '../styles/Lists-light.module.css';
+import darkStyles from '../styles/modules/Lists-dark.module.css';
+import lightStyles from '../styles/modules/Lists-light.module.css';
 const Lists: React.FC = () => {
   const [listName, setListName] = useState('');
   const [lists, setLists] = useState<ListData[]>([]);
