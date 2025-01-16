@@ -115,14 +115,14 @@ const AlbumTableList: React.FC<AlbumTableListProps> = ({
                                 </div>
                             )}
                             {listId && togglePlayed && (
-                            <label className={styles['list-page-switch']}>
+                             <label className={styles['list-page-switch']}>
                                 <input
-                                type="checkbox"
-                                checked={albumList.played}
-                                onChange={() => togglePlayed(listId, albumList.album.id, albumList.played)}
+                                    type="checkbox"
+                                    checked={albumList.played}
+                                    onChange={() => togglePlayed(listId, albumList.album.id, albumList.played)}
                                 />
-                                <span className={styles['list-page-slider list-page-round']}></span>
-                            </label>
+                                <span className={styles['list-page-slider']}></span>
+                             </label>
                             )}
                           </div>
                         </td>

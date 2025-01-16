@@ -70,8 +70,23 @@ const AlbumDetails: React.FC<AlbumDetailsProps> = ({
       <p className={styles['album-artist']}>
         <Link to={`/albums/artist/${encodeURIComponent(artist)}`} className={styles['album-link']}>{artist}</Link>
       </p>
-      {releaseYear && <p className={styles['release-date']}>{releaseYear}</p>}
-      {genres.length > 0 && <p className={styles['album-genres']}>Genres: {genres.join(', ')}</p>}
+      {releaseYear && 
+        <p className={styles['release-date']}>
+          <Link to={`/albums/year/${encodeURIComponent(releaseYear)}`} className={styles['album-link']}>{releaseYear}</Link>
+        </p>
+      }
+      {genres.length > 0 && 
+      <p className={styles['album-genres']}>
+        Genres: {genres.map((genre, index) => (
+          <React.Fragment key={genre}>
+            <Link to={`/albums/genre/${encodeURIComponent(genre)}`} className={styles['album-link']}>
+              {genre}
+            </Link>
+            {index < genres.length - 1 && ', '}
+          </React.Fragment>
+        ))}
+      </p>
+      }
       {spotifyUrl && (
         <a href={spotifyUrl} target="_blank" rel="noopener noreferrer" className={styles['spotify-link']}>
           <img

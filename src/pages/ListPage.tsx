@@ -167,9 +167,9 @@ const ListPage: React.FC = () => {
       </button>
 
       <div className={styles['view-toggle']}>
-        <button onClick={() => setView('table')} className={view === 'table' ? 'active' : ''}>Table View</button>
-        <button onClick={() => setView('list')} className={view === 'list' ? 'active' : ''}>List View</button>
-        <button onClick={() => setView('block')} className={view === 'block' ? 'active' : ''}>Block View</button>
+        <button onClick={() => setView('table')} className={view === 'table' ? styles['active'] : ''}>Table View</button>
+        <button onClick={() => setView('list')} className={view === 'list' ? styles['active'] : ''}>List View</button>
+        <button onClick={() => setView('block')} className={view === 'block' ? styles['active'] : ''}>Block View</button>
       </div>
 
       {list.albums?.length === 0 ? (
@@ -202,11 +202,11 @@ const ListPage: React.FC = () => {
             </a>
             <label className={styles['list-page-switch']}>
               <input
-                type="checkbox"
-                checked={randomAlbum.played}
-                onChange={() => togglePlayed(list.id, randomAlbum.album.id, randomAlbum.played)}
+                  type="checkbox"
+                  checked={randomAlbum.played}
+                  onChange={() => togglePlayed(list.id, randomAlbum.album.id, randomAlbum.played)}
               />
-              <span className={styles['list-page-slider list-page-round']}></span>
+              <span className={styles['list-page-slider']}></span>
             </label>
           </div>
         </div>

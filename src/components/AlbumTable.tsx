@@ -83,12 +83,12 @@ const AlbumTable: React.FC<AlbumTableProps> = ({
                 </p>
                 {listId && togglePlayed && (
                   <label className={styles['list-page-switch']}>
-                    <input
-                      type="checkbox"
-                      checked={albumList.played}
-                      onChange={() => togglePlayed(listId, albumList.album.id, albumList.played)}
-                    />
-                    <span className={styles['list-page-slider list-page-round']}></span>
+                      <input
+                          type="checkbox"
+                          checked={albumList.played}
+                          onChange={() => togglePlayed(listId, albumList.album.id, albumList.played)}
+                      />
+                      <span className={styles['list-page-slider']}></span>
                   </label>
                 )}
               </td>

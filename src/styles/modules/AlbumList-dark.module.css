@@ -570,19 +570,21 @@
   cursor: pointer;
 }
 
-.list-page-switch {
-  position: relative;
-  display: inline-block;
-  width: 34px;
-  height: 20px;
+.list-page-switch input[type="checkbox"] {
+  opacity: 0; /* Hides the checkbox */
+  width: 0;   /* Prevents the checkbox from taking up space */
+  height: 0;  /* Prevents the checkbox from taking up space */
+  position: absolute; /* Removes it from the layout flow */
 }
 
 .list-page-slider {
-  position: absolute;
+  position: relative;
   cursor: pointer;
-  background-color: #1f1f1f;
+  background-color: #ccc;
   transition: 0.4s;
   border-radius: 20px;
+  width: 34px; /* Match switch width */
+  height: 20px; /* Match switch height */
 }
 
 .list-page-slider:before {
@@ -590,15 +592,20 @@
   position: absolute;
   background-color: black;
   border-radius: 50%;
+  height: 14px;
+  width: 14px;
+  left: 3px;
+  bottom: 3px;
   transition: 0.4s;
 }
 
-input:checked + .list-page-slider {
-  background-color: #2196f3;
+/* When the checkbox is checked */
+.list-page-switch input:checked + .list-page-slider {
+  background-color: #2196f3; /* Toggle background */
 }
 
-input:checked + .list-page-slider:before {
-  transform: translateX(14px);
+.list-page-switch input:checked + .list-page-slider:before {
+  transform: translateX(14px); /* Move the circle */
 }
 
 /* View toggle buttons */
