@@ -78,7 +78,9 @@ const AlbumTable: React.FC<AlbumTableProps> = ({
               </td>
               <td>
                 <h3 className={styles['list-page-album-name']}>{albumList.album.name}</h3>
-                <p className={styles['list-page-album-artist']}>{albumList.album.artist}</p>
+                <p className={styles['list-page-album-artist']}>
+                  <Link to={`/albums/artist/${encodeURIComponent(albumList.album.artist)}`} className={styles['album-link']}>{albumList.album.artist}</Link>
+                </p>
                 {listId && togglePlayed && (
                   <label className={styles['list-page-switch']}>
                     <input

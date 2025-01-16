@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import darkStyles from '../styles/modules/AlbumDetails-dark.module.css';
 import lightStyles from '../styles/modules/AlbumDetails-light.module.css';
+import { Link } from 'react-router-dom';
 
 interface AlbumDetailsProps {
   imageUrl: string;
@@ -66,7 +67,9 @@ const AlbumDetails: React.FC<AlbumDetailsProps> = ({
       ) : (
         <h1 onClick={() => setIsEditing(true)}>{name}</h1>
       )}
-      <p className={styles['album-artist']}>{artist}</p>
+      <p className={styles['album-artist']}>
+        <Link to={`/albums/artist/${encodeURIComponent(artist)}`} className={styles['album-link']}>{artist}</Link>
+      </p>
       {releaseYear && <p className={styles['release-date']}>{releaseYear}</p>}
       {genres.length > 0 && <p className={styles['album-genres']}>Genres: {genres.join(', ')}</p>}
       {spotifyUrl && (

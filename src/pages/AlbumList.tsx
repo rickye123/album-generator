@@ -152,9 +152,9 @@ const AlbumList = () => {
           : 'All Albums'}
       </h1>
       <div className={styles['view-toggle']}>
-        <button onClick={() => setView('table')} className={view === 'table' ? 'active' : ''}>Table View</button>
-        <button onClick={() => setView('list')} className={view === 'list' ? 'active' : ''}>List View</button>
-        <button onClick={() => setView('block')} className={view === 'block' ? 'active' : ''}>Block View</button>
+        <button onClick={() => setView('table')} className={view === 'table' ? styles['active'] : ''}>Table View</button>
+        <button onClick={() => setView('list')} className={view === 'list' ? styles['active'] : ''}>List View</button>
+        <button onClick={() => setView('block')} className={view === 'block' ? styles['active'] : ''}>Block View</button>
       </div>
       {albums.length === 0 ? (
         <p className={styles['no-albums']}>No albums found.</p>

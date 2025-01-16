@@ -3,6 +3,7 @@ import { fetchRandomAlbum } from '../api/amplifyApi';
 import { AlbumData } from '../model';
 import darkStyles from '../styles/modules/LandingPage-dark.module.css';
 import lightStyles from '../styles/modules/LandingPage-light.module.css';
+import { Link } from 'react-router-dom';
 
 const LandingPage = () => {
   const [album, setAlbum] = useState<AlbumData | null>(null);
@@ -27,8 +28,12 @@ const LandingPage = () => {
       <h1 className={styles['title']}>Album Generator</h1>
       {album ? (
         <div className={styles['album-details']}>
-          <h2>{album.name}</h2>
-          <p>{album.artist}</p>
+          <h2>
+            <Link to={`/albums/${album.id}`} className={styles['album-link']}>{album.name}</Link>
+          </h2>
+          <p>
+            <Link to={`/albums/artist/${encodeURIComponent(album.artist)}`} className={styles['album-link']}>{album.artist}</Link>
+          </p>
           <a
             href={album.spotifyUrl}
             target="_blank"

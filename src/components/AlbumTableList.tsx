@@ -78,7 +78,9 @@ const AlbumTableList: React.FC<AlbumTableListProps> = ({
                           {albumList.album.name}
                         </Link>
                         </td>
-                        <td className={styles['artist-album-cell']}>{albumList.album.artist}</td>
+                        <td className={styles['artist-album-cell']}>
+                          <Link to={`/albums/artist/${encodeURIComponent(albumList.album.artist)}`} className={styles['album-link']}>{albumList.album.artist}</Link>
+                        </td>
                         <td className={styles['more-options-cell']}>
                           <div className={styles['more-options-container']}>
                             <a
