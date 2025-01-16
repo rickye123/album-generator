@@ -271,6 +271,12 @@
   color: #1a4d2c;
 }
 
+.spotify-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .album-table th,
@@ -555,7 +561,6 @@
   text-decoration: none;
   padding: 10px 16px;
   border-radius: 4px;
-  margin: 20px 0;
   transition: background-color 0.3s;
 }
 
@@ -568,6 +573,13 @@
   border: none;
   color: #fff;
   cursor: pointer;
+}
+
+.list-page-switch {
+  position: relative;
+  display: inline-flex;
+  width: 60px;
+  height: 34px;
 }
 
 .list-page-switch input[type="checkbox"] {
