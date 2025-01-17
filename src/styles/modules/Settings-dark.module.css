@@ -2,8 +2,8 @@
     margin: 0 auto;
     padding: 20px;
     font-family: Arial, sans-serif;
-    background-color: #121212;
-    color: white;
+    background-color: var(--dark-page-background-color);
+    color: var(--dark-reverse);
     min-height: 100vh;
   }
   

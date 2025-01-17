@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import darkStyles from '../styles/modules/Sidebar-dark.module.css';
-import lightStyles from '../styles/modules/Sidebar-light.module.css';
+import lightStyles from '../styles/modules/Sidebar.module.css';
 
 const Sidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -12,7 +11,7 @@ const Sidebar: React.FC = () => {
   });
 
   // Use the appropriate styles based on the current theme
-  const styles = theme === 'dark' ? darkStyles : lightStyles;
+  const styles = theme === 'dark' ? lightStyles : lightStyles;
   let lastScrollPosition = 0;
 
   const toggleSidebar = () => {
@@ -71,29 +70,29 @@ const Sidebar: React.FC = () => {
               </Link>
             </li>
             <li>
-              <Link to="/artists" onClick={toggleSidebar}>
-                Artists
-              </Link>
-            </li>
-            <li>
-              <Link to="/years" onClick={toggleSidebar}>
-                Years
-              </Link>
-            </li>
-            <li>
-              <Link to="/lists" onClick={toggleSidebar}>
-                Lists
-              </Link>
-            </li>
-            <li>
-              <Link to="/genres" onClick={toggleSidebar}>
-                Genres
-              </Link>
-            </li>
-            <li>
               <Link to="/add-album" onClick={toggleSidebar}>
                 Add Album
               </Link>
+            </li>
+            <li>
+              Media
+              <ul className={styles.submenu}>
+                <li>
+                  <Link to="/artists" onClick={toggleSidebar}>
+                    Artists
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/years" onClick={toggleSidebar}>
+                    Years
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/genres" onClick={toggleSidebar}>
+                    Genres
+                  </Link>
+                </li>
+              </ul>
             </li>
             <li>
               <Link to="/settings" onClick={toggleSidebar}>

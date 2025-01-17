@@ -39,4 +39,6 @@
   --dark-button-disabled: #b7b7b7;
   --dark-bootstrap-error: #dc3545;
   --dark-darker-error: #c82333;
+  --dark-form: #fff;
+  --light-form: #fff;
 }

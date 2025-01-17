@@ -5,8 +5,8 @@
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f9f9f9;
-    color: #333;
+    background-color: var(--light-page-background-color);
+    color: var(--light-contrast-color);
   }
   
   /* Page container */
@@ -14,7 +14,7 @@
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
-    background: white;
+    background: var(--light-page-default);
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     text-align: center; /* Center-align content */
@@ -23,8 +23,8 @@
   /* Header styling */
   .lists-page h1 {
     font-size: 2rem;
-    color: #222;
-    border-bottom: 2px solid #e0e0e0;
+    color: var(--light-reverse);
+    border-bottom: 2px solid var(--light-off-default);
     padding-bottom: 10px;
     margin-bottom: 20px;
     text-align: center;
@@ -33,7 +33,7 @@
   .lists-page h2 {
     font-size: 1.5rem;
     margin: 20px 0 10px;
-    color: #555;
+    color: var(--light-more-contrast-color);
   }
   
   /* Form styling */
@@ -47,14 +47,14 @@
   
   .lists-page form label {
     font-size: 1rem;
-    color: #444;
+    color: var(--light-contrast-color);
     font-weight: bold;
   }
   
   .lists-page form input {
     padding: 10px;
     font-size: 1rem;
-    border: 1px solid #ddd;
+    border: 1px solid var(--light-contrast-off-default);
     border-radius: 4px;
     transition: border-color 0.3s ease;
     width: 100%; /* Full width for input */
@@ -62,13 +62,13 @@
   }
   
   .lists-page form input:focus {
-    border-color: #007bff;
+    border-color: var(--spotify-green);
     outline: none;
   }
   
   .lists-page form button {
-    background-color: #007bff;
-    color: white;
+    background-color: var(--spotify-green);
+    color: var(--light-for);
     font-size: 1rem;
     padding: 10px 20px;
     border: none;
@@ -78,12 +78,12 @@
   }
   
   .lists-page form button:hover {
-    background-color: #0056b3;
+    background-color: var(--hover-color);
   }
   
   /* Error message */
   .lists-page .error {
-    color: red;
+    color: var(--light-bootstrap-error);
     font-size: 0.9rem;
   }
   
@@ -94,7 +94,7 @@
   }
   
   .lists-page li {
-    background-color: #f5f5f5;
+    background-color: var(--light-off-default);
     margin-bottom: 10px;
     padding: 15px;
     border-radius: 6px;
@@ -114,27 +114,27 @@
   .lists-page li h3 {
     margin: 0;
     font-size: 1.2rem;
-    color: #333;
+    color: var(--light-contrast-color);
   }
   
   .lists-page li p {
     margin: 0;
     font-size: 0.9rem;
-    color: #666;
+    color: var(--light-more-contrast-color);
   }
   
   /* No lists message */
   .lists-page .no-lists {
     font-size: 1rem;
-    color: #888;
+    color: var(--light-more-contrast-color);
     text-align: center;
     margin: 20px 0;
   }
   
   /* Delete Button */
 .lists-page .delete-button {
-    background-color: #e74c3c;
-    color: white;
+    background-color: var(--light-bootstrap-error);
+    color: var(--light-default);
     border: none;
     border-radius: 4px;
     padding: 5px 10px;
@@ -145,5 +145,5 @@
   }
   
   .lists-page .delete-button:hover {
-    background-color: #c0392b;
+    background-color: var(--light-darker-error);
   }

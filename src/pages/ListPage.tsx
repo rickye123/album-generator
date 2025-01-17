@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import {
   fetchAlbumListEntry,
   fetchAlbumsByListId,
@@ -185,9 +185,9 @@ const ListPage: React.FC = () => {
               &times;
             </button>
             <img src={randomAlbum.album.imageUrl} alt={randomAlbum.album.name} className={styles['list-page-overlay-image']} />
-            <h2 className={styles['list-page-overlay-title']}>{randomAlbum.album.name}</h2>
-            <p className={styles['list-page-overlay-artist']}>{randomAlbum.album.artist}</p>
-            <p className={styles['list-page-overlay-year']}>{randomAlbum.album.release_date.split('-')[0]}</p>
+            <h2 className={styles['list-page-overlay-title']}><Link to={`/albums/${randomAlbum.album.id}`} className={styles['album-link']}>{randomAlbum.album.name}</Link></h2>
+            <p className={styles['list-page-overlay-artist']}><Link to={`/albums/artist/${encodeURIComponent(randomAlbum.album.artist)}`} className={styles['album-link']}>{randomAlbum.album.artist}</Link></p>
+            <p className={styles['list-page-overlay-year']}> <Link to={`/albums/year/${encodeURIComponent(randomAlbum.album.release_date.split('-')[0])}`} className={styles['album-link']}>{randomAlbum.album.release_date.split('-')[0]}</Link></p>
             <a
               href={randomAlbum.album.spotifyUrl}
               target="_blank"

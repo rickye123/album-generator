@@ -51,7 +51,7 @@
     background: var(--dark-default); /* White background */
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 4px 10px var(--dark-box-shadow-color-5);
+    box-shadow: 0 4px 10px rgba(201, 201, 201, 0.5);
 }
 
 /* Album title */
@@ -93,7 +93,7 @@
     height: 300px;
     border-radius: 10px;
     object-fit: cover;
-    box-shadow: 0 4px 8px var(--dark-box-shadow-color-2);
+    box-shadow: 0 4px 8px rgba(201, 201, 201, 0.2);
 }
 
 /* No album message */

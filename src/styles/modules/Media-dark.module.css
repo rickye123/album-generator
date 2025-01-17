@@ -1,8 +1,8 @@
 .media-page {
     padding: 20px;
     font-family: Arial, sans-serif;
-    color: #c5c4c4;
-    background-color: #121212;
+    color: var(--dark-more-contrast-color);
+    background-color: var(--dark-page-background-color);
   }
   
   .media-page h1 {
@@ -26,15 +26,15 @@
   
   .media-item a {
     text-decoration: none;
-    color: #1db954;
+    color: var(--spotify-green);
     padding: 5px 0;
     display: block;
-    border-bottom: 1px solid #444444;
+    border-bottom: 1px solid var(--dark-off-default);
     transition: color 0.2s, border-color 0.2s;
   }
   
   .media-item a:hover {
-    color: #14833b;
-    border-color: #14833b;
+    color: var(--hover-color);
+    border-color: var(--hover-color);
   }
   
