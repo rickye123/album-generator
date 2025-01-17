@@ -1,5 +1,6 @@
 /* Import common styles */
 @import url('LandingPage-common.module.css');
+@import url('Root.module.css');
 
 /* General container for the landing page */
 .landing-page {
@@ -10,15 +11,15 @@
     text-align: center;
     min-height: 100vh;
     padding: 20px;
-    background-color: #121212; /* Dark background */
-    color: #e0e0e0; /* Light text for contrast */
+    background-color: var(--dark-page-background-color); /* Light grey background */
+    color: var(--dark-contrast-color); /* Darker text for contrast */
     font-family: Arial, sans-serif;
 }
 
 /* Title styling */
 .landing-page h1 {
     font-size: 2.5rem;
-    color: #1DB954; /* Spotify green */
+    color: var(--spotify-green); /* Spotify green */
     margin-bottom: 20px;
 }
 
@@ -29,7 +30,7 @@
 
 .landing-page nav a {
     text-decoration: none;
-    color: #e0e0e0; /* Light text */
+    color: var(--dark-contrast-color);
     font-size: 1.2rem;
     font-weight: bold;
     margin: 0 10px;
@@ -37,7 +38,7 @@
 }
 
 .landing-page nav a:hover {
-    color: #1DB954; /* Spotify green */
+    color: var(--hover-color); /* Darker green for hover */
 }
 
 /* Album details container */
@@ -47,10 +48,10 @@
     align-items: center;
     gap: 20px;
     max-width: 600px;
-    background: #1f1f1f; /* Dark background */
+    background: var(--dark-default); /* White background */
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Darker shadow */
+    box-shadow: 0 4px 10px var(--dark-box-shadow-color-5);
 }
 
 /* Album title */
@@ -62,7 +63,7 @@
 /* Album artist */
 .album-details p {
     font-size: 1.2rem;
-    color: #999; /* Lighter grey for contrast */
+    color: var(--dark-more-contrast-color);
     margin: 0;
 }
 
@@ -71,7 +72,7 @@
     display: flex;
     align-items: center;
     text-decoration: none;
-    color: #1DB954; /* Spotify green */
+    color: var(--spotify-green); /* Spotify green */
     font-weight: bold;
     transition: opacity 0.3s;
 }
@@ -92,11 +93,11 @@
     height: 300px;
     border-radius: 10px;
     object-fit: cover;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Darker shadow */
+    box-shadow: 0 4px 8px var(--dark-box-shadow-color-2);
 }
 
 /* No album message */
 .no-album {
     font-size: 1.5rem;
-    color: #999; /* Lighter grey for contrast */
+    color: var(--dark-more-contrast-color);
 }

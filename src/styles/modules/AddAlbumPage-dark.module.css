@@ -1,3 +1,5 @@
+@import url('Root.module.css');
+
 /* General container for the page */
 .add-album-page {
   display: flex;
@@ -5,25 +7,25 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background-color:  #121212;
+  background-color: var(--dark-page-background-color);
   padding: 20px;
   font-family: Arial, sans-serif;
-  color: #d4d4d4;
+  color: var(--dark-contrast-color);
 }
 
 /* Page title */
 .add-album-page h1 {
   font-size: 2.5rem;
-  color: #1DB954;
+  color: var(--spotify-green);
   margin-bottom: 20px;
 }
 
 /* Form styles */
 .add-album-form {
-  background: #000000;
+  background: var(--dark-default);
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 400px;
   display: flex;
@@ -38,29 +40,29 @@ label {
   display: block;
   font-size: 1rem;
   margin-bottom: 5px;
-  color: #adadad;
+  color: var(--dark-more-contrast-color);
 }
 
 input, select {
   width: 100%;
   padding: 10px;
   font-size: 1rem;
-  border: 1px solid #313131;
+  border: 1px solid var(--dark-off-default);
   border-radius: 4px;
   box-sizing: border-box;
-  background-color: #000000;
+  background-color: var(--dark-default);
 }
 
 select {
   appearance: none; /* Removes default OS styling for consistency */
   background: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="5" viewBox="0 0 10 5"><path fill="none" stroke="%23666" stroke-width="1.5" d="M1 1l4 4 4-4"/></svg>') no-repeat right 10px center;
   background-size: 10px;
-  color: white
+  color: var(--dark-reverse);
 }
 
 button {
-  background-color: #1DB954;
-  color: #000000;
+  background-color: var(--spotify-green);
+  color: var(--dark-default);
   font-size: 1rem;
   padding: 10px 15px;
   border: none;
@@ -71,23 +73,23 @@ button {
 }
 
 button:disabled {
-  background-color: #b3d7bf;
+  background-color: var(--dark-button-disabled-color);
   cursor: not-allowed;
 }
 
 button:hover:not(:disabled) {
-  background-color: #169c44;
+  background-color: var(--hover-color);
 }
 
 /* Success and error messages */
 .error-message {
-  color: red;
+  color: var(--dark-bootstrap-error);
   font-size: 0.9rem;
   margin-top: 10px;
 }
 
 .success-message {
-  color: green;
+  color: var(--spotify-green);
   font-size: 0.9rem;
   margin-top: 10px;
 }

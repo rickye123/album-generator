@@ -1,3 +1,5 @@
+@import url('Root.module.css'); /* Import the global styles */
+
 /* General container for the album list page */
 .album-list-page {
   display: flex;
@@ -5,24 +7,24 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background-color: #161616; /* Light grey background */
+  background-color: var(--dark-page-background-color); /* Light grey background */
   padding: 20px;
   text-align: center;
   font-family: Arial, sans-serif;
-  color: #d3d3d3;
+  color: var(--dark-contrast-color);
 }
 
 /* Page title */
 .album-list-page h1 {
   font-size: 2.5rem;
-  color: #1DB954; /* Spotify green */
+  color: var(--spotify-green); /* Spotify green */
   margin-bottom: 20px;
 }
 
 /* No albums message */
 .album-list-page .no-albums {
   font-size: 1.5rem;
-  color: #adadad;
+  color: var(--dark-more-contrast-color); /* Lighter black text */
   margin-top: 40px;
 }
 
@@ -32,7 +34,7 @@
   max-width: 800px;
   border-collapse: collapse;
   margin: 20px 0;
-  background: #000000;
+  background: var(--dark-default); /* White background */
   box-shadow: 0 4px 10px rgb(41, 41, 41);
 }
 
@@ -43,22 +45,22 @@
 }
 
 .album-table th {
-  background-color: #1DB954;
-  color: #000000;
+  background-color: var(--spotify-green); /* Spotify green */
+  color: var(--dark-default);
   font-size: 1.2rem;
 }
 
 .album-table tr:nth-child(even) {
-  background-color: #161616;
+  background-color: var(--dark-table-even-color);
 }
 
 .album-table tr:hover {
-  background-color: #0e0f0f;
+  background-color: var(--dark-table-hover-color);;
 }
 
 .album-table td {
   font-size: 1rem;
-  color: #dddcdc;
+  color: var(--dark-contrast-color); /* Darker text color */
 }
 
 /* Spotify link styles */
@@ -66,7 +68,7 @@
   display: flex;
   align-items: center;
   text-decoration: none;
-  color: #1DB954;
+  color: var(--spotify-green); /* Spotify green */
   font-weight: bold;
   height: 20px;
 }
@@ -89,8 +91,8 @@
 
 /* Add to list button */
 .add-to-list-button {
-  background-color: #1DB954;
-  color: black;
+  background-color: var(--spotify-green); /* Spotify green */
+  color: var(--dark-default);
   border: none;
   padding: 8px 16px;
   font-size: 1rem;
@@ -100,7 +102,7 @@
 }
 
 .add-to-list-button:hover {
-  background-color: #14843d; /* Darker green for hover */
+  background-color: var(--hover-color); /* Darker green for hover */
 }
 
 /* Overlay styles */
@@ -118,7 +120,7 @@
 }
 
 .overlay-content {
-  background: #000000;
+  background: var(--dark-default);
   padding: 20px;
   border-radius: 10px;
   width: 400px;
@@ -128,12 +130,12 @@
 
 .overlay-content h2 {
   font-size: 1.5rem;
-  color: #d4d4d4;
+  color: var(--dark-contrast-color); /* Darker text color */
   margin-bottom: 20px;
 }
 
 .error-message {
-  color: red;
+  color: var(--dark-bootstrap-error);
   margin-bottom: 10px;
 }
 
@@ -150,8 +152,8 @@
 }
 
 .list-select-button {
-  background-color: #1DB954;
-  color: black;
+  background-color: var(--spotify-green);
+  color: var(--dark-default);
   border: none;
   padding: 10px 16px;
   font-size: 1rem;
@@ -164,10 +166,10 @@
   width: 100%;
   padding: 10px;
   font-size: 1rem;
-  border: 1px solid #ccc;
+  border: 1px solid var(--dark-off-default);
   border-radius: 4px;
-  background-color: #fff;
-  color: #333;
+  background-color: var(--dark-default);
+  color: var(--dark-contrast-color);
   margin-top: 10px;
 }
 
@@ -175,22 +177,22 @@
   text-decoration: none;
   font-weight: bold;
   transition: color 0.3s ease;
-  color: #dddcdc
+  color: var(--spotify-green);
 }
 
 .album-link:hover {
-  color: #14843d; /* Darker green for hover */
+  color: var(--hover-color); /* Darker green for hover */
   text-decoration: underline;
 }
 
 .list-select-button:hover {
-  background-color: #14843d; /* Darker green for hover */
+  background-color: var(--hover-color); /* Darker green for hover */
 }
 
 /* Close overlay button */
 .close-overlay-button {
-  background-color: #dc3545; /* Bootstrap red */
-  color: black;
+  background-color: var(--dark-bootstrap-error); /* Bootstrap red */
+  color: var(--dark-reverse);
   border: none;
   padding: 10px 20px;
   margin-top: 20px;
@@ -200,24 +202,7 @@
 }
 
 .close-overlay-button:hover {
-  background-color: #c82333; /* Darker red for hover */
-}
-
-/* Delete album button */
-.delete-album-button {
-  background-color: #dc3545; /* Red */
-  color: black;
-  border: none;
-  padding: 8px 16px;
-  font-size: 1rem;
-  cursor: pointer;
-  border-radius: 4px;
-  margin-left: 8px;
-  transition: background-color 0.3s;
-}
-
-.delete-album-button:hover {
-  background-color: #c82333; /* Darker red for hover */
+  background-color: var(--dark-darker-error); /* Darker red for hover */
 }
 
 /* Search Bar */
@@ -230,14 +215,14 @@
 .search-bar input {
   padding: 8px 12px;
   font-size: 1rem;
-  border: 1px solid #292929;
+  border: 1px solid var(--dark-off-default);
   border-radius: 4px;
   width: 300px;
   transition: box-shadow 0.2s ease;
 }
 
 .search-bar input:focus {
-  box-shadow: 0 0 5px #1DB954;
+  box-shadow: 0 0 5px var(--spotify-green);
   outline: none;
 }
 
@@ -252,8 +237,8 @@
 }
 
 .pagination-controls button {
-  background-color: #1DB954;
-  color: black;
+  background-color: var(--spotify-green);
+  color: var(--dark-default);
   border: none;
   padding: 8px 16px;
   cursor: pointer;
@@ -262,7 +247,7 @@
 }
 
 .pagination-controls button:disabled {
-  background-color: #444444;
+  background-color: var(--dark-button-disabled);
   cursor: not-allowed;
 }
 
@@ -274,7 +259,7 @@
 }
 
 .album-table th:hover {
-  color: #1a4d2c;
+  color: var(--hover-color);
 }
 
 /* Responsive Design */
@@ -325,7 +310,7 @@
   .album-table tr {
     display: flex;
     justify-content: space-between;
-    border-bottom: 1px solid #313131;
+    border-bottom: 1px solid var(--dark-off-default);
     padding: 10px;
   }
 
@@ -365,7 +350,7 @@
   .more-options-button {
     background: none;
     border: none;
-    color: white; /* Change the button color to black */
+    color: var(--dark-reverse); /* Change the button color to black */
     font-size: 1.5rem;
     cursor: pointer;
     margin-top: 0px;
@@ -390,7 +375,7 @@
 .more-options-button {
   background: none;
   border: none;
-  color: white; /* Change the button color to black */
+  color: var(--dark-reverse); /* Change the button color to black */
   font-size: 1.5rem;
   cursor: pointer;
   margin-top: 0px;
@@ -400,8 +385,8 @@
   position: absolute;
   top: 100%;
   right: 0;
-  background: black;
-  border: 1px solid #353535;
+  background: var(--dark-default);
+  border: 1px solid var(--dark-off-default);
   border-radius: 5px;
   box-shadow: 0 4px 8px rgb(255, 255, 255);
   z-index: 10;
@@ -413,16 +398,16 @@
   display: block;
   width: 100%;
   padding: 10px 15px;
-  background: black;
+  background: var(--dark-default);
   border: none;
   text-align: left;
   cursor: pointer;
   font-size: 1rem;
-  color: white; /* Ensure text color is black */
+  color: var(--dark-reverse); /* Ensure text color is black */
 }
 
 .dropdown-menu button:hover {
-  background: #0e0e0e; /* Light gray background on hover */
+  background: var(--dark-page-background-color); /* Light gray background on hover */
 }
 
 .more-options-button:focus + .dropdown-menu,
@@ -443,7 +428,7 @@
 .list-page-container {
   max-width: 800px;
   margin: 0 auto;
-  background: white;
+  background: var(--dark-default);
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgb(255, 255, 255);
@@ -452,31 +437,30 @@
 .list-page-title {
   margin-bottom: 20px;
   font-size: 1.8em;
-  color: #dddddd;
+  color: var(--dark-contrast-color)
 }
 
 .list-page-error {
-  color: red;
+  color: var(--dark-bootstrap-error);
 }
 
 .list-page-randomize-button {
-  background-color: #3498db;
-  color: black;
+  background-color: var(--spotify-green);
+  color: var(--white);
   border: none;
   padding: 10px 16px;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s;
-  margin-bottom: 20px;
   font-size: 1em;
 }
 
 .list-page-unplayed-button {
-  background-color: red;
+  background-color: var(--spotify-green);
 }
 
 .list-page-randomize-button:hover {
-  background-color: #2980b9;
+  background-color: var(--hover-color);
 }
 
 .list-page-album-table {
@@ -492,11 +476,11 @@
 }
 
 .list-page-even-row {
-  background-color: #0c0c0c;
+  background-color: var(--dark-even-row);
 }
 
 .list-page-odd-row {
-  background-color: #000000;
+  background-color: var(--dark-default);
 }
 
 .list-page-album-image {
@@ -504,20 +488,6 @@
   height: 80px;
   border-radius: 6px;
   object-fit: cover;
-}
-
-.list-page-remove-button {
-  background-color: #e74c3c;
-  color: black;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.list-page-remove-button:hover {
-  background-color: #c0392b;
 }
 
 .list-page-overlay {
@@ -533,7 +503,7 @@
 }
 
 .list-page-overlay-content {
-  background: rgb(26, 26, 26);
+  background: var(--dark-default);
   padding: 30px;
   border-radius: 10px;
   width: 90%;
@@ -557,7 +527,7 @@
 
 .list-page-overlay-link {
   display: inline-block;
-  color: black;
+  color: var(--dark-default);
   text-decoration: none;
   padding: 10px 16px;
   border-radius: 4px;
@@ -571,7 +541,7 @@
   font-size: 1.5em;
   background: none;
   border: none;
-  color: #f1f1f1;
+  color: var(--dark-reverse);
   cursor: pointer;
 }
 
@@ -592,7 +562,7 @@
 .list-page-slider {
   position: relative;
   cursor: pointer;
-  background-color: #ccc;
+  background-color: var(--dark-off-default);
   transition: 0.4s;
   border-radius: 20px;
   width: 34px; /* Match switch width */
@@ -602,7 +572,7 @@
 .list-page-slider:before {
   content: '';
   position: absolute;
-  background-color: black;
+  background-color: var(--dark-default);
   border-radius: 50%;
   height: 14px;
   width: 14px;
@@ -613,7 +583,7 @@
 
 /* When the checkbox is checked */
 .list-page-switch input:checked + .list-page-slider {
-  background-color: #2196f3; /* Toggle background */
+  background-color: var(--spotify-green); /* Toggle background */
 }
 
 .list-page-switch input:checked + .list-page-slider:before {
@@ -630,13 +600,13 @@
 .view-toggle button {
   padding: 10px 20px;
   border: none;
-  background-color: #131313;
+  background-color: var(--dark-contrast-off-default);
   cursor: pointer;
 }
 
 .view-toggle button.active {
-  background-color: #007bff;
-  color: black;
+  background-color: var(--spotify-green);
+  color: var(--dark-default);
 }
 
 /* AlbumTableBlock styles */
@@ -675,8 +645,8 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(255, 255, 255, 0.459);
-  color: black;
+  background: rgba(255, 255, 255, 0.660);
+  color: var(--dark-default);
   display: flex;
   justify-content: center;
   align-items: center;
