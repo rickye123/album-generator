@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { fetchAlbums, fetchLists, addAlbumToList, removeAlbum, fetchAlbumListEntriesForAlbumId, removeAlbumFromList } from '../api/amplifyApi';
+import { fetchAlbums, fetchLists, addAlbumToList, removeAlbum, fetchAlbumListEntriesForAlbumId, removeAlbumFromList, toggleHideAlbum } from '../api/amplifyApi';
 import { AlbumData, AlbumListData, ListData } from '../model';
 import darkStyles from '../styles/modules/AlbumList-dark.module.css';
 import lightStyles from '../styles/modules/AlbumList-light.module.css';
@@ -23,6 +23,7 @@ const AlbumList = () => {
     // Load theme preference from localStorage or default to 'light'
     return (localStorage.getItem('theme') as 'light' | 'dark') || 'light';
   });
+  const [showHidden, setShowHidden] = useState(false)
 
   // Use the appropriate styles based on the current theme
   const styles = theme === 'dark' ? darkStyles : lightStyles;
@@ -30,7 +31,7 @@ const AlbumList = () => {
   useEffect(() => {
     const loadAlbums = async () => {
       const albumList = await fetchAlbums();
-
+      albumList.filter((album: AlbumData) => album.hideAlbum === false);
       const filteredAlbums = artist
         ? albumList.filter((album: AlbumData) => album.artist === decodeURIComponent(artist))
         : albumList;
@@ -47,6 +48,10 @@ const AlbumList = () => {
 
     loadAlbums();
   }, [artist, year, genre]);
+
+  const toggleShowHidden = () => {
+    setShowHidden((prev) => !prev);
+  };
 
   const openOverlay = async (album: AlbumData) => {
     try {
@@ -99,6 +104,26 @@ const AlbumList = () => {
     }
   };
 
+  const handleHideAlbum = async (albumId: string, hidden: boolean) => {
+    try {
+      // Optimistically update the state
+      setAlbums((prevAlbums) =>
+        prevAlbums.map((album) =>
+          album.id === albumId ? { ...album, hideAlbum: !hidden } : album
+        )
+      );
+      await toggleHideAlbum(albumId, !hidden); // Toggle the current state
+      console.log(`Album ${hidden ? 'unhidden' : 'hidden'} successfully!`);
+    } catch (error) {
+      console.error('Error hiding album:', error);
+      alert('Failed to update album visibility.');
+
+      // Optionally, refetch the albums to revert optimistic updates
+      const updatedAlbums = await fetchAlbums();
+      setAlbums(updatedAlbums);
+    }
+  };
+
   const toggleMenu = (albumId: string) => {
     setMenuOpen((prev) => ({
       ...prev,
@@ -106,7 +131,9 @@ const AlbumList = () => {
     }));
   };
 
-  const albumListData: AlbumListData[] = albums.map(album => ({
+  const filteredAlbums = showHidden ? albums : albums.filter((album) => !album.hideAlbum);
+
+  const albumListData: AlbumListData[] = filteredAlbums.map(album => ({
     album,
     played: false,
   }));
@@ -121,6 +148,7 @@ const AlbumList = () => {
             toggleMenu={toggleMenu}
             menuOpen={menuOpen}
             openOverlay={openOverlay}
+            hideAlbum={handleHideAlbum}
           />
         );
       case 'list':
@@ -131,6 +159,7 @@ const AlbumList = () => {
             toggleMenu={toggleMenu}
             menuOpen={menuOpen}
             openOverlay={openOverlay}
+            hideAlbum={handleHideAlbum}
           />
         );
       case 'block':
@@ -155,6 +184,12 @@ const AlbumList = () => {
         <button onClick={() => setView('table')} className={view === 'table' ? styles['active'] : ''}>Table View</button>
         <button onClick={() => setView('list')} className={view === 'list' ? styles['active'] : ''}>List View</button>
         <button onClick={() => setView('block')} className={view === 'block' ? styles['active'] : ''}>Block View</button>
+      </div>
+      <div className={styles['list-page-switch']}>
+        <label>
+          <input type="checkbox" checked={showHidden} onChange={toggleShowHidden} />
+          <span className={styles['list-page-slider']}></span>
+        </label>
       </div>
       {albums.length === 0 ? (
         <p className={styles['no-albums']}>No albums found.</p>

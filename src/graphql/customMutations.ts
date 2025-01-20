@@ -6,3 +6,12 @@ mutation TogglePlayed($id: ID!, $played: Boolean!) {
     }
   }
 `;
+
+export const toggleHidden = /* GraphQL */ `
+  mutation ToggleAlbumHidden($id: ID!, $hideAlbum: Boolean!) {
+    updateAlbum(input: { id: $id, hideAlbum: $hideAlbum }) {
+      id
+      hideAlbum
+    }
+  }
+`;

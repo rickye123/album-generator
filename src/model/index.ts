@@ -7,6 +7,7 @@ export interface AlbumData {
     imageUrl: string;
     genres?: string[];
     lists?: ListData[];
+    hideAlbum: boolean;
 }
 
 export interface AlbumListData {

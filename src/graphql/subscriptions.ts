@@ -68,6 +68,7 @@ export const onCreateAlbum = /* GraphQL */ `subscription OnCreateAlbum($filter: 
     release_date
     imageUrl
     genres
+    hideAlbum
     lists {
       nextToken
       __typename
@@ -90,6 +91,7 @@ export const onUpdateAlbum = /* GraphQL */ `subscription OnUpdateAlbum($filter: 
     release_date
     imageUrl
     genres
+    hideAlbum
     lists {
       nextToken
       __typename
@@ -112,6 +114,7 @@ export const onDeleteAlbum = /* GraphQL */ `subscription OnDeleteAlbum($filter: 
     release_date
     imageUrl
     genres
+    hideAlbum
     lists {
       nextToken
       __typename
@@ -139,6 +142,7 @@ export const onCreateAlbumList = /* GraphQL */ `subscription OnCreateAlbumList($
       release_date
       imageUrl
       genres
+      hideAlbum
       createdAt
       updatedAt
       __typename
@@ -173,6 +177,7 @@ export const onUpdateAlbumList = /* GraphQL */ `subscription OnUpdateAlbumList($
       release_date
       imageUrl
       genres
+      hideAlbum
       createdAt
       updatedAt
       __typename
@@ -207,6 +212,7 @@ export const onDeleteAlbumList = /* GraphQL */ `subscription OnDeleteAlbumList($
       release_date
       imageUrl
       genres
+      hideAlbum
       createdAt
       updatedAt
       __typename
