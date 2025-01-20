@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { fetchAlbums } from '../api/amplifyApi';
 import { Link } from 'react-router-dom';
-import './Artists.css';
+import darkStyles from '../styles/modules/Media-dark.module.css';
+import lightStyles from '../styles/modules/Media-light.module.css';
 import { AlbumData } from '../model';
 
 const ArtistsPage = () => {
   const [artists, setArtists] = useState<string[]>([]);
+  const [theme] = useState<'light' | 'dark'>(() => {
+    // Load theme preference from localStorage or default to 'light'
+    return (localStorage.getItem('theme') as 'light' | 'dark') || 'light';
+  });
 
+  // Use the appropriate styles based on the current theme
+  const styles = theme === 'dark' ? darkStyles : lightStyles;
   useEffect(() => {
     const getArtists = async () => {
       try {
@@ -22,14 +29,14 @@ const ArtistsPage = () => {
   }, []);
 
   return (
-    <div className="artists-page">
+    <div className={styles['media-page']}>
       <h1>Artists</h1>
       {artists.length === 0 ? (
         <p>No artists found.</p>
       ) : (
-        <ul className="artist-list">
+        <ul className={styles['media-list']}>
           {artists.map((artist) => (
-            <li key={artist} className="artist-item">
+            <li key={artist} className={styles['media-item']}>
               <Link to={`/albums/artist/${encodeURIComponent(artist)}`}>{artist}</Link>
             </li>
           ))}

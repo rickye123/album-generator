@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import './CollapsibleSection.css';
+import darkStyles from '../styles/modules/CollapsibleSection-dark.module.css';
+import lightStyles from '../styles/modules/CollapsibleSection-light.module.css';
 
 interface CollapsibleSectionProps {
   title: string;
@@ -9,14 +10,20 @@ interface CollapsibleSectionProps {
 
 const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({ title, defaultOpen = false, children }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
+  const [theme] = useState<'light' | 'dark'>(() => {
+    // Load theme preference from localStorage or default to 'light'
+    return (localStorage.getItem('theme') as 'light' | 'dark') || 'light';
+  });
 
+  // Use the appropriate styles based on the current theme
+  const styles = theme === 'dark' ? darkStyles : lightStyles;
   return (
-    <div className={`collapsible-section ${isOpen ? 'open' : 'closed'}`}>
-      <h2 className="toggle-header" onClick={() => setIsOpen((prev) => !prev)}>
-        {title}
-        <span className={`arrow ${isOpen ? 'down' : 'right'}`}></span>
+    <div className={`${styles['collapsible-section']} ${isOpen ? styles['open'] : styles['closed']}`}>
+      <h2 className={`${styles['toggle-header']}`} onClick={() => setIsOpen((prev) => !prev)}>
+      {title}
+      <span className={`${styles['arrow']} ${isOpen ? styles['down'] : styles['right']}`}></span>
       </h2>
-      {isOpen && <div className="section-content">{children}</div>}
+      {isOpen && <div className={styles['section-content']}>{children}</div>}
     </div>
   );
 };

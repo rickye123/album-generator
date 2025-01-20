@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { fetchAlbums, fetchLists, addAlbumToList, removeAlbum, fetchAlbumListEntriesForAlbumId, removeAlbumFromList } from '../api/amplifyApi';
 import { AlbumData, AlbumListData, ListData } from '../model';
-import './AlbumList.css';
+import darkStyles from '../styles/modules/AlbumList-dark.module.css';
+import lightStyles from '../styles/modules/AlbumList-light.module.css';
 import { useParams } from 'react-router-dom';
 import AlbumTable from '../components/AlbumTable';
 import AlbumTableList from '../components/AlbumTableList';
@@ -18,6 +19,13 @@ const AlbumList = () => {
   const { year } = useParams<{ year: string }>();
   const { genre } = useParams<{ genre: string }>();
   const [view, setView] = useState<'table' | 'list' | 'block'>('table'); // State to manage view
+  const [theme] = useState<'light' | 'dark'>(() => {
+    // Load theme preference from localStorage or default to 'light'
+    return (localStorage.getItem('theme') as 'light' | 'dark') || 'light';
+  });
+
+  // Use the appropriate styles based on the current theme
+  const styles = theme === 'dark' ? darkStyles : lightStyles;
 
   useEffect(() => {
     const loadAlbums = async () => {
@@ -133,7 +141,7 @@ const AlbumList = () => {
   };
 
   return (
-    <div className="album-list-page">
+    <div className={styles['album-list-page']}>
       <h1>
         {genre 
           ? `${genre} Albums`
@@ -143,38 +151,39 @@ const AlbumList = () => {
           ? `${artist}'s Albums`
           : 'All Albums'}
       </h1>
-      <div className="view-toggle">
-        <button onClick={() => setView('table')} className={view === 'table' ? 'active' : ''}>Table View</button>
-        <button onClick={() => setView('list')} className={view === 'list' ? 'active' : ''}>List View</button>
-        <button onClick={() => setView('block')} className={view === 'block' ? 'active' : ''}>Block View</button>
+      <div className={styles['view-toggle']}>
+        <button onClick={() => setView('table')} className={view === 'table' ? styles['active'] : ''}>Table View</button>
+        <button onClick={() => setView('list')} className={view === 'list' ? styles['active'] : ''}>List View</button>
+        <button onClick={() => setView('block')} className={view === 'block' ? styles['active'] : ''}>Block View</button>
       </div>
       {albums.length === 0 ? (
-        <p className="no-albums">No albums found.</p>
+        <p className={styles['no-albums']}>No albums found.</p>
       ) : (
         renderView()
       )}
       {showOverlay && selectedAlbum && (
-        <div className="overlay">
-          <div className="overlay-content">
+        <div className={styles['overlay']}>
+          <div className={styles['overlay-content']}>
             <h2>Add {selectedAlbum.name} to a List</h2>
-            {error && <p className="error-message">{error}</p>}
+            {error && <p className={styles['error-message']}>{error}</p>}
             {lists.length === 0 ? (
               <p>No lists available. Please create one first.</p>
             ) : (
-              <ul className="list-table">
-                {lists.map((list) => (
-                  <li key={list.id}>
-                    <button
-                      className="list-select-button"
-                      onClick={() => handleAddAlbumToList(list.id)}
-                    >
+              <select
+                  className={styles['list-select-dropdown']}
+                  onChange={(e) => handleAddAlbumToList(e.target.value)}
+                >
+                  <option value="" disabled selected>
+                    Select a list
+                  </option>
+                  {lists.map((list) => (
+                    <option key={list.id} value={list.id}>
                       {list.name}
-                    </button>
-                  </li>
-                ))}
-              </ul>
+                    </option>
+                  ))}
+              </select>
             )}
-            <button className="close-overlay-button" onClick={closeOverlay}>
+            <button className={styles['close-overlay-button']} onClick={closeOverlay}>
               Close
             </button>
           </div>

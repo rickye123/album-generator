@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import './Sidebar.css';
+import lightStyles from '../styles/modules/Sidebar.module.css';
 
 const Sidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showBurgerButton, setShowBurgerButton] = useState(true);
+  const [theme] = useState<'light' | 'dark'>(() => {
+    // Load theme preference from localStorage or default to 'light'
+    return (localStorage.getItem('theme') as 'light' | 'dark') || 'light';
+  });
+
+  // Use the appropriate styles based on the current theme
+  const styles = theme === 'dark' ? lightStyles : lightStyles;
   let lastScrollPosition = 0;
 
   const toggleSidebar = () => {
@@ -38,7 +45,7 @@ const Sidebar: React.FC = () => {
       {/* Burger Button */}
       {showBurgerButton && (
         <button
-          className={`burger-button ${isOpen ? 'open' : ''}`}
+          className={`${styles['burger-button']} ${isOpen ? styles['open'] : ''}`}
           onClick={toggleSidebar}
           aria-label="Toggle navigation"
         >
@@ -49,7 +56,7 @@ const Sidebar: React.FC = () => {
       )}
 
       {/* Sidebar */}
-      <div className={`sidebar ${isOpen ? 'open' : ''}`}>
+      <div className={`${styles['sidebar']} ${isOpen ? styles['open'] : ''}`}>
         <nav>
           <ul>
             <li>
@@ -63,29 +70,34 @@ const Sidebar: React.FC = () => {
               </Link>
             </li>
             <li>
-              <Link to="/artists" onClick={toggleSidebar}>
-                Artists
-              </Link>
-            </li>
-            <li>
-              <Link to="/years" onClick={toggleSidebar}>
-                Years
-              </Link>
-            </li>
-            <li>
               <Link to="/lists" onClick={toggleSidebar}>
                 Lists
-              </Link>
-            </li>
-            <li>
-              <Link to="/genres" onClick={toggleSidebar}>
-                Genres
               </Link>
             </li>
             <li>
               <Link to="/add-album" onClick={toggleSidebar}>
                 Add Album
               </Link>
+            </li>
+            <li>
+              Media
+              <ul className={styles.submenu}>
+                <li>
+                  <Link to="/artists" onClick={toggleSidebar}>
+                    Artists
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/years" onClick={toggleSidebar}>
+                    Years
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/genres" onClick={toggleSidebar}>
+                    Genres
+                  </Link>
+                </li>
+              </ul>
             </li>
             <li>
               <Link to="/settings" onClick={toggleSidebar}>
@@ -97,7 +109,7 @@ const Sidebar: React.FC = () => {
       </div>
 
       {/* Overlay */}
-      {isOpen && <div className="overlay" onClick={toggleSidebar}></div>}
+      {isOpen && <div className={styles['overlay']} onClick={toggleSidebar}></div>}
     </>
   );
 };

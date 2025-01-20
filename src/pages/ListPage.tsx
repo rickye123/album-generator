@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import {
   fetchAlbumListEntry,
   fetchAlbumsByListId,
@@ -7,7 +7,8 @@ import {
   removeAlbumFromList,
   togglePlayedAlbumList,
 } from '../api/amplifyApi';
-import './AlbumList';
+import darkStyles from '../styles/modules/AlbumList-dark.module.css';
+import lightStyles from '../styles/modules/AlbumList-light.module.css';
 import { ListData } from '../model';
 import AlbumTable from '../components/AlbumTable';
 import AlbumTableList from '../components/AlbumTableList';
@@ -20,7 +21,13 @@ const ListPage: React.FC = () => {
   const [randomAlbum, setRandomAlbum] = useState<any | null>(null);
   const [menuOpen, setMenuOpen] = useState<{ [key: string]: boolean }>({});
   const [view, setView] = useState<'table' | 'list' | 'block'>('table'); // State to manage view
+  const [theme] = useState<'light' | 'dark'>(() => {
+    // Load theme preference from localStorage or default to 'light'
+    return (localStorage.getItem('theme') as 'light' | 'dark') || 'light';
+  });
 
+  // Use the appropriate styles based on the current theme
+  const styles = theme === 'dark' ? darkStyles : lightStyles;
   useEffect(() => {
     const loadLists = async () => {
       try {
@@ -147,59 +154,59 @@ const ListPage: React.FC = () => {
   };
 
   return (
-    <div className="album-list-page">
-      <h1 className="list-page-title">{list.name}</h1>
-      {error && <p className="list-page-error">{error}</p>}
+    <div className={styles['album-list-page']}>
+      <h1 className={styles['list-page-title']}>{list.name}</h1>
+      {error && <p className={styles['list-page-error']}>{error}</p>}
 
-      <button className="list-page-randomize-button" onClick={randomizeAlbum}>
+      <button className={styles['list-page-randomize-button']} onClick={randomizeAlbum}>
         Randomize Album
       </button>
 
-      <button className="list-page-unplayed-button" onClick={bulkSetUnplayed}>
+      <button className={styles['list-page-unplayed-button']} onClick={bulkSetUnplayed}>
         Mark All as Unplayed
       </button>
 
-      <div className="view-toggle">
-        <button onClick={() => setView('table')} className={view === 'table' ? 'active' : ''}>Table View</button>
-        <button onClick={() => setView('list')} className={view === 'list' ? 'active' : ''}>List View</button>
-        <button onClick={() => setView('block')} className={view === 'block' ? 'active' : ''}>Block View</button>
+      <div className={styles['view-toggle']}>
+        <button onClick={() => setView('table')} className={view === 'table' ? styles['active'] : ''}>Table View</button>
+        <button onClick={() => setView('list')} className={view === 'list' ? styles['active'] : ''}>List View</button>
+        <button onClick={() => setView('block')} className={view === 'block' ? styles['active'] : ''}>Block View</button>
       </div>
 
       {list.albums?.length === 0 ? (
-        <p className="no-albums">No albums found.</p>
+        <p className={styles['no-albums']}>No albums found.</p>
       ) : (
         renderView()
       )}
 
       {randomAlbum && (
-        <div className="list-page-overlay">
-          <div className="list-page-overlay-content">
-            <button className="list-page-close-button" onClick={closeOverlay}>
+        <div className={styles['list-page-overlay']}>
+          <div className={styles['list-page-overlay-content']}>
+            <button className={styles['list-page-close-button']} onClick={closeOverlay}>
               &times;
             </button>
-            <img src={randomAlbum.album.imageUrl} alt={randomAlbum.album.name} className="list-page-overlay-image" />
-            <h2 className="list-page-overlay-title">{randomAlbum.album.name}</h2>
-            <p className="list-page-overlay-artist">{randomAlbum.album.artist}</p>
-            <p className="list-page-overlay-year">{randomAlbum.album.release_date.split('-')[0]}</p>
+            <img src={randomAlbum.album.imageUrl} alt={randomAlbum.album.name} className={styles['list-page-overlay-image']} />
+            <h2 className={styles['list-page-overlay-title']}><Link to={`/albums/${randomAlbum.album.id}`} className={styles['album-link']}>{randomAlbum.album.name}</Link></h2>
+            <p className={styles['list-page-overlay-artist']}><Link to={`/albums/artist/${encodeURIComponent(randomAlbum.album.artist)}`} className={styles['album-link']}>{randomAlbum.album.artist}</Link></p>
+            <p className={styles['list-page-overlay-year']}> <Link to={`/albums/year/${encodeURIComponent(randomAlbum.album.release_date.split('-')[0])}`} className={styles['album-link']}>{randomAlbum.album.release_date.split('-')[0]}</Link></p>
             <a
               href={randomAlbum.album.spotifyUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="list-page-overlay-link"
+              className={styles['list-page-overlay-link']}
             >
               <img
                 src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg"
                 alt="Spotify"
-                className="spotify-icon"
+                className={styles['spotify-icon']}
               />
             </a>
-            <label className="list-page-switch">
+            <label className={styles['list-page-switch']}>
               <input
-                type="checkbox"
-                checked={randomAlbum.played}
-                onChange={() => togglePlayed(list.id, randomAlbum.album.id, randomAlbum.played)}
+                  type="checkbox"
+                  checked={randomAlbum.played}
+                  onChange={() => togglePlayed(list.id, randomAlbum.album.id, randomAlbum.played)}
               />
-              <span className="list-page-slider list-page-round"></span>
+              <span className={styles['list-page-slider']}></span>
             </label>
           </div>
         </div>

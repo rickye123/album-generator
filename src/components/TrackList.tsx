@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import './Tracklist.css';
+import darkStyles from '../styles/modules/TrackList-dark.module.css';
+import lightStyles from '../styles/modules/TrackList-light.module.css';
 
 interface Track {
   id: string;
@@ -14,6 +15,13 @@ interface TrackListProps {
 const TrackList: React.FC<TrackListProps> = ({ tracks }) => {
   const [selectedTrack, setSelectedTrack] = useState<Track | null>(null);
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
+  const [theme] = useState<'light' | 'dark'>(() => {
+    // Load theme preference from localStorage or default to 'light'
+    return (localStorage.getItem('theme') as 'light' | 'dark') || 'light';
+  });
+
+  // Use the appropriate styles based on the current theme
+  const styles = theme === 'dark' ? darkStyles : lightStyles;
 
   const msToMinutes = (ms: number) => {
     const minutes = Math.floor(ms / 60000);
@@ -33,22 +41,22 @@ const TrackList: React.FC<TrackListProps> = ({ tracks }) => {
 
   return (
     <div>
-      <table className="track-table">
+      <table className={styles['track-table']}>
         <thead>
           <tr>
-            <th className="track-header">Track</th>
-            <th className="duration-header">Duration</th>
+            <th className={styles['track-header']}>Track</th>
+            <th className={styles['duration-header']}>Duration</th>
           </tr>
         </thead>
         <tbody>
           {tracks.map((track, index) => (
             <tr
               key={track.id}
-              className={index % 2 === 0 ? 'even-row' : 'odd-row'}
+              className={index % 2 === 0 ? styles['even-row'] : styles['odd-row']}
               onClick={() => handleTrackClick(track)} // Add click handler
             >
               <td>{`${index + 1}. ${track.name}`}</td>
-              <td className="duration">{msToMinutes(track.durationMs)}</td>
+              <td className={styles['duration']}>{msToMinutes(track.durationMs)}</td>
             </tr>
           ))}
         </tbody>
@@ -56,16 +64,16 @@ const TrackList: React.FC<TrackListProps> = ({ tracks }) => {
 
       {/* Overlay */}
       {isOverlayOpen && selectedTrack && (
-        <div className="overlay">
-          <div className="overlay-content">
+        <div className={styles['overlay']}>
+          <div className={styles['overlay-content']}>
             <h2>Track Options</h2>
             <p>{`Track: ${selectedTrack.name}`}</p>
-            <div className="button-container">
-              <button className="option-button">Rate</button>
-              <button className="option-button">Favorite</button>
-              <button className="option-button">Hate</button>
+            <div className={styles['button-container']}>
+              <button className={styles['option-button']}>Rate</button>
+              <button className={styles['option-button']}>Favorite</button>
+              <button className={styles['option-button']}>Hate</button>
             </div>
-            <button className="close-overlay-button" onClick={closeOverlay}>
+            <button className={styles['close-overlay-button']} onClick={closeOverlay}>
               Close
             </button>
           </div>

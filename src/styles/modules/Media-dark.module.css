@@ -1,0 +1,40 @@
+.media-page {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    color: var(--dark-more-contrast-color);
+    background-color: var(--dark-page-background-color);
+  }
+  
+  .media-page h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .media-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto;
+    max-width: 600px;
+  }
+  
+  .media-item {
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+    text-align: left;
+  }
+  
+  .media-item a {
+    text-decoration: none;
+    color: var(--spotify-green);
+    padding: 5px 0;
+    display: block;
+    border-bottom: 1px solid var(--dark-off-default);
+    transition: color 0.2s, border-color 0.2s;
+  }
+  
+  .media-item a:hover {
+    color: var(--hover-color);
+    border-color: var(--hover-color);
+  }
+  

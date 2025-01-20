@@ -1,0 +1,85 @@
+/* General container for the landing page */
+.landing-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 100vh;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+/* Title styling */
+.landing-page h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+/* Navigation links */
+.landing-page nav {
+    margin-bottom: 40px;
+}
+
+.landing-page nav a {
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 0 10px;
+    transition: color 0.3s;
+}
+
+.landing-page nav a:hover {
+    opacity: 0.8;
+}
+
+/* Album details container */
+.album-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    max-width: 600px;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+/* Album title */
+.album-details h2 {
+    font-size: 1.8rem;
+    margin: 0;
+}
+
+/* Album artist */
+.album-details p {
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+/* Spotify link */
+.album-details a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    font-weight: bold;
+    transition: opacity 0.3s;
+}
+
+.album-details a img {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+}
+
+/* Album image */
+.album-details img {
+    width: 300px;
+    height: 300px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+/* No album message */
+.no-album {
+    font-size: 1.5rem;
+}

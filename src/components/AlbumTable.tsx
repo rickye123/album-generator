@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AlbumListData, AlbumData } from '../model';
 import useAlbumTable from '../hooks/useAlbumTable';
-import '../pages/AlbumList.css';
+import darkStyles from '../styles/modules/AlbumList-dark.module.css';
+import lightStyles from '../styles/modules/AlbumList-light.module.css';
 
 interface AlbumTableProps {
   albums: AlbumListData[];
@@ -37,10 +38,17 @@ const AlbumTable: React.FC<AlbumTableProps> = ({
   } = useAlbumTable(albums);
 
   const albumsPerPage = 10; // Define albumsPerPage
+  const [theme] = useState<'light' | 'dark'>(() => {
+    // Load theme preference from localStorage or default to 'light'
+    return (localStorage.getItem('theme') as 'light' | 'dark') || 'light';
+  });
+
+  // Use the appropriate styles based on the current theme
+  const styles = theme === 'dark' ? darkStyles : lightStyles;
 
   return (
     <>
-      <div className="search-bar">
+      <div className={styles['search-bar']}>
         <input
           type="text"
           placeholder="Search albums or artists..."
@@ -48,7 +56,7 @@ const AlbumTable: React.FC<AlbumTableProps> = ({
           onChange={handleSearch}
         />
       </div>
-      <table className="album-table">
+      <table className={styles['album-table']}>
         <thead>
           <tr>
             <th onClick={() => handleSortChange('name')}>
@@ -63,54 +71,56 @@ const AlbumTable: React.FC<AlbumTableProps> = ({
         <tbody>
           {currentAlbums.map((albumList) => (
             <tr key={albumList.album.id}>
-              <td className="artist-album-cell">
+              <td className={styles['artist-album-cell']}>
                 <Link to={`/albums/${albumList.album.id}`}>
-                  <img src={albumList.album.imageUrl} alt={albumList.album.name} className="list-page-album-image" />
+                  <img src={albumList.album.imageUrl} alt={albumList.album.name} className={styles['list-page-album-image']} />
                 </Link>
               </td>
               <td>
-                <h3 className="list-page-album-name">{albumList.album.name}</h3>
-                <p className="list-page-album-artist">{albumList.album.artist}</p>
+                <h3 className={styles['list-page-album-name']}>{albumList.album.name}</h3>
+                <p className={styles['list-page-album-artist']}>
+                  <Link to={`/albums/artist/${encodeURIComponent(albumList.album.artist)}`} className={styles['album-link']}>{albumList.album.artist}</Link>
+                </p>
                 {listId && togglePlayed && (
-                  <label className="list-page-switch">
-                    <input
-                      type="checkbox"
-                      checked={albumList.played}
-                      onChange={() => togglePlayed(listId, albumList.album.id, albumList.played)}
-                    />
-                    <span className="list-page-slider list-page-round"></span>
+                  <label className={styles['list-page-switch']}>
+                      <input
+                          type="checkbox"
+                          checked={albumList.played}
+                          onChange={() => togglePlayed(listId, albumList.album.id, albumList.played)}
+                      />
+                      <span className={styles['list-page-slider']}></span>
                   </label>
                 )}
               </td>
-              <td className="more-options-cell">
-                <div className="more-options-container">
+              <td className={styles['more-options-cell']}>
+                <div className={styles['more-options-container']}>
                   <a
                     href={albumList.album.spotifyUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="spotify-link"
+                      className={styles['spotify-link']}
                   >
                     <img
                       src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg"
                       alt="Spotify"
-                      className="spotify-link"
+                      className={styles['spotify-link']}
                     />
                   </a>
                   {toggleMenu && (
                     <button
-                      className="more-options-button"
+                      className={styles['more-options-button']}
                       onClick={() => toggleMenu(albumList.album.id)}
                     >
                       ⋮
                     </button>
                   )}
                   {listId && menuOpen && menuOpen[albumList.album.id] && (
-                    <div className="dropdown-menu">
+                    <div className={styles['dropdown-menu']}>
                       <button onClick={() => handleRemove(albumList.album.id, listId)}>Remove</button>
                     </div>
                   )}
                   {!listId && menuOpen && menuOpen[albumList.album.id] && (
-                    <div className="dropdown-menu">
+                    <div className={styles['dropdown-menu']}>
                         <button onClick={() => handleRemove(albumList.album.id, "")}>Delete</button>
                         {openOverlay && (<button onClick={() => openOverlay(albumList.album)}>Add to List</button>)}
                     </div>
@@ -121,7 +131,7 @@ const AlbumTable: React.FC<AlbumTableProps> = ({
           ))}
         </tbody>
       </table>
-      <div className="pagination-controls">
+      <div className={styles['pagination-controls']}>
         <button onClick={() => handlePageChange('prev')} disabled={currentPage === 1}>
           Previous
         </button>

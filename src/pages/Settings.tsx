@@ -1,27 +1,42 @@
-import React, { useState } from 'react';
-import './Settings.css';
-
+import React, { useEffect, useState } from 'react';
+import darkStyles from '../styles/modules/Settings-dark.module.css';
+import lightStyles from '../styles/modules/Settings-light.module.css';
 const Settings: React.FC = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [landingPage, setLandingPage] = useState<'list' | 'albums' | 'year'>('list');
   const [selectedList, setSelectedList] = useState<string>('defaultList');
   const [randomizationMethod, setRandomizationMethod] = useState<'alphabetical' | 'popularity' | 'custom'>('alphabetical');
 
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    setTheme(savedTheme as 'light' | 'dark');
+  
+    // CSS Modules will handle class scoping, so no need for dynamic imports
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  }, []);
+  
+  const handleThemeChange = (newTheme: 'light' | 'dark') => {
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+    document.documentElement.setAttribute('data-theme', newTheme);
+  };  
+  // Use the appropriate styles based on the current theme
+  const styles = theme === 'dark' ? darkStyles : lightStyles;
   return (
-    <div className="settings-page">
+    <div className={styles['settings-page']}>
       <h1>Settings</h1>
 
       {/* Theme Selection */}
-      <section className="settings-section">
+      <section className={styles['settings-section']}>
         <h2>Theme</h2>
-        <div className="theme-options">
+        <div className={styles['theme-options']}>
           <label>
             <input
               type="radio"
               name="theme"
               value="light"
               checked={theme === 'light'}
-              onChange={() => setTheme('light')}
+              onChange={() => handleThemeChange('light')}
             />
             Light Mode
           </label>
@@ -31,7 +46,7 @@ const Settings: React.FC = () => {
               name="theme"
               value="dark"
               checked={theme === 'dark'}
-              onChange={() => setTheme('dark')}
+              onChange={() => handleThemeChange('dark')}
             />
             Dark Mode
           </label>
@@ -39,9 +54,9 @@ const Settings: React.FC = () => {
       </section>
 
       {/* Landing Page Randomization */}
-      <section className="settings-section">
+      <section className={styles['settings-section']}>
         <h2>Landing Page Randomization</h2>
-        <div className="landing-page-options">
+        <div className={styles['landing-page-options']}>
           <label>
             <input
               type="radio"
@@ -77,7 +92,7 @@ const Settings: React.FC = () => {
 
       {/* List Selection */}
       {landingPage === 'list' && (
-        <section className="settings-section">
+        <section className={styles['settings-section']}>
           <h2>Select List</h2>
           <select
             value={selectedList}
@@ -93,9 +108,9 @@ const Settings: React.FC = () => {
 
       {/* Randomization Method */}
       {landingPage === 'list' && (
-        <section className="settings-section">
+        <section className={styles['settings-section']}>
           <h2>Randomization Method</h2>
-          <div className="randomization-options">
+          <div className={styles['randomization-options']}>
             <label>
               <input
                 type="radio"

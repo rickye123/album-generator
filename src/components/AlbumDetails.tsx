@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import './AlbumDetails.css';
+import darkStyles from '../styles/modules/AlbumDetails-dark.module.css';
+import lightStyles from '../styles/modules/AlbumDetails-light.module.css';
+import { Link } from 'react-router-dom';
 
 interface AlbumDetailsProps {
   imageUrl: string;
@@ -23,7 +25,14 @@ const AlbumDetails: React.FC<AlbumDetailsProps> = ({
   const [isEditing, setIsEditing] = useState(false);
   const [editedName, setEditedName] = useState(name);
   const [editedGenres, setEditedGenres] = useState(genres.join(', '));
+  const [theme] = useState<'light' | 'dark'>(() => {
+    // Load theme preference from localStorage or default to 'light'
+    return (localStorage.getItem('theme') as 'light' | 'dark') || 'light';
+  });
 
+  // Use the appropriate styles based on the current theme
+  const styles = theme === 'dark' ? darkStyles : lightStyles;
+  
   const handleSave = () => {
     if (onEdit) {
       const genreArray = editedGenres
@@ -36,20 +45,20 @@ const AlbumDetails: React.FC<AlbumDetailsProps> = ({
   };
 
   return (
-    <div className="album-details">
-      <img className="album-cover" src={imageUrl} alt={name} />
+    <div className={styles['album-details']}>
+      <img className={styles['album-cover']} src={imageUrl} alt={name} />
       {isEditing ? (
         <div>
           <input
             type="text"
             value={editedName}
             onChange={(e) => setEditedName(e.target.value)}
-            className="edit-input"
+            className={styles['edit-input']}
           />
           <textarea
             value={editedGenres}
             onChange={(e) => setEditedGenres(e.target.value)}
-            className="edit-input"
+            className={styles['edit-input']}
             placeholder="Enter genres, separated by commas"
           />
           <button onClick={handleSave}>Save</button>
@@ -58,15 +67,32 @@ const AlbumDetails: React.FC<AlbumDetailsProps> = ({
       ) : (
         <h1 onClick={() => setIsEditing(true)}>{name}</h1>
       )}
-      <p className="album-artist">{artist}</p>
-      {releaseYear && <p className="release-date">{releaseYear}</p>}
-      {genres.length > 0 && <p className="album-genres">Genres: {genres.join(', ')}</p>}
+      <p className={styles['album-artist']}>
+        <Link to={`/albums/artist/${encodeURIComponent(artist)}`} className={styles['album-link']}>{artist}</Link>
+      </p>
+      {releaseYear && 
+        <p className={styles['release-date']}>
+          <Link to={`/albums/year/${encodeURIComponent(releaseYear)}`} className={styles['album-link']}>{releaseYear}</Link>
+        </p>
+      }
+      {genres.length > 0 && 
+      <p className={styles['album-genres']}>
+        Genres: {genres.map((genre, index) => (
+          <React.Fragment key={genre}>
+            <Link to={`/albums/genre/${encodeURIComponent(genre)}`} className={styles['album-link']}>
+              {genre}
+            </Link>
+            {index < genres.length - 1 && ', '}
+          </React.Fragment>
+        ))}
+      </p>
+      }
       {spotifyUrl && (
-        <a href={spotifyUrl} target="_blank" rel="noopener noreferrer" className="spotify-link">
+        <a href={spotifyUrl} target="_blank" rel="noopener noreferrer" className={styles['spotify-link']}>
           <img
             src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg"
             alt="Spotify"
-            className="spotify-icon"
+            className={styles['spotify-icon']}
           />
         </a>
       )}
