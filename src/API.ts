@@ -23,6 +23,7 @@ export type Album = {
   release_date: string,
   imageUrl?: string | null,
   genres?: Array< string | null > | null,
+  hideAlbum?: boolean | null,
   lists?: ModelAlbumListConnection | null,
   createdAt: string,
   updatedAt: string,
@@ -146,6 +147,7 @@ export type CreateAlbumInput = {
   release_date: string,
   imageUrl?: string | null,
   genres?: Array< string | null > | null,
+  hideAlbum?: boolean | null,
 };
 
 export type ModelAlbumConditionInput = {
@@ -155,11 +157,19 @@ export type ModelAlbumConditionInput = {
   release_date?: ModelStringInput | null,
   imageUrl?: ModelStringInput | null,
   genres?: ModelStringInput | null,
+  hideAlbum?: ModelBooleanInput | null,
   and?: Array< ModelAlbumConditionInput | null > | null,
   or?: Array< ModelAlbumConditionInput | null > | null,
   not?: ModelAlbumConditionInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
+};
+
+export type ModelBooleanInput = {
+  ne?: boolean | null,
+  eq?: boolean | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
 };
 
 export type UpdateAlbumInput = {
@@ -170,6 +180,7 @@ export type UpdateAlbumInput = {
   release_date?: string | null,
   imageUrl?: string | null,
   genres?: Array< string | null > | null,
+  hideAlbum?: boolean | null,
 };
 
 export type DeleteAlbumInput = {
@@ -194,13 +205,6 @@ export type ModelAlbumListConditionInput = {
   updatedAt?: ModelStringInput | null,
 };
 
-export type ModelBooleanInput = {
-  ne?: boolean | null,
-  eq?: boolean | null,
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
-};
-
 export type UpdateAlbumListInput = {
   id: string,
   albumId?: string | null,
@@ -220,6 +224,7 @@ export type ModelAlbumFilterInput = {
   release_date?: ModelStringInput | null,
   imageUrl?: ModelStringInput | null,
   genres?: ModelStringInput | null,
+  hideAlbum?: ModelBooleanInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
   and?: Array< ModelAlbumFilterInput | null > | null,
@@ -308,10 +313,16 @@ export type ModelSubscriptionAlbumFilterInput = {
   release_date?: ModelSubscriptionStringInput | null,
   imageUrl?: ModelSubscriptionStringInput | null,
   genres?: ModelSubscriptionStringInput | null,
+  hideAlbum?: ModelSubscriptionBooleanInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionAlbumFilterInput | null > | null,
   or?: Array< ModelSubscriptionAlbumFilterInput | null > | null,
+};
+
+export type ModelSubscriptionBooleanInput = {
+  ne?: boolean | null,
+  eq?: boolean | null,
 };
 
 export type ModelSubscriptionAlbumListFilterInput = {
@@ -323,11 +334,6 @@ export type ModelSubscriptionAlbumListFilterInput = {
   updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionAlbumListFilterInput | null > | null,
   or?: Array< ModelSubscriptionAlbumListFilterInput | null > | null,
-};
-
-export type ModelSubscriptionBooleanInput = {
-  ne?: boolean | null,
-  eq?: boolean | null,
 };
 
 export type TogglePlayedMutationVariables = {
@@ -504,6 +510,7 @@ export type CreateAlbumMutation = {
     release_date: string,
     imageUrl?: string | null,
     genres?: Array< string | null > | null,
+    hideAlbum?: boolean | null,
     lists?:  {
       __typename: "ModelAlbumListConnection",
       nextToken?: string | null,
@@ -528,6 +535,7 @@ export type UpdateAlbumMutation = {
     release_date: string,
     imageUrl?: string | null,
     genres?: Array< string | null > | null,
+    hideAlbum?: boolean | null,
     lists?:  {
       __typename: "ModelAlbumListConnection",
       nextToken?: string | null,
@@ -552,6 +560,7 @@ export type DeleteAlbumMutation = {
     release_date: string,
     imageUrl?: string | null,
     genres?: Array< string | null > | null,
+    hideAlbum?: boolean | null,
     lists?:  {
       __typename: "ModelAlbumListConnection",
       nextToken?: string | null,
@@ -582,6 +591,7 @@ export type CreateAlbumListMutation = {
       release_date: string,
       imageUrl?: string | null,
       genres?: Array< string | null > | null,
+      hideAlbum?: boolean | null,
       createdAt: string,
       updatedAt: string,
     },
@@ -618,6 +628,7 @@ export type UpdateAlbumListMutation = {
       release_date: string,
       imageUrl?: string | null,
       genres?: Array< string | null > | null,
+      hideAlbum?: boolean | null,
       createdAt: string,
       updatedAt: string,
     },
@@ -654,6 +665,7 @@ export type DeleteAlbumListMutation = {
       release_date: string,
       imageUrl?: string | null,
       genres?: Array< string | null > | null,
+      hideAlbum?: boolean | null,
       createdAt: string,
       updatedAt: string,
     },
@@ -721,6 +733,7 @@ export type GetAlbumQuery = {
     release_date: string,
     imageUrl?: string | null,
     genres?: Array< string | null > | null,
+    hideAlbum?: boolean | null,
     lists?:  {
       __typename: "ModelAlbumListConnection",
       nextToken?: string | null,
@@ -748,6 +761,7 @@ export type ListAlbumsQuery = {
       release_date: string,
       imageUrl?: string | null,
       genres?: Array< string | null > | null,
+      hideAlbum?: boolean | null,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -775,6 +789,7 @@ export type GetAlbumListQuery = {
       release_date: string,
       imageUrl?: string | null,
       genres?: Array< string | null > | null,
+      hideAlbum?: boolean | null,
       createdAt: string,
       updatedAt: string,
     },
@@ -930,6 +945,7 @@ export type OnCreateAlbumSubscription = {
     release_date: string,
     imageUrl?: string | null,
     genres?: Array< string | null > | null,
+    hideAlbum?: boolean | null,
     lists?:  {
       __typename: "ModelAlbumListConnection",
       nextToken?: string | null,
@@ -953,6 +969,7 @@ export type OnUpdateAlbumSubscription = {
     release_date: string,
     imageUrl?: string | null,
     genres?: Array< string | null > | null,
+    hideAlbum?: boolean | null,
     lists?:  {
       __typename: "ModelAlbumListConnection",
       nextToken?: string | null,
@@ -976,6 +993,7 @@ export type OnDeleteAlbumSubscription = {
     release_date: string,
     imageUrl?: string | null,
     genres?: Array< string | null > | null,
+    hideAlbum?: boolean | null,
     lists?:  {
       __typename: "ModelAlbumListConnection",
       nextToken?: string | null,
@@ -1005,6 +1023,7 @@ export type OnCreateAlbumListSubscription = {
       release_date: string,
       imageUrl?: string | null,
       genres?: Array< string | null > | null,
+      hideAlbum?: boolean | null,
       createdAt: string,
       updatedAt: string,
     },
@@ -1040,6 +1059,7 @@ export type OnUpdateAlbumListSubscription = {
       release_date: string,
       imageUrl?: string | null,
       genres?: Array< string | null > | null,
+      hideAlbum?: boolean | null,
       createdAt: string,
       updatedAt: string,
     },
@@ -1075,6 +1095,7 @@ export type OnDeleteAlbumListSubscription = {
       release_date: string,
       imageUrl?: string | null,
       genres?: Array< string | null > | null,
+      hideAlbum?: boolean | null,
       createdAt: string,
       updatedAt: string,
     },

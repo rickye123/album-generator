@@ -97,6 +97,7 @@ export const createAlbum = /* GraphQL */ `mutation CreateAlbum(
     release_date
     imageUrl
     genres
+    hideAlbum
     lists {
       nextToken
       __typename
@@ -122,6 +123,7 @@ export const updateAlbum = /* GraphQL */ `mutation UpdateAlbum(
     release_date
     imageUrl
     genres
+    hideAlbum
     lists {
       nextToken
       __typename
@@ -147,6 +149,7 @@ export const deleteAlbum = /* GraphQL */ `mutation DeleteAlbum(
     release_date
     imageUrl
     genres
+    hideAlbum
     lists {
       nextToken
       __typename
@@ -177,6 +180,7 @@ export const createAlbumList = /* GraphQL */ `mutation CreateAlbumList(
       release_date
       imageUrl
       genres
+      hideAlbum
       createdAt
       updatedAt
       __typename
@@ -214,6 +218,7 @@ export const updateAlbumList = /* GraphQL */ `mutation UpdateAlbumList(
       release_date
       imageUrl
       genres
+      hideAlbum
       createdAt
       updatedAt
       __typename
@@ -251,6 +256,7 @@ export const deleteAlbumList = /* GraphQL */ `mutation DeleteAlbumList(
       release_date
       imageUrl
       genres
+      hideAlbum
       createdAt
       updatedAt
       __typename

@@ -16,6 +16,7 @@ type Album @model {
   release_date: String!
   imageUrl: String
   genres: [String] # New optional array field for genres
+  hideAlbum: Boolean
   lists: [AlbumList] @hasMany(indexName: "byAlbum", fields: ["id"])
 }
 

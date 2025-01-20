@@ -1,5 +1,19 @@
 @import url('Root.module.css'); /* Import the global styles */
 
+.hidden-album {
+  background-color: rgba(255, 0, 0, 0.1); /* Light red background for visibility */
+  color: #900; /* Darker text color for emphasis */
+  border-bottom: 1px solid var(--dark-off-default);
+  display: table-row;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.hidden-album-block {
+  background-color: rgba(255, 0, 0, 0.555); /* Light red background for visibility */
+  opacity: 0.5
+}
+
 /* General container for the album list page */
 .album-list-page {
   display: flex;
@@ -50,11 +64,11 @@
   font-size: 1.2rem;
 }
 
-.album-table tr:nth-child(even) {
+.album-table tr.visible-album:nth-child(even) {
   background-color: var(--dark-table-even-color);
 }
 
-.album-table tr:hover {
+.album-table tr.visible-album:hover {
   background-color: var(--dark-table-hover-color);;
 }
 
@@ -307,7 +321,7 @@
     display: block;
   }
 
-  .album-table tr {
+  .album-table tr.visible-album {
     display: flex;
     justify-content: space-between;
     border-bottom: 1px solid var(--dark-off-default);

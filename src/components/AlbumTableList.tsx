@@ -13,6 +13,7 @@ interface AlbumTableListProps {
   toggleMenu?: (albumId: string) => void;
   menuOpen?: { [key: string]: boolean };
   openOverlay?: (album: AlbumData) => void; // New prop for opening overlay
+  hideAlbum?: (albumId: string, hideAlbum: boolean) => void;
 }
 
 const AlbumTableList: React.FC<AlbumTableListProps> = ({
@@ -23,6 +24,7 @@ const AlbumTableList: React.FC<AlbumTableListProps> = ({
     toggleMenu,
     menuOpen,
     openOverlay,
+    hideAlbum,
   }) => {
     const {
       currentPage,
@@ -72,8 +74,8 @@ const AlbumTableList: React.FC<AlbumTableListProps> = ({
                   </thead>
                   <tbody>
                     {currentAlbums.map((albumList: AlbumListData) => (
-                      <tr key={albumList.album.id}>
-                        <td className={styles['artist-album-cell']}>
+                      <tr key={albumList.album.id} className={albumList.album.hideAlbum ? styles['hidden-album'] : styles['visible-album'] }>
+                        <td className={styles['artist-album-cell']} >
                         <Link to={`/albums/${albumList.album.id}`} className={styles['album-link']}>
                           {albumList.album.name}
                         </Link>
@@ -110,6 +112,7 @@ const AlbumTableList: React.FC<AlbumTableListProps> = ({
                             )}
                             {!listId && menuOpen && menuOpen[albumList.album.id] && (
                                 <div className={styles['dropdown-menu']}>
+                                    {hideAlbum && (<button onClick={() => hideAlbum(albumList.album.id, albumList.album.hideAlbum)}>{albumList.album.hideAlbum ? 'Unhide' : 'Hide'}</button>)} {/* Add hideAlbum button */}
                                     <button onClick={() => handleRemove(albumList.album.id, "")}>Delete</button>
                                     {openOverlay && (<button onClick={() => openOverlay(albumList.album)}>Add to List</button>)}
                                 </div>

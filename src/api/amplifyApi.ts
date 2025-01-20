@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { AlbumData, AlbumListData, ListData } from '../model';
 import { AlbumList, List } from '../API';
 import { getUnplayedAlbums, listListsWithAlbums } from '../graphql/customQueries';
-import { togglePlayed } from '../graphql/customMutations';
+import { toggleHidden, togglePlayed } from '../graphql/customMutations';
 
 export const updateAlbumDetails = async (albumData: AlbumData): Promise<GraphQLResult<any>> => {
   try {
@@ -87,6 +87,7 @@ export const fetchAlbumById = async(albumId: string): Promise<AlbumData | null> 
         genres: album.genres,
         spotifyUrl: album.spotifyUrl,
         imageUrl: album.imageUrl,
+        hideAlbum: album.hideAlbum
       };
     }
 
@@ -124,6 +125,7 @@ export const fetchAlbums = async () => {
             genres: item.genres,
             spotifyUrl: item.spotifyUrl,
             imageUrl: item.imageUrl,
+            hideAlbum: item.hideAlbum
           }))
         );
         nextToken = typedResponse.data.listAlbums.nextToken;
@@ -170,6 +172,7 @@ export const fetchLists = async () => {
               genres: albumListItem.album.genres,
               imageUrl: albumListItem.album.imageUrl,
               played: albumListItem.played,
+              hideAlbum: albumListItem.album.hideAlbum,
             })),
           }))
         );
@@ -221,6 +224,7 @@ export const fetchAlbumsByListId = async (listId: string): Promise<ListData> => 
                 spotifyUrl: albumListItem.album.spotifyUrl,
                 releaseDate: albumListItem.album.release_date,
                 genres: albumListItem.album.genres,
+                hideAlbum: albumListItem.album.hideAlbum,
                 imageUrl: albumListItem.album.imageUrl,
               },
               played: albumListItem.played,
@@ -534,6 +538,26 @@ export const togglePlayedAlbumList = async (albumListId: string, played: boolean
     return response;
   } catch (error) {
     console.error('Error toggling played album list:', error);
+    return null;
+  }
+};
+
+export const toggleHideAlbum = async (albumId: string, hideAlbum: boolean) => {
+  try {
+    const response = await GraphQLAPI.graphql(
+      Amplify as any,
+      graphqlOperation(toggleHidden, { id: albumId, hideAlbum }), // Use `id` as expected by the mutation
+      {}
+    );
+
+    if (response instanceof Observable) {
+      throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+    }
+
+    console.log('toggleHidden Response', response);
+    return response;
+  } catch (error) {
+    console.error('Error toggling hide album:', error);
     return null;
   }
 };
