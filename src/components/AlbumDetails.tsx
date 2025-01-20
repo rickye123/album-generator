@@ -7,23 +7,24 @@ interface AlbumDetailsProps {
   imageUrl: string;
   name: string;
   artist: string;
-  releaseYear?: string;
+  releaseDate?: string;
   spotifyUrl?: string;
   genres?: string[];
-  onEdit?: (updatedName: string, updatedGenres: string[]) => void;
+  onEdit?: (updatedName: string, updatedGenres: string[], updatedReleaseDate: string) => void;
 }
 
 const AlbumDetails: React.FC<AlbumDetailsProps> = ({
   imageUrl,
   name,
   artist,
-  releaseYear,
+  releaseDate,
   spotifyUrl,
   genres = [],
   onEdit,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedName, setEditedName] = useState(name);
+  const [editedReleaseDate, setEditedReleaseDate] = useState(releaseDate || '');
   const [editedGenres, setEditedGenres] = useState(genres.join(', '));
   const [theme] = useState<'light' | 'dark'>(() => {
     // Load theme preference from localStorage or default to 'light'
@@ -39,7 +40,7 @@ const AlbumDetails: React.FC<AlbumDetailsProps> = ({
         .split(',')
         .map((genre) => genre.trim())
         .filter((genre) => genre !== ''); // Ensure no empty strings
-      onEdit(editedName, genreArray);
+      onEdit(editedName, genreArray, editedReleaseDate);
     }
     setIsEditing(false);
   };
@@ -54,6 +55,7 @@ const AlbumDetails: React.FC<AlbumDetailsProps> = ({
             value={editedName}
             onChange={(e) => setEditedName(e.target.value)}
             className={styles['edit-input']}
+            placeholder="Enter album name"
           />
           <textarea
             value={editedGenres}
@@ -61,6 +63,13 @@ const AlbumDetails: React.FC<AlbumDetailsProps> = ({
             className={styles['edit-input']}
             placeholder="Enter genres, separated by commas"
           />
+          <input
+            type="text"
+            value={editedReleaseDate}
+            onChange={(e) => setEditedReleaseDate(e.target.value)}
+            className={styles['edit-input']}
+            placeholder="Enter release date"
+          /> 
           <button onClick={handleSave}>Save</button>
           <button onClick={() => setIsEditing(false)}>Cancel</button>
         </div>
@@ -70,9 +79,9 @@ const AlbumDetails: React.FC<AlbumDetailsProps> = ({
       <p className={styles['album-artist']}>
         <Link to={`/albums/artist/${encodeURIComponent(artist)}`} className={styles['album-link']}>{artist}</Link>
       </p>
-      {releaseYear && 
+      {releaseDate && 
         <p className={styles['release-date']}>
-          <Link to={`/albums/year/${encodeURIComponent(releaseYear)}`} className={styles['album-link']}>{releaseYear}</Link>
+          <Link to={`/albums/year/${encodeURIComponent(releaseDate?.split('-')[0])}`} className={styles['album-link']}>{releaseDate?.split('-')[0]}</Link>
         </p>
       }
       {genres.length > 0 && 

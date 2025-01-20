@@ -47,9 +47,9 @@ const AlbumPage = () => {
     loadDetails();
   }, [album]);
 
-  const handleEditName = async (updatedName: string, updatedGenres: string[]) => {
+  const handleEditName = async (updatedName: string, updatedGenres: string[], updatedReleaseDate: string) => {
     if (album) {
-      const updatedAlbum = { ...album, name: updatedName, genres: updatedGenres };
+      const updatedAlbum = { ...album, name: updatedName, genres: updatedGenres, release_date: updatedReleaseDate };
       setAlbum(updatedAlbum);
 
       try {
@@ -69,7 +69,7 @@ const AlbumPage = () => {
         imageUrl={album.imageUrl}
         name={album.name}
         artist={album.artist}
-        releaseYear={spotifyDetails?.releaseDate?.split('-')[0]}
+        releaseDate={album.release_date?.toString()}
         spotifyUrl={album.spotifyUrl}
         genres={album.genres ?? []}
         onEdit={handleEditName}
