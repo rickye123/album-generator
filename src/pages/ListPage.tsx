@@ -13,6 +13,7 @@ import { ListData } from '../model';
 import AlbumTable from '../components/AlbumTable';
 import AlbumTableList from '../components/AlbumTableList';
 import AlbumTableBlock from '../components/AlbumTableBlock';
+import RandomAlbumOverlay from '../components/RandomAlbumOverlay';
 
 const ListPage: React.FC = () => {
   const { listId } = useParams<{ listId: string }>();
@@ -159,7 +160,7 @@ const ListPage: React.FC = () => {
       {error && <p className={styles['list-page-error']}>{error}</p>}
 
       <button className={styles['list-page-randomize-button']} onClick={randomizeAlbum}>
-        Randomize Album
+        Generate Unplayed Album
       </button>
 
       <button className={styles['list-page-unplayed-button']} onClick={bulkSetUnplayed}>
@@ -179,37 +180,12 @@ const ListPage: React.FC = () => {
       )}
 
       {randomAlbum && (
-        <div className={styles['list-page-overlay']}>
-          <div className={styles['list-page-overlay-content']}>
-            <button className={styles['list-page-close-button']} onClick={closeOverlay}>
-              &times;
-            </button>
-            <img src={randomAlbum.album.imageUrl} alt={randomAlbum.album.name} className={styles['list-page-overlay-image']} />
-            <h2 className={styles['list-page-overlay-title']}><Link to={`/albums/${randomAlbum.album.id}`} className={styles['album-link']}>{randomAlbum.album.name}</Link></h2>
-            <p className={styles['list-page-overlay-artist']}><Link to={`/albums/artist/${encodeURIComponent(randomAlbum.album.artist)}`} className={styles['album-link']}>{randomAlbum.album.artist}</Link></p>
-            <p className={styles['list-page-overlay-year']}> <Link to={`/albums/year/${encodeURIComponent(randomAlbum.album.release_date.split('-')[0])}`} className={styles['album-link']}>{randomAlbum.album.release_date.split('-')[0]}</Link></p>
-            <a
-              href={randomAlbum.album.spotifyUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles['list-page-overlay-link']}
-            >
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg"
-                alt="Spotify"
-                className={styles['spotify-icon']}
-              />
-            </a>
-            <label className={styles['list-page-switch']}>
-              <input
-                  type="checkbox"
-                  checked={randomAlbum.played}
-                  onChange={() => togglePlayed(list.id, randomAlbum.album.id, randomAlbum.played)}
-              />
-              <span className={styles['list-page-slider']}></span>
-            </label>
-          </div>
-        </div>
+        <RandomAlbumOverlay
+          randomAlbum={randomAlbum}
+          onClose={closeOverlay}
+          togglePlayed={togglePlayed}
+          listId={list.id}
+        />
       )}
     </div>
   );

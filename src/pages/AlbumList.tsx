@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { fetchAlbums, fetchLists, addAlbumToList, removeAlbum, fetchAlbumListEntriesForAlbumId, removeAlbumFromList, toggleHideAlbum } from '../api/amplifyApi';
+import { fetchAlbums, fetchLists, addAlbumToList, removeAlbum, fetchAlbumListEntriesForAlbumId, removeAlbumFromList, toggleHideAlbum, fetchRandomAlbum } from '../api/amplifyApi';
 import { AlbumData, AlbumListData, ListData } from '../model';
 import darkStyles from '../styles/modules/AlbumList-dark.module.css';
 import lightStyles from '../styles/modules/AlbumList-light.module.css';
@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom';
 import AlbumTable from '../components/AlbumTable';
 import AlbumTableList from '../components/AlbumTableList';
 import AlbumTableBlock from '../components/AlbumTableBlock'; // Import the new component
+import RandomAlbumOverlay from '../components/RandomAlbumOverlay';
 
 const AlbumList = () => {
   const [albums, setAlbums] = useState<AlbumData[]>([]);
@@ -18,6 +19,7 @@ const AlbumList = () => {
   const { artist } = useParams<{ artist: string }>();
   const { year } = useParams<{ year: string }>();
   const { genre } = useParams<{ genre: string }>();
+  const [randomAlbum, setRandomAlbum] = useState<any | null>(null);
   const [view, setView] = useState<'table' | 'list' | 'block'>('table'); // State to manage view
   const [theme] = useState<'light' | 'dark'>(() => {
     // Load theme preference from localStorage or default to 'light'
@@ -138,6 +140,26 @@ const AlbumList = () => {
     played: false,
   }));
 
+  const randomizeAlbum = async () => {
+    try {
+      const randomised = filteredAlbums[Math.floor(Math.random() * filteredAlbums.length)];
+
+      if (!randomised) {
+        alert('No albums available to generate.');
+        return;
+      }
+      const randomAlbum = {
+        album: randomised,
+        played: false,
+      }
+      setRandomAlbum(randomAlbum);
+    } catch (err) {
+      console.error('Error fetching random album:', err);
+    }
+  };
+
+  const closeAlbumOverlay = () => setRandomAlbum(null);
+
   const renderView = () => {
     switch (view) {
       case 'table':
@@ -180,6 +202,11 @@ const AlbumList = () => {
           ? `${artist}'s Albums`
           : 'All Albums'}
       </h1>
+
+      <button className={styles['list-page-randomize-button']} onClick={randomizeAlbum}>
+        Generate Random Album
+      </button>
+
       <div className={styles['view-toggle']}>
         <button onClick={() => setView('table')} className={view === 'table' ? styles['active'] : ''}>Table View</button>
         <button onClick={() => setView('list')} className={view === 'list' ? styles['active'] : ''}>List View</button>
@@ -223,6 +250,12 @@ const AlbumList = () => {
             </button>
           </div>
         </div>
+      )}
+      {randomAlbum && (
+        <RandomAlbumOverlay
+          randomAlbum={randomAlbum}
+          onClose={closeAlbumOverlay}
+        />
       )}
     </div>
   );
