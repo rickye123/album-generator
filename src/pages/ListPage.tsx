@@ -64,6 +64,21 @@ const ListPage: React.FC = () => {
 
   const togglePlayed = async (listId: string, albumId: string, played: boolean) => {
     try {
+
+      // Optimistically update the state
+      setList((prevList) => {
+        if (!prevList) {
+          return prevList;
+        }
+
+        return {
+          ...prevList,
+          items: prevList.albums.map((album) =>
+            album.album.id === albumId ? { ...album, played: !played } : album
+          ),
+        };
+      });
+
       const albumListEntry = await fetchAlbumListEntry(listId, albumId);
 
       if (!albumListEntry?.id) {
@@ -74,6 +89,11 @@ const ListPage: React.FC = () => {
       setList(foundList || null);
     } catch (err) {
       console.error('Error toggling played status:', err);
+      // Revert the optimistic update by refetching the list
+      const updatedList = await fetchAlbumsByListId(listId!);
+      setList(updatedList || null);
+
+      alert('Failed to update the played status.');
     }
   };
 

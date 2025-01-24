@@ -390,19 +390,24 @@ export const fetchAlbumListEntriesForListId = async (listId: string) => {
 
 export const fetchAlbumListEntry = async (listId: string, albumId: string) => {
   try {
-    const response = await GraphQLAPI.graphql(
-      Amplify as any,
-      graphqlOperation(albumListsByListIdAndId, {
-        listId,
-        filter: { albumId: { eq: albumId } },
-      }),
-      {}
-    );
+    let nextToken = null;
+    do {
+      const response = await GraphQLAPI.graphql(
+        Amplify as any,
+        graphqlOperation(albumListsByListIdAndId, {
+          listId,
+          filter: { albumId: { eq: albumId } },
+          nextToken,
+        }),
+        {}
+      );
 
-    const typedResponse = response as GraphQLResult<any>;
-    if (typedResponse.data?.albumListsByListIdAndId?.items?.length) {
-      return typedResponse.data.albumListsByListIdAndId.items[0]; // Return the first match
-    }
+      const typedResponse = response as GraphQLResult<any>;
+      if (typedResponse.data?.albumListsByListIdAndId?.items?.length) {
+        return typedResponse.data.albumListsByListIdAndId.items[0]; // Return the first match
+      }
+      nextToken = typedResponse.data?.albumListsByListIdAndId?.nextToken;
+    } while (nextToken);
     throw new Error('AlbumList entry not found');
   } catch (error) {
     console.error('Error fetching AlbumList entry:', error);
