@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import {
+  addAlbumToList,
   fetchAlbumListEntry,
+  fetchAlbums,
   fetchAlbumsByListId,
   getUnplayedAlbumsInList,
   removeAlbumFromList,
@@ -9,7 +11,7 @@ import {
 } from '../api/amplifyApi';
 import darkStyles from '../styles/modules/AlbumList-dark.module.css';
 import lightStyles from '../styles/modules/AlbumList-light.module.css';
-import { ListData } from '../model';
+import { AlbumData, ListData } from '../model';
 import AlbumTable from '../components/AlbumTable';
 import AlbumTableList from '../components/AlbumTableList';
 import AlbumTableBlock from '../components/AlbumTableBlock';
@@ -18,6 +20,7 @@ import RandomAlbumOverlay from '../components/RandomAlbumOverlay';
 const ListPage: React.FC = () => {
   const { listId } = useParams<{ listId: string }>();
   const [list, setList] = useState<ListData | null>(null);
+  const [allAlbums, setAllAlbums] = useState<AlbumData[]>([]);
   const [error, setError] = useState('');
   const [randomAlbum, setRandomAlbum] = useState<any | null>(null);
   const [menuOpen, setMenuOpen] = useState<{ [key: string]: boolean }>({});
@@ -27,6 +30,7 @@ const ListPage: React.FC = () => {
     return (localStorage.getItem('theme') as 'light' | 'dark') || 'light';
   });
 
+  const [showAddAlbumOverlay, setShowAddAlbumOverlay] = useState(false);
   // Use the appropriate styles based on the current theme
   const styles = theme === 'dark' ? darkStyles : lightStyles;
   useEffect(() => {
@@ -116,6 +120,16 @@ const ListPage: React.FC = () => {
     }
   };
 
+  const fetchAllAlbums = async () => {
+    try {
+      const albums = await fetchAlbums();
+      setAllAlbums(albums);
+      setShowAddAlbumOverlay(true);
+    } catch (err) {
+      console.error('Error fetching albums:', err);
+    }
+  };
+
   const randomizeAlbum = async () => {
     try {
       const unplayedAlbums = await getUnplayedAlbumsInList(listId!);
@@ -129,6 +143,19 @@ const ListPage: React.FC = () => {
       setRandomAlbum(randomAlbum);
     } catch (err) {
       console.error('Error fetching unplayed albums:', err);
+    }
+  };
+
+  const handleAddAlbumToList = async (albumId: string) => {
+    try {
+      await addAlbumToList(albumId, list.id);
+      const updatedList = await fetchAlbumsByListId(listId!);
+      setList(updatedList || null);
+      alert('Album added to the list successfully!');
+    } catch (err) {
+      console.error('Error adding album to list:', err);
+      setError('Failed to add album. Please try again.');
+      alert('Album failed to be added to list');
     }
   };
 
@@ -174,6 +201,29 @@ const ListPage: React.FC = () => {
     }
   };
 
+  const renderAddAlbumOverlay = () => (
+    <div className={styles['add-album-overlay']}>
+      <div className={styles['add-album-overlay-content']}>
+        <h2>Add Albums to {list.name}</h2>
+        <button
+          className={styles['list-page-close-button']}
+          onClick={() => setShowAddAlbumOverlay(false)}
+        >
+          &times;
+        </button>
+        {allAlbums.length === 0 ? (
+          <p>No albums to add</p>
+        ) : (
+            <AlbumTable
+            albums={allAlbums.map((album) => ({ album, played: false }))}
+            listId={listId!}
+            handleAdd={handleAddAlbumToList} // Add album to list
+            />
+        )}
+      </div>
+    </div>
+  );
+
   return (
     <div className={styles['album-list-page']}>
       <h1 className={styles['list-page-title']}>{list.name}</h1>
@@ -185,6 +235,13 @@ const ListPage: React.FC = () => {
 
       <button className={styles['list-page-unplayed-button']} onClick={bulkSetUnplayed}>
         Mark All as Unplayed
+      </button>
+
+      <button
+        className={styles['list-page-randomize-button']}
+        onClick={() => fetchAllAlbums()}
+      >
+        Add Albums to List
       </button>
 
       <div className={styles['view-toggle']}>
@@ -207,6 +264,7 @@ const ListPage: React.FC = () => {
           listId={list.id}
         />
       )}
+      {showAddAlbumOverlay && renderAddAlbumOverlay()}
     </div>
   );
 };

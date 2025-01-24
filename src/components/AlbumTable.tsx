@@ -8,12 +8,13 @@ import lightStyles from '../styles/modules/AlbumList-light.module.css';
 interface AlbumTableProps {
   albums: AlbumListData[];
   listId?: string;
-  handleRemove: (albumId: string, listId: string) => void;
+  handleRemove?: (albumId: string, listId: string) => void;
   togglePlayed?: (listId: string, albumId: string, played: boolean) => void;
   toggleMenu?: (albumId: string) => void;
   menuOpen?: { [key: string]: boolean };
   openOverlay?: (album: AlbumData) => void; // New prop for opening overlay
   hideAlbum?: (albumId: string, hideAlbum: boolean) => void;
+  handleAdd?: (albumId: string) => void;
 }
 
 const AlbumTable: React.FC<AlbumTableProps> = ({
@@ -25,6 +26,7 @@ const AlbumTable: React.FC<AlbumTableProps> = ({
   menuOpen,
   openOverlay,
   hideAlbum,
+  handleAdd,
 }) => {
   const {
     currentPage,
@@ -116,17 +118,25 @@ const AlbumTable: React.FC<AlbumTableProps> = ({
                       ⋮
                     </button>
                   )}
-                  {listId && menuOpen && menuOpen[albumList.album.id] && (
+                  {handleRemove && listId && menuOpen && menuOpen[albumList.album.id] && (
                     <div className={styles['dropdown-menu']}>
                       <button onClick={() => handleRemove(albumList.album.id, listId)}>Remove</button>
                     </div>
                   )}
-                  {!listId && menuOpen && menuOpen[albumList.album.id] && (
+                  {handleRemove && !listId && menuOpen && menuOpen[albumList.album.id] && (
                     <div className={styles['dropdown-menu']}>
                         {hideAlbum && (<button onClick={() => hideAlbum(albumList.album.id, albumList.album.hideAlbum)}>{albumList.album.hideAlbum ? 'Unhide' : 'Hide'}</button>)} {/* Add hideAlbum button */}
                         <button onClick={() => handleRemove(albumList.album.id, "")}>Delete</button>
                         {openOverlay && (<button onClick={() => openOverlay(albumList.album)}>Add to List</button>)}
                     </div>
+                  )}
+                  {handleAdd && listId && (
+                    <button
+                    className={styles['add-album-overlay-add-button']}
+                    onClick={() => handleAdd(albumList.album.id)}
+                    >
+                      Add
+                    </button>
                   )}
                 </div>
               </td>
