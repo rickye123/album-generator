@@ -15,6 +15,7 @@ interface AlbumTableProps {
   openOverlay?: (album: AlbumData) => void; // New prop for opening overlay
   hideAlbum?: (albumId: string, hideAlbum: boolean) => void;
   handleAdd?: (albumId: string) => void;
+  renderCustomButton?: (albumId: string) => JSX.Element | null; // New prop
 }
 
 const AlbumTable: React.FC<AlbumTableProps> = ({
@@ -27,6 +28,7 @@ const AlbumTable: React.FC<AlbumTableProps> = ({
   openOverlay,
   hideAlbum,
   handleAdd,
+  renderCustomButton
 }) => {
   const {
     currentPage,
@@ -130,13 +132,17 @@ const AlbumTable: React.FC<AlbumTableProps> = ({
                         {openOverlay && (<button onClick={() => openOverlay(albumList.album)}>Add to List</button>)}
                     </div>
                   )}
-                  {handleAdd && listId && (
-                    <button
-                    className={styles['add-album-overlay-add-button']}
-                    onClick={() => handleAdd(albumList.album.id)}
-                    >
-                      Add
-                    </button>
+                  {handleAdd && listId && renderCustomButton ? (
+                    renderCustomButton(albumList.album.id)
+                  ) : (
+                    handleAdd && listId && (
+                      <button
+                        className={styles['add-album-overlay-add-button']}
+                        onClick={() => handleAdd(albumList.album.id)}
+                      >
+                        Add
+                      </button>
+                    )
                   )}
                 </div>
               </td>

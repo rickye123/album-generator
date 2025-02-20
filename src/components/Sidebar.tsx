@@ -71,7 +71,7 @@ const Sidebar: React.FC = () => {
             </li>
             <li>
               <Link to="/lists" onClick={toggleSidebar}>
-                Lists
+                Collections
               </Link>
             </li>
             <li>

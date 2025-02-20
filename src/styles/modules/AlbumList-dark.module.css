@@ -757,3 +757,10 @@
 .add-album-overlay-add-button:hover {
   background: var(--hover-color);
 }
+
+.added-tick {
+  color: var(--spotify-green);
+  font-size: 1.5rem; /* Make it slightly larger */
+  font-weight: bold;
+  margin-left: 8px; /* Adds spacing from the button */
+}

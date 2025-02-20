@@ -19,6 +19,7 @@ import RandomAlbumOverlay from '../components/RandomAlbumOverlay';
 
 const ListPage: React.FC = () => {
   const { listId } = useParams<{ listId: string }>();
+  const [addedAlbums, setAddedAlbums] = useState<{ [key: string]: boolean }>({});
   const [list, setList] = useState<ListData | null>(null);
   const [allAlbums, setAllAlbums] = useState<AlbumData[]>([]);
   const [error, setError] = useState('');
@@ -39,8 +40,8 @@ const ListPage: React.FC = () => {
         const foundList = await fetchAlbumsByListId(listId!);
         setList(foundList || null);
       } catch (err) {
-        console.error('Error fetching list:', err);
-        setError('Error loading list');
+        console.error('Error fetching collection:', err);
+        setError('Error loading collection');
       }
     };
 
@@ -123,7 +124,10 @@ const ListPage: React.FC = () => {
   const fetchAllAlbums = async () => {
     try {
       const albums = await fetchAlbums();
-      setAllAlbums(albums);
+      // cycle through all albums and remove any that are already in the list
+      const albumIds = list.albums.map((album) => album.album.id);
+      const filteredAlbums = albums.filter((album) => !albumIds.includes(album.id));
+      setAllAlbums(filteredAlbums);
       setShowAddAlbumOverlay(true);
     } catch (err) {
       console.error('Error fetching albums:', err);
@@ -151,11 +155,11 @@ const ListPage: React.FC = () => {
       await addAlbumToList(albumId, list.id);
       const updatedList = await fetchAlbumsByListId(listId!);
       setList(updatedList || null);
-      alert('Album added to the list successfully!');
+      setAddedAlbums((prev) => ({ ...prev, [albumId]: true }));
     } catch (err) {
-      console.error('Error adding album to list:', err);
+      console.error('Error adding album to collection:', err);
       setError('Failed to add album. Please try again.');
-      alert('Album failed to be added to list');
+      alert('Album failed to be added to collection');
     }
   };
 
@@ -166,6 +170,19 @@ const ListPage: React.FC = () => {
       ...prev,
       [albumId]: !prev[albumId],
     }));
+  };
+
+  const renderAddButton = (albumId: string) => {
+    return addedAlbums[albumId] ? (
+      <span className={styles['added-tick']}>&#10003;</span>
+    ) : (
+      <button
+        className={styles['custom-add-button']}
+        onClick={() => handleAddAlbumToList(albumId)}
+      >
+        Add
+      </button>
+    );
   };
 
   const renderView = () => {
@@ -218,6 +235,7 @@ const ListPage: React.FC = () => {
             albums={allAlbums.map((album) => ({ album, played: false }))}
             listId={listId!}
             handleAdd={handleAddAlbumToList} // Add album to list
+            renderCustomButton={renderAddButton} // Custom button to add album
             />
         )}
       </div>

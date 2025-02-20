@@ -56,7 +56,8 @@ const Lists: React.FC = () => {
 
   const handleDeleteList = async (id: string) => {
     try {
-
+      const confirmed = window.confirm('Are you sure you want to delete this Collection?');
+      if (!confirmed) return;
       // get album list entry (if one exists) and delete it
       const results = await fetchAlbumListEntriesForListId(id);
       console.log('Result: ', results);
@@ -82,10 +83,10 @@ const Lists: React.FC = () => {
   return (
     <div className={styles['lists-page']}>
       <div className={styles['container']}>
-        <h1>My Lists</h1>
+        <h1>My Collections</h1>
         <form onSubmit={handleCreateList}>
           <div>
-            <label htmlFor={styles['listName']}>New List Name:</label>
+            <label htmlFor={styles['listName']}>New Collection Name:</label>
             <input
               type="text"
               id={styles['listName']}
@@ -94,12 +95,12 @@ const Lists: React.FC = () => {
               required
             />
           </div>
-          <button type="submit">Create List</button>
+          <button type="submit">Create Collection</button>
         </form>
         {error && <p style={{ color: 'red' }}>{error}</p>}
-        <h2>Existing Lists</h2>
+        <h2>Existing Collections</h2>
         {lists.length === 0 ? (
-          <p className={styles['no-lists']}>No Lists found.</p>
+          <p className={styles['no-lists']}>No Collections found.</p>
         ) : (
           <ul>
             {lists.map((list) => (

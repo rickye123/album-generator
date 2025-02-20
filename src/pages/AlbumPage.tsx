@@ -92,7 +92,7 @@ const AlbumPage = () => {
         {wikipediaLink && <Wikipedia wikipediaUrl={wikipediaLink} />}
       </CollapsibleSection>
       <CollapsibleSection title="Discogs">
-        <Discogs />
+        <Discogs albumName={album.name} artistName={album.artist} />
       </CollapsibleSection>
     </div>
   );
