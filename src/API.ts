@@ -25,6 +25,7 @@ export type Album = {
   genres?: Array< string | null > | null,
   hideAlbum?: boolean | null,
   lists?: ModelAlbumListConnection | null,
+  ListeningPileEntry?: ListeningPileEntry | null,
   createdAt: string,
   updatedAt: string,
 };
@@ -35,6 +36,16 @@ export type ModelAlbumListConnection = {
   nextToken?: string | null,
 };
 
+export type ListeningPileEntry = {
+  __typename: "ListeningPileEntry",
+  id: string,
+  albumId: string,
+  order: number,
+  album: Album,
+  createdAt: string,
+  updatedAt: string,
+};
+
 export type List = {
   __typename: "List",
   id: string,
@@ -42,6 +53,12 @@ export type List = {
   albums?: ModelAlbumListConnection | null,
   createdAt: string,
   updatedAt: string,
+};
+
+export type UpdateListeningPileEntryInput = {
+  id: string,
+  albumId?: string | null,
+  order?: number | null,
 };
 
 export type ModelListFilterInput = {
@@ -216,6 +233,38 @@ export type DeleteAlbumListInput = {
   id: string,
 };
 
+export type CreateListeningPileEntryInput = {
+  id?: string | null,
+  albumId: string,
+  order: number,
+};
+
+export type ModelListeningPileEntryConditionInput = {
+  albumId?: ModelIDInput | null,
+  order?: ModelIntInput | null,
+  and?: Array< ModelListeningPileEntryConditionInput | null > | null,
+  or?: Array< ModelListeningPileEntryConditionInput | null > | null,
+  not?: ModelListeningPileEntryConditionInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+};
+
+export type ModelIntInput = {
+  ne?: number | null,
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  between?: Array< number | null > | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+};
+
+export type DeleteListeningPileEntryInput = {
+  id: string,
+};
+
 export type ModelAlbumFilterInput = {
   id?: ModelIDInput | null,
   name?: ModelStringInput | null,
@@ -248,6 +297,23 @@ export type ModelAlbumListFilterInput = {
   and?: Array< ModelAlbumListFilterInput | null > | null,
   or?: Array< ModelAlbumListFilterInput | null > | null,
   not?: ModelAlbumListFilterInput | null,
+};
+
+export type ModelListeningPileEntryFilterInput = {
+  id?: ModelIDInput | null,
+  albumId?: ModelIDInput | null,
+  order?: ModelIntInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+  and?: Array< ModelListeningPileEntryFilterInput | null > | null,
+  or?: Array< ModelListeningPileEntryFilterInput | null > | null,
+  not?: ModelListeningPileEntryFilterInput | null,
+};
+
+export type ModelListeningPileEntryConnection = {
+  __typename: "ModelListeningPileEntryConnection",
+  items:  Array<ListeningPileEntry | null >,
+  nextToken?: string | null,
 };
 
 export type ModelIDKeyConditionInput = {
@@ -336,6 +402,28 @@ export type ModelSubscriptionAlbumListFilterInput = {
   or?: Array< ModelSubscriptionAlbumListFilterInput | null > | null,
 };
 
+export type ModelSubscriptionListeningPileEntryFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  albumId?: ModelSubscriptionIDInput | null,
+  order?: ModelSubscriptionIntInput | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionListeningPileEntryFilterInput | null > | null,
+  or?: Array< ModelSubscriptionListeningPileEntryFilterInput | null > | null,
+};
+
+export type ModelSubscriptionIntInput = {
+  ne?: number | null,
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  between?: Array< number | null > | null,
+  in?: Array< number | null > | null,
+  notIn?: Array< number | null > | null,
+};
+
 export type TogglePlayedMutationVariables = {
   id: string,
   played: boolean,
@@ -346,6 +434,33 @@ export type TogglePlayedMutation = {
     __typename: "AlbumList",
     id: string,
     played: boolean,
+  } | null,
+};
+
+export type ToggleAlbumHiddenMutationVariables = {
+  id: string,
+  hideAlbum: boolean,
+};
+
+export type ToggleAlbumHiddenMutation = {
+  updateAlbum?:  {
+    __typename: "Album",
+    id: string,
+    hideAlbum?: boolean | null,
+  } | null,
+};
+
+export type ReorderListeningPileMutationVariables = {
+  input: UpdateListeningPileEntryInput,
+};
+
+export type ReorderListeningPileMutation = {
+  updateListeningPileEntry?:  {
+    __typename: "ListeningPileEntry",
+    id: string,
+    albumId: string,
+    order: number,
+    updatedAt: string,
   } | null,
 };
 
@@ -515,6 +630,14 @@ export type CreateAlbumMutation = {
       __typename: "ModelAlbumListConnection",
       nextToken?: string | null,
     } | null,
+    ListeningPileEntry?:  {
+      __typename: "ListeningPileEntry",
+      id: string,
+      albumId: string,
+      order: number,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -540,6 +663,14 @@ export type UpdateAlbumMutation = {
       __typename: "ModelAlbumListConnection",
       nextToken?: string | null,
     } | null,
+    ListeningPileEntry?:  {
+      __typename: "ListeningPileEntry",
+      id: string,
+      albumId: string,
+      order: number,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -564,6 +695,14 @@ export type DeleteAlbumMutation = {
     lists?:  {
       __typename: "ModelAlbumListConnection",
       nextToken?: string | null,
+    } | null,
+    ListeningPileEntry?:  {
+      __typename: "ListeningPileEntry",
+      id: string,
+      albumId: string,
+      order: number,
+      createdAt: string,
+      updatedAt: string,
     } | null,
     createdAt: string,
     updatedAt: string,
@@ -681,6 +820,93 @@ export type DeleteAlbumListMutation = {
   } | null,
 };
 
+export type CreateListeningPileEntryMutationVariables = {
+  input: CreateListeningPileEntryInput,
+  condition?: ModelListeningPileEntryConditionInput | null,
+};
+
+export type CreateListeningPileEntryMutation = {
+  createListeningPileEntry?:  {
+    __typename: "ListeningPileEntry",
+    id: string,
+    albumId: string,
+    order: number,
+    album:  {
+      __typename: "Album",
+      id: string,
+      name: string,
+      artist: string,
+      spotifyUrl: string,
+      release_date: string,
+      imageUrl?: string | null,
+      genres?: Array< string | null > | null,
+      hideAlbum?: boolean | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateListeningPileEntryMutationVariables = {
+  input: UpdateListeningPileEntryInput,
+  condition?: ModelListeningPileEntryConditionInput | null,
+};
+
+export type UpdateListeningPileEntryMutation = {
+  updateListeningPileEntry?:  {
+    __typename: "ListeningPileEntry",
+    id: string,
+    albumId: string,
+    order: number,
+    album:  {
+      __typename: "Album",
+      id: string,
+      name: string,
+      artist: string,
+      spotifyUrl: string,
+      release_date: string,
+      imageUrl?: string | null,
+      genres?: Array< string | null > | null,
+      hideAlbum?: boolean | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteListeningPileEntryMutationVariables = {
+  input: DeleteListeningPileEntryInput,
+  condition?: ModelListeningPileEntryConditionInput | null,
+};
+
+export type DeleteListeningPileEntryMutation = {
+  deleteListeningPileEntry?:  {
+    __typename: "ListeningPileEntry",
+    id: string,
+    albumId: string,
+    order: number,
+    album:  {
+      __typename: "Album",
+      id: string,
+      name: string,
+      artist: string,
+      spotifyUrl: string,
+      release_date: string,
+      imageUrl?: string | null,
+      genres?: Array< string | null > | null,
+      hideAlbum?: boolean | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
 export type GetListQueryVariables = {
   id: string,
 };
@@ -737,6 +963,14 @@ export type GetAlbumQuery = {
     lists?:  {
       __typename: "ModelAlbumListConnection",
       nextToken?: string | null,
+    } | null,
+    ListeningPileEntry?:  {
+      __typename: "ListeningPileEntry",
+      id: string,
+      albumId: string,
+      order: number,
+      createdAt: string,
+      updatedAt: string,
     } | null,
     createdAt: string,
     updatedAt: string,
@@ -827,6 +1061,55 @@ export type ListAlbumListsQuery = {
   } | null,
 };
 
+export type GetListeningPileEntryQueryVariables = {
+  id: string,
+};
+
+export type GetListeningPileEntryQuery = {
+  getListeningPileEntry?:  {
+    __typename: "ListeningPileEntry",
+    id: string,
+    albumId: string,
+    order: number,
+    album:  {
+      __typename: "Album",
+      id: string,
+      name: string,
+      artist: string,
+      spotifyUrl: string,
+      release_date: string,
+      imageUrl?: string | null,
+      genres?: Array< string | null > | null,
+      hideAlbum?: boolean | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListListeningPileEntriesQueryVariables = {
+  filter?: ModelListeningPileEntryFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListListeningPileEntriesQuery = {
+  listListeningPileEntries?:  {
+    __typename: "ModelListeningPileEntryConnection",
+    items:  Array< {
+      __typename: "ListeningPileEntry",
+      id: string,
+      albumId: string,
+      order: number,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
 export type AlbumListsByAlbumIdAndIdQueryVariables = {
   albumId: string,
   id?: ModelIDKeyConditionInput | null,
@@ -870,6 +1153,30 @@ export type AlbumListsByListIdAndIdQuery = {
       albumId: string,
       listId: string,
       played: boolean,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type ListeningPileEntriesByAlbumIdAndIdQueryVariables = {
+  albumId: string,
+  id?: ModelIDKeyConditionInput | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelListeningPileEntryFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListeningPileEntriesByAlbumIdAndIdQuery = {
+  listeningPileEntriesByAlbumIdAndId?:  {
+    __typename: "ModelListeningPileEntryConnection",
+    items:  Array< {
+      __typename: "ListeningPileEntry",
+      id: string,
+      albumId: string,
+      order: number,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -950,6 +1257,14 @@ export type OnCreateAlbumSubscription = {
       __typename: "ModelAlbumListConnection",
       nextToken?: string | null,
     } | null,
+    ListeningPileEntry?:  {
+      __typename: "ListeningPileEntry",
+      id: string,
+      albumId: string,
+      order: number,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -974,6 +1289,14 @@ export type OnUpdateAlbumSubscription = {
       __typename: "ModelAlbumListConnection",
       nextToken?: string | null,
     } | null,
+    ListeningPileEntry?:  {
+      __typename: "ListeningPileEntry",
+      id: string,
+      albumId: string,
+      order: number,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -997,6 +1320,14 @@ export type OnDeleteAlbumSubscription = {
     lists?:  {
       __typename: "ModelAlbumListConnection",
       nextToken?: string | null,
+    } | null,
+    ListeningPileEntry?:  {
+      __typename: "ListeningPileEntry",
+      id: string,
+      albumId: string,
+      order: number,
+      createdAt: string,
+      updatedAt: string,
     } | null,
     createdAt: string,
     updatedAt: string,
@@ -1103,6 +1434,90 @@ export type OnDeleteAlbumListSubscription = {
       __typename: "List",
       id: string,
       name: string,
+      createdAt: string,
+      updatedAt: string,
+    },
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnCreateListeningPileEntrySubscriptionVariables = {
+  filter?: ModelSubscriptionListeningPileEntryFilterInput | null,
+};
+
+export type OnCreateListeningPileEntrySubscription = {
+  onCreateListeningPileEntry?:  {
+    __typename: "ListeningPileEntry",
+    id: string,
+    albumId: string,
+    order: number,
+    album:  {
+      __typename: "Album",
+      id: string,
+      name: string,
+      artist: string,
+      spotifyUrl: string,
+      release_date: string,
+      imageUrl?: string | null,
+      genres?: Array< string | null > | null,
+      hideAlbum?: boolean | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdateListeningPileEntrySubscriptionVariables = {
+  filter?: ModelSubscriptionListeningPileEntryFilterInput | null,
+};
+
+export type OnUpdateListeningPileEntrySubscription = {
+  onUpdateListeningPileEntry?:  {
+    __typename: "ListeningPileEntry",
+    id: string,
+    albumId: string,
+    order: number,
+    album:  {
+      __typename: "Album",
+      id: string,
+      name: string,
+      artist: string,
+      spotifyUrl: string,
+      release_date: string,
+      imageUrl?: string | null,
+      genres?: Array< string | null > | null,
+      hideAlbum?: boolean | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeleteListeningPileEntrySubscriptionVariables = {
+  filter?: ModelSubscriptionListeningPileEntryFilterInput | null,
+};
+
+export type OnDeleteListeningPileEntrySubscription = {
+  onDeleteListeningPileEntry?:  {
+    __typename: "ListeningPileEntry",
+    id: string,
+    albumId: string,
+    order: number,
+    album:  {
+      __typename: "Album",
+      id: string,
+      name: string,
+      artist: string,
+      spotifyUrl: string,
+      release_date: string,
+      imageUrl?: string | null,
+      genres?: Array< string | null > | null,
+      hideAlbum?: boolean | null,
       createdAt: string,
       updatedAt: string,
     },

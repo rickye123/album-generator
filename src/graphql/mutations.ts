@@ -102,6 +102,14 @@ export const createAlbum = /* GraphQL */ `mutation CreateAlbum(
       nextToken
       __typename
     }
+    ListeningPileEntry {
+      id
+      albumId
+      order
+      createdAt
+      updatedAt
+      __typename
+    }
     createdAt
     updatedAt
     __typename
@@ -128,6 +136,14 @@ export const updateAlbum = /* GraphQL */ `mutation UpdateAlbum(
       nextToken
       __typename
     }
+    ListeningPileEntry {
+      id
+      albumId
+      order
+      createdAt
+      updatedAt
+      __typename
+    }
     createdAt
     updatedAt
     __typename
@@ -152,6 +168,14 @@ export const deleteAlbum = /* GraphQL */ `mutation DeleteAlbum(
     hideAlbum
     lists {
       nextToken
+      __typename
+    }
+    ListeningPileEntry {
+      id
+      albumId
+      order
+      createdAt
+      updatedAt
       __typename
     }
     createdAt
@@ -276,4 +300,94 @@ export const deleteAlbumList = /* GraphQL */ `mutation DeleteAlbumList(
 ` as GeneratedMutation<
   APITypes.DeleteAlbumListMutationVariables,
   APITypes.DeleteAlbumListMutation
+>;
+export const createListeningPileEntry = /* GraphQL */ `mutation CreateListeningPileEntry(
+  $input: CreateListeningPileEntryInput!
+  $condition: ModelListeningPileEntryConditionInput
+) {
+  createListeningPileEntry(input: $input, condition: $condition) {
+    id
+    albumId
+    order
+    album {
+      id
+      name
+      artist
+      spotifyUrl
+      release_date
+      imageUrl
+      genres
+      hideAlbum
+      createdAt
+      updatedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateListeningPileEntryMutationVariables,
+  APITypes.CreateListeningPileEntryMutation
+>;
+export const updateListeningPileEntry = /* GraphQL */ `mutation UpdateListeningPileEntry(
+  $input: UpdateListeningPileEntryInput!
+  $condition: ModelListeningPileEntryConditionInput
+) {
+  updateListeningPileEntry(input: $input, condition: $condition) {
+    id
+    albumId
+    order
+    album {
+      id
+      name
+      artist
+      spotifyUrl
+      release_date
+      imageUrl
+      genres
+      hideAlbum
+      createdAt
+      updatedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateListeningPileEntryMutationVariables,
+  APITypes.UpdateListeningPileEntryMutation
+>;
+export const deleteListeningPileEntry = /* GraphQL */ `mutation DeleteListeningPileEntry(
+  $input: DeleteListeningPileEntryInput!
+  $condition: ModelListeningPileEntryConditionInput
+) {
+  deleteListeningPileEntry(input: $input, condition: $condition) {
+    id
+    albumId
+    order
+    album {
+      id
+      name
+      artist
+      spotifyUrl
+      release_date
+      imageUrl
+      genres
+      hideAlbum
+      createdAt
+      updatedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteListeningPileEntryMutationVariables,
+  APITypes.DeleteListeningPileEntryMutation
 >;

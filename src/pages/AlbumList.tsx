@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { fetchAlbums, fetchLists, addAlbumToList, removeAlbum, fetchAlbumListEntriesForAlbumId, removeAlbumFromList, toggleHideAlbum, fetchRandomAlbum } from '../api/amplifyApi';
+import { fetchAlbums, fetchLists, addAlbumToList, removeAlbum, fetchAlbumListEntriesForAlbumId, removeAlbumFromList, toggleHideAlbum, fetchRandomAlbum, addAlbumToListeningPile } from '../api/amplifyApi';
 import { AlbumData, AlbumListData, ListData } from '../model';
 import darkStyles from '../styles/modules/AlbumList-dark.module.css';
 import lightStyles from '../styles/modules/AlbumList-light.module.css';
@@ -162,6 +162,17 @@ const AlbumList = () => {
     }
   };
 
+  const handleAddToListeningPile = async (albumId: string) => {
+    try {
+      const response = await addAlbumToListeningPile(albumId);
+      console.log('Album added to listening pile:', response);
+      alert('Album added to listening pile successfully!');
+    } catch (error) {
+      console.error('Error adding album to listening pile:', error);
+      alert('Failed to add album to listening pile. Please try again.');
+    }
+  };
+
   const closeAlbumOverlay = () => setRandomAlbum(null);
 
   const renderView = () => {
@@ -175,6 +186,7 @@ const AlbumList = () => {
             menuOpen={menuOpen}
             openOverlay={openOverlay}
             hideAlbum={handleHideAlbum}
+            handleAddToListeningPile={handleAddToListeningPile}
           />
         );
       case 'list':

@@ -16,6 +16,7 @@ interface AlbumTableProps {
   hideAlbum?: (albumId: string, hideAlbum: boolean) => void;
   handleAdd?: (albumId: string) => void;
   renderCustomButton?: (albumId: string) => JSX.Element | null; // New prop
+  handleAddToListeningPile?: (albumId: string) => void;
 }
 
 const AlbumTable: React.FC<AlbumTableProps> = ({
@@ -28,7 +29,8 @@ const AlbumTable: React.FC<AlbumTableProps> = ({
   openOverlay,
   hideAlbum,
   handleAdd,
-  renderCustomButton
+  renderCustomButton,
+  handleAddToListeningPile
 }) => {
   const {
     currentPage,
@@ -130,6 +132,7 @@ const AlbumTable: React.FC<AlbumTableProps> = ({
                         {hideAlbum && (<button onClick={() => hideAlbum(albumList.album.id, albumList.album.hideAlbum)}>{albumList.album.hideAlbum ? 'Unhide' : 'Hide'}</button>)} {/* Add hideAlbum button */}
                         <button onClick={() => handleRemove(albumList.album.id, "")}>Delete</button>
                         {openOverlay && (<button onClick={() => openOverlay(albumList.album)}>Add to List</button>)}
+                        {handleAddToListeningPile && <button onClick={() => handleAddToListeningPile(albumList.album.id)}>Add to Listening Pile</button>}
                     </div>
                   )}
                   {handleAdd && listId && renderCustomButton ? (

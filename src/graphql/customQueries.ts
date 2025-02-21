@@ -52,3 +52,40 @@ export const getUnplayedAlbums = /* GraphQL */ `
     }
   }
 `;
+
+export const listListeningPileEntries = /* GraphQL */ `query ListListeningPileEntries(
+  $filter: ModelListeningPileEntryFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listListeningPileEntries(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      albumId
+      order
+      album {  # This is the added field to get Album details
+        id
+        name
+        artist
+        spotifyUrl
+        release_date
+        imageUrl
+        genres
+        hideAlbum
+        createdAt
+        updatedAt
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+`;

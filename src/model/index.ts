@@ -1,3 +1,5 @@
+import { integer } from "aws-sdk/clients/cloudfront";
+
 export interface AlbumData {
     id: string;
     name: string;
@@ -36,4 +38,10 @@ export interface ListData {
     id: string;
     name: string;
     albums: AlbumListData[];
+}
+
+export interface ListeningPileEntry {
+    id: string;
+    album: AlbumData;
+    order: integer;
 }

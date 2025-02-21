@@ -1,12 +1,12 @@
 import { GraphQLAPI, graphqlOperation } from '@aws-amplify/api-graphql';
-import { createAlbum, createList, deleteList, addAlbumToList as addAlbumToListMutation, deleteAlbum, createAlbumList, deleteAlbumList, updateAlbum } from '../graphql/mutations';
+import { createAlbum, createList, deleteList, addAlbumToList as addAlbumToListMutation, deleteAlbum, createAlbumList, deleteAlbumList, updateAlbum, deleteListeningPileEntry, createListeningPileEntry } from '../graphql/mutations';
 import { albumListsByAlbumIdAndId, albumListsByListIdAndId, getAlbum, getList, listAlbumLists, listAlbums, listLists } from '../graphql/queries';
 import { GraphQLResult } from '@aws-amplify/api-graphql';
 import { Amplify } from '@aws-amplify/core';
 import { Observable } from 'rxjs';
-import { AlbumData, AlbumListData, ListData } from '../model';
+import { AlbumData, AlbumListData, ListData, ListeningPileEntry } from '../model';
 import { AlbumList, List } from '../API';
-import { getUnplayedAlbums, listListsWithAlbums } from '../graphql/customQueries';
+import { getUnplayedAlbums, listListeningPileEntries, listListsWithAlbums } from '../graphql/customQueries';
 import { toggleHidden, togglePlayed } from '../graphql/customMutations';
 
 export const updateAlbumDetails = async (albumData: AlbumData): Promise<GraphQLResult<any>> => {
@@ -621,3 +621,172 @@ export const getUnplayedAlbumsInList = async (listId: string) => {
 
   return allUnplayedAlbums;
 };
+
+export async function fetchListeningPile() {
+  const allEntries: ListeningPileEntry[] = [];
+  let nextToken: string | null = null;
+
+  do {
+    const response = await GraphQLAPI.graphql(
+      Amplify as any,
+      graphqlOperation(listListeningPileEntries, {
+        filter: {},
+        limit: 50, // Adjust limit as needed
+        nextToken,
+      }),
+      {}
+    );
+
+    if (response instanceof Observable) {
+      throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+    }
+
+    const existingEntries = response as GraphQLResult<any>;
+
+    if (!existingEntries || !existingEntries.data?.listListeningPileEntries) {
+      throw new Error('Failed to fetch listening pile.');
+    }
+
+    const currentItems = existingEntries.data.listListeningPileEntries.items || [];
+    allEntries.push(...currentItems);
+
+    nextToken = existingEntries.data.listListeningPileEntries.nextToken;
+  } while (nextToken);
+
+  return allEntries.sort((a, b) => a.order - b.order); // Ensure sorting
+}
+
+export async function reorderListeningPile(entryId: string, newOrder: number) {
+  const response = await GraphQLAPI.graphql(
+    Amplify as any,
+    graphqlOperation(reorderListeningPile, {
+      input: {
+        id: entryId,
+        order: newOrder,
+      },
+    }),
+    {}
+  );
+
+  if (response instanceof Observable) {
+    throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+  }
+
+  return response as GraphQLResult<any>;
+}
+
+export async function removeFromListeningPile(entryId: string) {
+  const response = await GraphQLAPI.graphql(
+    Amplify as any,
+    graphqlOperation(deleteListeningPileEntry, {
+      input: { id: entryId },
+    }),
+    {}
+  );
+
+  if (response instanceof Observable) {
+    throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+  }
+
+  return response as GraphQLResult<any>;
+}
+
+async function fetchAllListeningPileEntriesByAlbumId(albumId: string) {
+  const allEntries: any[] = [];
+  let nextToken: string | null = null;
+
+  do {
+    const response = await GraphQLAPI.graphql(
+      Amplify as any,
+      graphqlOperation(listListeningPileEntries, {
+        filter: { albumId: { eq: albumId } },
+        nextToken,
+      }),
+      {}
+    );
+
+    if (response instanceof Observable) {
+      throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+    }
+
+    const existingEntries = response as GraphQLResult<any>;
+
+    if (!existingEntries || !existingEntries.data?.listListeningPileEntries) {
+      throw new Error('Failed to fetch listening pile entries.');
+    }
+
+    const currentItems = existingEntries.data.listListeningPileEntries.items || [];
+    allEntries.push(...currentItems);
+
+    nextToken = existingEntries.data.listListeningPileEntries.nextToken;
+  } while (nextToken);
+
+  return allEntries;
+}
+
+async function getHighestListeningPileOrder(): Promise<number> {
+  const response = await GraphQLAPI.graphql(
+    Amplify as any,
+    graphqlOperation(listListeningPileEntries, {
+      limit: 1,  // Only fetch one item, sorted by order in descending order to get the highest one
+      sortDirection: 'DESC',
+    }),
+    {}
+  );
+
+  if (response instanceof Observable) {
+    throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+  }
+
+  const result = response as GraphQLResult<any>;
+
+  if (!result || !result.data || !result.data.listListeningPileEntries) {
+    throw new Error('Failed to fetch listening pile entries.');
+  }
+
+  // If no entries exist, return 0 (start at the first position)
+  const highestOrder = result.data.listListeningPileEntries.items.length > 0
+    ? result.data.listListeningPileEntries.items[0].order
+    : 0;
+
+  return highestOrder;
+}
+
+export async function addAlbumToListeningPile(albumId: string): Promise<GraphQLResult<any>> {
+
+  const highestOrder = await getHighestListeningPileOrder();  // Get the highest order value
+
+  console.log('Highest order in pile is:', highestOrder);
+  // Check if the album is already in the listening pile
+  const existingEntries = await fetchAllListeningPileEntriesByAlbumId(albumId);
+
+  if (existingEntries.length > 0) {
+    throw new Error('This album is already in the listening pile.');
+  }
+
+  const newOrder = highestOrder + 1;
+  console.log(`Adding album to listening pile with order ${newOrder} and albumId ${albumId}`);
+  const response = await GraphQLAPI.graphql(
+    Amplify as any,
+    graphqlOperation(createListeningPileEntry, {
+      input: { 
+        albumId: albumId, 
+        order: newOrder 
+      },
+    }),
+    {}
+  );
+
+  if (response instanceof Observable) {
+    throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+  }
+
+  const result = response as GraphQLResult<any>;
+
+  if (!result || !result.data || !result.data.createListeningPileEntry) {
+    throw new Error('Failed to add album to listening pile.');
+  }
+
+  return result;
+}
+

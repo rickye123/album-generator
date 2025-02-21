@@ -14,6 +14,7 @@ interface AlbumTableListProps {
   menuOpen?: { [key: string]: boolean };
   openOverlay?: (album: AlbumData) => void; // New prop for opening overlay
   hideAlbum?: (albumId: string, hideAlbum: boolean) => void;
+  handleAddToListeningPile?: (albumId: string) => void;
 }
 
 const AlbumTableList: React.FC<AlbumTableListProps> = ({
@@ -25,6 +26,7 @@ const AlbumTableList: React.FC<AlbumTableListProps> = ({
     menuOpen,
     openOverlay,
     hideAlbum,
+    handleAddToListeningPile
   }) => {
     const {
       currentPage,
@@ -115,6 +117,7 @@ const AlbumTableList: React.FC<AlbumTableListProps> = ({
                                     {hideAlbum && (<button onClick={() => hideAlbum(albumList.album.id, albumList.album.hideAlbum)}>{albumList.album.hideAlbum ? 'Unhide' : 'Hide'}</button>)} {/* Add hideAlbum button */}
                                     <button onClick={() => handleRemove(albumList.album.id, "")}>Delete</button>
                                     {openOverlay && (<button onClick={() => openOverlay(albumList.album)}>Add to List</button>)}
+                                    {handleAddToListeningPile && <button onClick={() => handleAddToListeningPile(albumList.album.id)}>Add to Listening Pile</button>}
                                 </div>
                             )}
                             {listId && togglePlayed && (

@@ -18,6 +18,7 @@ type Album @model {
   genres: [String] # New optional array field for genres
   hideAlbum: Boolean
   lists: [AlbumList] @hasMany(indexName: "byAlbum", fields: ["id"])
+  ListeningPileEntry: ListeningPileEntry @hasOne(fields: ["id"])
 }
 
 type AlbumList @model {
@@ -33,7 +34,7 @@ type ListeningPileEntry @model {
   id: ID!
   albumId: ID! @index(name: "byAlbum", sortKeyFields: ["id"])
   order: Int!
-  album: Album! @belongsTo(fields: ["albumId"])
+  album: Album! @belongsTo(fields: ["albumId"])  # This defines the relationship
 }
 
 type Mutation {

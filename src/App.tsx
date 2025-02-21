@@ -10,6 +10,7 @@ import Artists from './pages/Artists';
 import Years from './pages/Years';
 import Settings from './pages/Settings';
 import Genres from './pages/Genres';
+import ListeningPile from './pages/ListeningPile';
 
 const App = () => {
   return (
@@ -31,6 +32,7 @@ const App = () => {
             <Route path="/settings" element={<Settings />} />
             <Route path="/genres" element={<Genres />} />
             <Route path="/albums/genre/:genre" element={<AlbumList />} />
+            <Route path="/listeningPile" element={<ListeningPile />} />
           </Routes>
         </div>
       </div>
