@@ -16,9 +16,11 @@ import AlbumTable from '../components/AlbumTable';
 import AlbumTableList from '../components/AlbumTableList';
 import AlbumTableBlock from '../components/AlbumTableBlock';
 import RandomAlbumOverlay from '../components/RandomAlbumOverlay';
+import Loader from '../components/Loader';
 
 const ListPage: React.FC = () => {
   const { listId } = useParams<{ listId: string }>();
+  const [loading, setLoading] = useState(true);
   const [addedAlbums, setAddedAlbums] = useState<{ [key: string]: boolean }>({});
   const [list, setList] = useState<ListData | null>(null);
   const [allAlbums, setAllAlbums] = useState<AlbumData[]>([]);
@@ -37,18 +39,19 @@ const ListPage: React.FC = () => {
   useEffect(() => {
     const loadLists = async () => {
       try {
+        setLoading(true);
         const foundList = await fetchAlbumsByListId(listId!);
         setList(foundList || null);
       } catch (err) {
         console.error('Error fetching collection:', err);
         setError('Error loading collection');
+      } finally {
+        setLoading(false);
       }
     };
 
     loadLists();
   }, [listId]);
-
-  if (!list) return <div>Loading...</div>;
 
   const handleRemoveFromList = async (albumId: string, listId: string) => {
     try {
@@ -125,7 +128,7 @@ const ListPage: React.FC = () => {
     try {
       const albums = await fetchAlbums();
       // cycle through all albums and remove any that are already in the list
-      const albumIds = list.albums.map((album) => album.album.id);
+      const albumIds = list?.albums.map((album) => album.album.id) || [];
       const filteredAlbums = albums.filter((album) => !albumIds.includes(album.id));
       setAllAlbums(filteredAlbums);
       setShowAddAlbumOverlay(true);
@@ -152,7 +155,11 @@ const ListPage: React.FC = () => {
 
   const handleAddAlbumToList = async (albumId: string) => {
     try {
-      await addAlbumToList(albumId, list.id);
+      if (list) {
+        await addAlbumToList(albumId, list.id);
+      } else {
+        throw new Error('List is null');
+      }
       const updatedList = await fetchAlbumsByListId(listId!);
       setList(updatedList || null);
       setAddedAlbums((prev) => ({ ...prev, [albumId]: true }));
@@ -190,8 +197,8 @@ const ListPage: React.FC = () => {
       case 'table':
         return (
           <AlbumTable
-            albums={list.albums}
-            listId={list.id}
+            albums={list?.albums || []}
+            listId={list?.id || ''}
             handleRemove={handleRemoveFromList}
             togglePlayed={togglePlayed}
             toggleMenu={toggleMenu}
@@ -201,8 +208,8 @@ const ListPage: React.FC = () => {
       case 'list':
         return (
           <AlbumTableList
-            albums={list.albums}
-            listId={list.id}
+            albums={list?.albums || []}
+            listId={list?.id || ''}
             handleRemove={handleRemoveFromList}
             togglePlayed={togglePlayed}
             toggleMenu={toggleMenu}
@@ -211,7 +218,7 @@ const ListPage: React.FC = () => {
         );
       case 'block':
         return (
-          <AlbumTableBlock albums={list.albums} />
+          <AlbumTableBlock albums={list?.albums || []} />
         );
       default:
         return null;
@@ -221,7 +228,7 @@ const ListPage: React.FC = () => {
   const renderAddAlbumOverlay = () => (
     <div className={styles['add-album-overlay']}>
       <div className={styles['add-album-overlay-content']}>
-        <h2>Add Albums to {list.name}</h2>
+        <h2>Add Albums to {list?.name}</h2>
         <button
           className={styles['list-page-close-button']}
           onClick={() => setShowAddAlbumOverlay(false)}
@@ -244,7 +251,7 @@ const ListPage: React.FC = () => {
 
   return (
     <div className={styles['album-list-page']}>
-      <h1 className={styles['list-page-title']}>{list.name}</h1>
+      <h1 className={styles['list-page-title']}>{list?.name}</h1>
       {error && <p className={styles['list-page-error']}>{error}</p>}
 
       <button className={styles['list-page-randomize-button']} onClick={randomizeAlbum}>
@@ -268,7 +275,7 @@ const ListPage: React.FC = () => {
         <button onClick={() => setView('block')} className={view === 'block' ? styles['active'] : ''}>Block View</button>
       </div>
 
-      {list.albums?.length === 0 ? (
+      {loading ? <Loader /> : !list || list.albums?.length === 0 ? (
         <p className={styles['no-albums']}>No albums found.</p>
       ) : (
         renderView()
@@ -279,7 +286,8 @@ const ListPage: React.FC = () => {
           randomAlbum={randomAlbum}
           onClose={closeOverlay}
           togglePlayed={togglePlayed}
-          listId={list.id}
+          listId={list?.id || ''}
+          generateNext={randomizeAlbum}
         />
       )}
       {showAddAlbumOverlay && renderAddAlbumOverlay()}

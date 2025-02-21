@@ -4,8 +4,10 @@ import { fetchLists, addList, removeList, fetchAlbumListEntriesForListId, remove
 import { ListData } from '../model';
 import darkStyles from '../styles/modules/Lists-dark.module.css';
 import lightStyles from '../styles/modules/Lists-light.module.css';
+import Loader from '../components/Loader';
 const Lists: React.FC = () => {
   const [listName, setListName] = useState('');
+  const [loading, setLoading] = useState(true);
   const [lists, setLists] = useState<ListData[]>([]);
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -19,6 +21,7 @@ const Lists: React.FC = () => {
   useEffect(() => {
     const loadLists = async () => {
       try {
+        setLoading(true);
         const result = await fetchLists();
         const sortedLists = result 
           ? result.sort((a: ListData, b: ListData) => a.name.localeCompare(b.name)) 
@@ -28,6 +31,8 @@ const Lists: React.FC = () => {
         console.error('Error fetching lists:', err);
         setError('Error loading lists.');
         setLists([]);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -99,7 +104,7 @@ const Lists: React.FC = () => {
         </form>
         {error && <p style={{ color: 'red' }}>{error}</p>}
         <h2>Existing Collections</h2>
-        {lists.length === 0 ? (
+        {loading ? <Loader /> : lists.length === 0 ? (
           <p className={styles['no-lists']}>No Collections found.</p>
         ) : (
           <ul>

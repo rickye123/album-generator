@@ -29,6 +29,13 @@ type AlbumList @model {
   list: List! @belongsTo(fields: ["listId"])
 }
 
+type ListeningPileEntry @model {
+  id: ID!
+  albumId: ID! @index(name: "byAlbum", sortKeyFields: ["id"])
+  order: Int!
+  album: Album! @belongsTo(fields: ["albumId"])
+}
+
 type Mutation {
   addAlbumToList(albumId: ID!, listId: ID!): List
 }

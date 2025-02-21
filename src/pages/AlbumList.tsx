@@ -8,9 +8,11 @@ import AlbumTable from '../components/AlbumTable';
 import AlbumTableList from '../components/AlbumTableList';
 import AlbumTableBlock from '../components/AlbumTableBlock'; // Import the new component
 import RandomAlbumOverlay from '../components/RandomAlbumOverlay';
+import Loader from '../components/Loader';
 
 const AlbumList = () => {
   const [albums, setAlbums] = useState<AlbumData[]>([]);
+  const [loading, setLoading] = useState(true);
   const [lists, setLists] = useState<ListData[]>([]);
   const [selectedAlbum, setSelectedAlbum] = useState<AlbumData | null>(null);
   const [showOverlay, setShowOverlay] = useState(false);
@@ -32,6 +34,7 @@ const AlbumList = () => {
 
   useEffect(() => {
     const loadAlbums = async () => {
+      setLoading(true);
       const albumList = await fetchAlbums();
       albumList.filter((album: AlbumData) => album.hideAlbum === false);
       const filteredAlbums = artist
@@ -46,6 +49,7 @@ const AlbumList = () => {
         ? filteredByYear.filter((album: AlbumData) => album.genres?.includes(decodeURIComponent(genre)))
         : filteredByYear;
       setAlbums(filteredByGenre);
+      setLoading(false);
     };
 
     loadAlbums();
@@ -218,7 +222,7 @@ const AlbumList = () => {
           <span className={styles['list-page-slider']}></span>
         </label>
       </div>
-      {albums.length === 0 ? (
+      {loading ? <Loader /> : albums.length === 0 ? (
         <p className={styles['no-albums']}>No albums found.</p>
       ) : (
         renderView()
@@ -255,6 +259,7 @@ const AlbumList = () => {
         <RandomAlbumOverlay
           randomAlbum={randomAlbum}
           onClose={closeAlbumOverlay}
+          generateNext={randomizeAlbum}
         />
       )}
     </div>

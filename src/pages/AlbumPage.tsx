@@ -10,6 +10,7 @@ import { AlbumData, SpotifyAlbumDetails } from '../model';
 import Wikipedia from '../components/Wikipedia';
 import Discogs from '../components/Discogs';
 import TrackList from '../components/TrackList';
+import Loader from '../components/Loader';
 
 const AlbumPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -61,7 +62,7 @@ const AlbumPage = () => {
     }
   };
 
-  if (!album) return <p>Loading...</p>;
+  if (!album) return <Loader />;
 
   return (
     <div className={styles['album-page']}>
