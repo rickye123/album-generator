@@ -16,6 +16,7 @@ export const getList = /* GraphQL */ `query GetList($id: ID!) {
       nextToken
       __typename
     }
+    userId
     createdAt
     updatedAt
     __typename
@@ -31,6 +32,7 @@ export const listLists = /* GraphQL */ `query ListLists(
     items {
       id
       name
+      userId
       createdAt
       updatedAt
       __typename
@@ -58,10 +60,12 @@ export const getAlbum = /* GraphQL */ `query GetAlbum($id: ID!) {
       id
       albumId
       order
+      userId
       createdAt
       updatedAt
       __typename
     }
+    userId
     createdAt
     updatedAt
     __typename
@@ -83,6 +87,7 @@ export const listAlbums = /* GraphQL */ `query ListAlbums(
       imageUrl
       genres
       hideAlbum
+      userId
       createdAt
       updatedAt
       __typename
@@ -110,6 +115,7 @@ export const getAlbumList = /* GraphQL */ `query GetAlbumList($id: ID!) {
       imageUrl
       genres
       hideAlbum
+      userId
       createdAt
       updatedAt
       __typename
@@ -117,10 +123,12 @@ export const getAlbumList = /* GraphQL */ `query GetAlbumList($id: ID!) {
     list {
       id
       name
+      userId
       createdAt
       updatedAt
       __typename
     }
+    userId
     createdAt
     updatedAt
     __typename
@@ -141,6 +149,7 @@ export const listAlbumLists = /* GraphQL */ `query ListAlbumLists(
       albumId
       listId
       played
+      userId
       createdAt
       updatedAt
       __typename
@@ -167,10 +176,12 @@ export const getListeningPileEntry = /* GraphQL */ `query GetListeningPileEntry(
       imageUrl
       genres
       hideAlbum
+      userId
       createdAt
       updatedAt
       __typename
     }
+    userId
     createdAt
     updatedAt
     __typename
@@ -194,6 +205,7 @@ export const listListeningPileEntries = /* GraphQL */ `query ListListeningPileEn
       id
       albumId
       order
+      userId
       createdAt
       updatedAt
       __typename
@@ -227,6 +239,7 @@ export const albumListsByAlbumIdAndId = /* GraphQL */ `query AlbumListsByAlbumId
       albumId
       listId
       played
+      userId
       createdAt
       updatedAt
       __typename
@@ -260,6 +273,7 @@ export const albumListsByListIdAndId = /* GraphQL */ `query AlbumListsByListIdAn
       albumId
       listId
       played
+      userId
       createdAt
       updatedAt
       __typename
@@ -292,6 +306,7 @@ export const listeningPileEntriesByAlbumIdAndId = /* GraphQL */ `query Listening
       id
       albumId
       order
+      userId
       createdAt
       updatedAt
       __typename

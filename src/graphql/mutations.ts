@@ -16,6 +16,7 @@ export const addAlbumToList = /* GraphQL */ `mutation AddAlbumToList($albumId: I
       nextToken
       __typename
     }
+    userId
     createdAt
     updatedAt
     __typename
@@ -36,6 +37,7 @@ export const createList = /* GraphQL */ `mutation CreateList(
       nextToken
       __typename
     }
+    userId
     createdAt
     updatedAt
     __typename
@@ -56,6 +58,7 @@ export const updateList = /* GraphQL */ `mutation UpdateList(
       nextToken
       __typename
     }
+    userId
     createdAt
     updatedAt
     __typename
@@ -76,6 +79,7 @@ export const deleteList = /* GraphQL */ `mutation DeleteList(
       nextToken
       __typename
     }
+    userId
     createdAt
     updatedAt
     __typename
@@ -106,10 +110,12 @@ export const createAlbum = /* GraphQL */ `mutation CreateAlbum(
       id
       albumId
       order
+      userId
       createdAt
       updatedAt
       __typename
     }
+    userId
     createdAt
     updatedAt
     __typename
@@ -140,10 +146,12 @@ export const updateAlbum = /* GraphQL */ `mutation UpdateAlbum(
       id
       albumId
       order
+      userId
       createdAt
       updatedAt
       __typename
     }
+    userId
     createdAt
     updatedAt
     __typename
@@ -174,10 +182,12 @@ export const deleteAlbum = /* GraphQL */ `mutation DeleteAlbum(
       id
       albumId
       order
+      userId
       createdAt
       updatedAt
       __typename
     }
+    userId
     createdAt
     updatedAt
     __typename
@@ -205,6 +215,7 @@ export const createAlbumList = /* GraphQL */ `mutation CreateAlbumList(
       imageUrl
       genres
       hideAlbum
+      userId
       createdAt
       updatedAt
       __typename
@@ -212,10 +223,12 @@ export const createAlbumList = /* GraphQL */ `mutation CreateAlbumList(
     list {
       id
       name
+      userId
       createdAt
       updatedAt
       __typename
     }
+    userId
     createdAt
     updatedAt
     __typename
@@ -243,6 +256,7 @@ export const updateAlbumList = /* GraphQL */ `mutation UpdateAlbumList(
       imageUrl
       genres
       hideAlbum
+      userId
       createdAt
       updatedAt
       __typename
@@ -250,10 +264,12 @@ export const updateAlbumList = /* GraphQL */ `mutation UpdateAlbumList(
     list {
       id
       name
+      userId
       createdAt
       updatedAt
       __typename
     }
+    userId
     createdAt
     updatedAt
     __typename
@@ -281,6 +297,7 @@ export const deleteAlbumList = /* GraphQL */ `mutation DeleteAlbumList(
       imageUrl
       genres
       hideAlbum
+      userId
       createdAt
       updatedAt
       __typename
@@ -288,10 +305,12 @@ export const deleteAlbumList = /* GraphQL */ `mutation DeleteAlbumList(
     list {
       id
       name
+      userId
       createdAt
       updatedAt
       __typename
     }
+    userId
     createdAt
     updatedAt
     __typename
@@ -318,10 +337,12 @@ export const createListeningPileEntry = /* GraphQL */ `mutation CreateListeningP
       imageUrl
       genres
       hideAlbum
+      userId
       createdAt
       updatedAt
       __typename
     }
+    userId
     createdAt
     updatedAt
     __typename
@@ -348,10 +369,12 @@ export const updateListeningPileEntry = /* GraphQL */ `mutation UpdateListeningP
       imageUrl
       genres
       hideAlbum
+      userId
       createdAt
       updatedAt
       __typename
     }
+    userId
     createdAt
     updatedAt
     __typename
@@ -378,10 +401,12 @@ export const deleteListeningPileEntry = /* GraphQL */ `mutation DeleteListeningP
       imageUrl
       genres
       hideAlbum
+      userId
       createdAt
       updatedAt
       __typename
     }
+    userId
     createdAt
     updatedAt
     __typename

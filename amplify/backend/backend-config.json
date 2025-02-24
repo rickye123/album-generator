@@ -1,13 +1,30 @@
 {
   "api": {
     "albumgenerator": {
-      "dependsOn": [],
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "albumgeneratorf5fb4951"
+        }
+      ],
       "output": {
         "authConfig": {
-          "additionalAuthenticationProviders": [],
+          "additionalAuthenticationProviders": [
+            {
+              "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+              "userPoolConfig": {
+                "userPoolId": "authalbumgeneratorf5fb4951"
+              }
+            }
+          ],
           "defaultAuthentication": {
             "apiKeyConfig": {
-              "apiKeyExpirationDays": 7
+              "apiKeyExpirationDate": "2026-02-24T08:32:25.638Z",
+              "apiKeyExpirationDays": 365,
+              "description": ""
             },
             "authenticationType": "API_KEY"
           }
@@ -15,6 +32,34 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "AppSync"
+    }
+  },
+  "auth": {
+    "albumgeneratorf5fb4951": {
+      "customAuth": false,
+      "dependsOn": [],
+      "frontendAuthConfig": {
+        "mfaConfiguration": "OFF",
+        "mfaTypes": [
+          "SMS"
+        ],
+        "passwordProtectionSettings": {
+          "passwordPolicyCharacters": [],
+          "passwordPolicyMinLength": 8
+        },
+        "signupAttributes": [
+          "EMAIL"
+        ],
+        "socialProviders": [],
+        "usernameAttributes": [
+          "EMAIL"
+        ],
+        "verificationMechanisms": [
+          "EMAIL"
+        ]
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito"
     }
   },
   "hosting": {

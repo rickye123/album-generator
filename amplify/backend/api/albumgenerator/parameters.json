@@ -1,5 +1,12 @@
 {
   "AppSyncApiName": "albumgenerator",
   "DynamoDBBillingMode": "PAY_PER_REQUEST",
-  "DynamoDBEnableServerSideEncryption": false
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authalbumgeneratorf5fb4951",
+      "Outputs.UserPoolId"
+    ]
+  },
+  "AuthModeLastUpdated": "2025-02-24T08:32:30.164Z"
 }

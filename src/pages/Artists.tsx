@@ -5,6 +5,7 @@ import darkStyles from '../styles/modules/Media-dark.module.css';
 import lightStyles from '../styles/modules/Media-light.module.css';
 import { AlbumData } from '../model';
 import Loader from '../components/Loader';
+import { getCurrentUserId } from '../core/users';
 
 const ArtistsPage = () => {
   const [artists, setArtists] = useState<string[]>([]);
@@ -21,7 +22,8 @@ const ArtistsPage = () => {
     const getArtists = async () => {
       try {
         setLoading(true);
-        const albums: AlbumData[] = await fetchAlbums();
+        const userId = (await getCurrentUserId()) || '';
+        const albums: AlbumData[] = await fetchAlbums(userId);
         const uniqueArtists = Array.from(new Set(albums.map(album => album.artist))).sort((a, b) => {
 
           return stripThePrefix(a).localeCompare(stripThePrefix(b));

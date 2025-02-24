@@ -564,6 +564,7 @@
   border: none;
   color: var(--light-reverse);
   cursor: pointer;
+  background-color: var(--spotify-green);
 }
 
 .list-page-switch {

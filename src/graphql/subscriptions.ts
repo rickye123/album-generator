@@ -16,6 +16,7 @@ export const onCreateList = /* GraphQL */ `subscription OnCreateList($filter: Mo
       nextToken
       __typename
     }
+    userId
     createdAt
     updatedAt
     __typename
@@ -33,6 +34,7 @@ export const onUpdateList = /* GraphQL */ `subscription OnUpdateList($filter: Mo
       nextToken
       __typename
     }
+    userId
     createdAt
     updatedAt
     __typename
@@ -50,6 +52,7 @@ export const onDeleteList = /* GraphQL */ `subscription OnDeleteList($filter: Mo
       nextToken
       __typename
     }
+    userId
     createdAt
     updatedAt
     __typename
@@ -77,10 +80,12 @@ export const onCreateAlbum = /* GraphQL */ `subscription OnCreateAlbum($filter: 
       id
       albumId
       order
+      userId
       createdAt
       updatedAt
       __typename
     }
+    userId
     createdAt
     updatedAt
     __typename
@@ -108,10 +113,12 @@ export const onUpdateAlbum = /* GraphQL */ `subscription OnUpdateAlbum($filter: 
       id
       albumId
       order
+      userId
       createdAt
       updatedAt
       __typename
     }
+    userId
     createdAt
     updatedAt
     __typename
@@ -139,10 +146,12 @@ export const onDeleteAlbum = /* GraphQL */ `subscription OnDeleteAlbum($filter: 
       id
       albumId
       order
+      userId
       createdAt
       updatedAt
       __typename
     }
+    userId
     createdAt
     updatedAt
     __typename
@@ -167,6 +176,7 @@ export const onCreateAlbumList = /* GraphQL */ `subscription OnCreateAlbumList($
       imageUrl
       genres
       hideAlbum
+      userId
       createdAt
       updatedAt
       __typename
@@ -174,10 +184,12 @@ export const onCreateAlbumList = /* GraphQL */ `subscription OnCreateAlbumList($
     list {
       id
       name
+      userId
       createdAt
       updatedAt
       __typename
     }
+    userId
     createdAt
     updatedAt
     __typename
@@ -202,6 +214,7 @@ export const onUpdateAlbumList = /* GraphQL */ `subscription OnUpdateAlbumList($
       imageUrl
       genres
       hideAlbum
+      userId
       createdAt
       updatedAt
       __typename
@@ -209,10 +222,12 @@ export const onUpdateAlbumList = /* GraphQL */ `subscription OnUpdateAlbumList($
     list {
       id
       name
+      userId
       createdAt
       updatedAt
       __typename
     }
+    userId
     createdAt
     updatedAt
     __typename
@@ -237,6 +252,7 @@ export const onDeleteAlbumList = /* GraphQL */ `subscription OnDeleteAlbumList($
       imageUrl
       genres
       hideAlbum
+      userId
       createdAt
       updatedAt
       __typename
@@ -244,10 +260,12 @@ export const onDeleteAlbumList = /* GraphQL */ `subscription OnDeleteAlbumList($
     list {
       id
       name
+      userId
       createdAt
       updatedAt
       __typename
     }
+    userId
     createdAt
     updatedAt
     __typename
@@ -273,10 +291,12 @@ export const onCreateListeningPileEntry = /* GraphQL */ `subscription OnCreateLi
       imageUrl
       genres
       hideAlbum
+      userId
       createdAt
       updatedAt
       __typename
     }
+    userId
     createdAt
     updatedAt
     __typename
@@ -302,10 +322,12 @@ export const onUpdateListeningPileEntry = /* GraphQL */ `subscription OnUpdateLi
       imageUrl
       genres
       hideAlbum
+      userId
       createdAt
       updatedAt
       __typename
     }
+    userId
     createdAt
     updatedAt
     __typename
@@ -331,10 +353,12 @@ export const onDeleteListeningPileEntry = /* GraphQL */ `subscription OnDeleteLi
       imageUrl
       genres
       hideAlbum
+      userId
       createdAt
       updatedAt
       __typename
     }
+    userId
     createdAt
     updatedAt
     __typename

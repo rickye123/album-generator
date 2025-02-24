@@ -5,6 +5,7 @@ import darkStyles from '../styles/modules/Media-dark.module.css';
 import lightStyles from '../styles/modules/Media-light.module.css';
 import { AlbumData } from '../model';
 import Loader from '../components/Loader';
+import { getCurrentUserId } from '../core/users';
 
 const Genres = () => {
   const [genres, setGenres] = useState<string[]>([]);
@@ -23,7 +24,8 @@ const Genres = () => {
     const getGenres = async () => {
       try {
         setLoading(true);
-        const albums: AlbumData[] = await fetchAlbums();
+        const userId = (await getCurrentUserId()) || '';
+        const albums: AlbumData[] = await fetchAlbums(userId);
         const uniqueGenres = Array.from(
           new Set(
             albums

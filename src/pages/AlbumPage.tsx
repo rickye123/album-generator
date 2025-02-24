@@ -39,6 +39,7 @@ const AlbumPage = () => {
     const loadDetails = async () => {
       if (album) {
         const spotifyInfo = await fetchSpotifyAlbumDetails(album.id);
+        console.log('Spotify info:', spotifyInfo);
         setSpotifyDetails(spotifyInfo);
 
         const wikiLink = await fetchWikipediaLink(album.name, album.artist);

@@ -10,6 +10,7 @@ export interface AlbumData {
     genres?: string[];
     lists?: ListData[];
     hideAlbum: boolean;
+    userId: string;
 }
 
 export interface AlbumListData {

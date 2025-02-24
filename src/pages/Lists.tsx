@@ -5,8 +5,10 @@ import { ListData } from '../model';
 import darkStyles from '../styles/modules/Lists-dark.module.css';
 import lightStyles from '../styles/modules/Lists-light.module.css';
 import Loader from '../components/Loader';
+import { getCurrentUserId } from '../core/users';
 const Lists: React.FC = () => {
   const [listName, setListName] = useState('');
+  const [userId, setUserId] = useState('');
   const [loading, setLoading] = useState(true);
   const [lists, setLists] = useState<ListData[]>([]);
   const [error, setError] = useState('');
@@ -22,11 +24,17 @@ const Lists: React.FC = () => {
     const loadLists = async () => {
       try {
         setLoading(true);
-        const result = await fetchLists();
-        const sortedLists = result 
-          ? result.sort((a: ListData, b: ListData) => a.name.localeCompare(b.name)) 
-          : [];
-        setLists(sortedLists);
+        const userId = await getCurrentUserId();
+        if (userId) {
+          setUserId(userId);
+          const result = await fetchLists(userId);
+          const sortedLists = result 
+            ? result.sort((a: ListData, b: ListData) => a.name.localeCompare(b.name)) 
+            : [];
+          setLists(sortedLists);
+        } else {
+            setLists([]);
+        }
       } catch (err) {
         console.error('Error fetching lists:', err);
         setError('Error loading lists.');
@@ -47,7 +55,7 @@ const Lists: React.FC = () => {
     }
 
     try {
-      const newList = await addList(listName);
+      const newList = await addList(listName, userId);
       if (newList) {
         setLists([...lists, newList]);
         setListName('');

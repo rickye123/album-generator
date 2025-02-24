@@ -11,9 +11,11 @@ import {
 import darkStyles from '../styles/modules/AddAlbumPage-dark.module.css';
 import lightStyles from '../styles/modules/AddAlbumPage-light.module.css';
 import { ListData } from '../model';
+import { getCurrentUserId } from '../core/users';
 
 const AddAlbumPage = () => {
   const [artist, setArtist] = useState('');
+  const [userId, setUserId] = useState('');
   const [name, setAlbumName] = useState('');
   const [spotifyUrl, setSpotifyUrl] = useState('');
   const [loading, setLoading] = useState(false);
@@ -31,8 +33,14 @@ const AddAlbumPage = () => {
   useEffect(() => {
     const loadLists = async () => {
       try {
-        const result = await fetchLists();
-        setLists(result || []);
+        const userId = await getCurrentUserId();
+        if (userId) {
+          setUserId(userId);
+          const result = await fetchLists(userId);
+          setLists(result || []);
+        } else {
+          setError('User ID not found.');
+        }
       } catch (err) {
         console.error('Error fetching lists:', err);
         setError('Error loading lists.');
@@ -69,10 +77,11 @@ const AddAlbumPage = () => {
         release_date: album.release_date,
         spotifyUrl: album.external_urls.spotify,
         imageUrl: album.images[0]?.url || '',
-        hideAlbum: false
+        hideAlbum: false,
+        userId: userId
       };
 
-      await addAlbum(newAlbum);
+      await addAlbum(newAlbum, userId);
 
       if (selectedListId) {
         await addAlbumToList(newAlbum.id, selectedListId);

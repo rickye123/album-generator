@@ -17,9 +17,11 @@ import AlbumTableList from '../components/AlbumTableList';
 import AlbumTableBlock from '../components/AlbumTableBlock';
 import RandomAlbumOverlay from '../components/RandomAlbumOverlay';
 import Loader from '../components/Loader';
+import { getCurrentUserId } from '../core/users';
 
 const ListPage: React.FC = () => {
   const { listId } = useParams<{ listId: string }>();
+  const [userId, setUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [addedAlbums, setAddedAlbums] = useState<{ [key: string]: boolean }>({});
   const [list, setList] = useState<ListData | null>(null);
@@ -39,6 +41,8 @@ const ListPage: React.FC = () => {
   useEffect(() => {
     const loadLists = async () => {
       try {
+        const userId = await getCurrentUserId();
+        setUserId(userId || null);
         setLoading(true);
         const foundList = await fetchAlbumsByListId(listId!);
         setList(foundList || null);
@@ -126,7 +130,10 @@ const ListPage: React.FC = () => {
 
   const fetchAllAlbums = async () => {
     try {
-      const albums = await fetchAlbums();
+      if (!userId) {
+        throw new Error('User ID is undefined');
+      }
+      const albums = await fetchAlbums(userId);
       // cycle through all albums and remove any that are already in the list
       const albumIds = list?.albums.map((album) => album.album.id) || [];
       const filteredAlbums = albums.filter((album) => !albumIds.includes(album.id));
@@ -203,6 +210,7 @@ const ListPage: React.FC = () => {
             togglePlayed={togglePlayed}
             toggleMenu={toggleMenu}
             menuOpen={menuOpen}
+            userId={userId || ''}
           />
         );
       case 'list':
@@ -214,6 +222,7 @@ const ListPage: React.FC = () => {
             togglePlayed={togglePlayed}
             toggleMenu={toggleMenu}
             menuOpen={menuOpen}
+            userId={userId || ''}
           />
         );
       case 'block':
@@ -243,6 +252,7 @@ const ListPage: React.FC = () => {
             listId={listId!}
             handleAdd={handleAddAlbumToList} // Add album to list
             renderCustomButton={renderAddButton} // Custom button to add album
+            userId={userId || ''}
             />
         )}
       </div>

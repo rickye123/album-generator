@@ -5,6 +5,7 @@ import darkStyles from '../styles/modules/Media-dark.module.css';
 import lightStyles from '../styles/modules/Media-light.module.css';
 import { AlbumData } from '../model';
 import Loader from '../components/Loader';
+import { getCurrentUserId } from '../core/users';
 
 const YearsPage = () => {
   const [years, setYears] = useState<string[]>([]);
@@ -22,7 +23,8 @@ const YearsPage = () => {
     const getYears = async () => {
       try {
         setLoading(true);
-        const albums: AlbumData[] = await fetchAlbums();
+        const userId = (await getCurrentUserId()) || '';
+        const albums: AlbumData[] = await fetchAlbums(userId);
         const uniqueYears = Array.from(new Set(albums.map(album => album.release_date.split('-')[0]))).sort();
         setYears(uniqueYears);
       } catch (error) {

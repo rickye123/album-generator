@@ -5,6 +5,7 @@ import darkStyles from '../styles/modules/LandingPage-dark.module.css';
 import lightStyles from '../styles/modules/LandingPage-light.module.css';
 import { Link } from 'react-router-dom';
 import Loader from '../components/Loader';
+import { getCurrentUserId } from '../core/users';
 
 const LandingPage = () => {
   const [album, setAlbum] = useState<AlbumData | null>(null);
@@ -16,9 +17,15 @@ const LandingPage = () => {
 
   useEffect(() => {
     const loadRandomAlbum = async () => {
+      const userId = await getCurrentUserId();
+      console.log('User id is ', userId);
       setLoading(true);
-      const randomAlbum = await fetchRandomAlbum();
-      setAlbum(randomAlbum);
+      if (userId) {
+        const randomAlbum = await fetchRandomAlbum(userId);
+        setAlbum(randomAlbum);
+      } else {
+        console.error('User ID is undefined');
+      }
       setLoading(false)
     };
     loadRandomAlbum();
