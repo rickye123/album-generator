@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import lightStyles from '../styles/modules/Sidebar.module.css';
 
-const Sidebar: React.FC = () => {
+interface SidebarProps {
+  user: { username?: string; userId?: string };
+  signOut: () => void;
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ user, signOut }) => {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [showBurgerButton, setShowBurgerButton] = useState(true);
   const [theme] = useState<'light' | 'dark'>(() => {
@@ -71,7 +77,12 @@ const Sidebar: React.FC = () => {
             </li>
             <li>
               <Link to="/lists" onClick={toggleSidebar}>
-                Lists
+                Collections
+              </Link>
+            </li>
+            <li>
+              <Link to="/listeningPile" onClick={toggleSidebar}>
+                Listening Pile
               </Link>
             </li>
             <li>
@@ -105,6 +116,23 @@ const Sidebar: React.FC = () => {
               </Link>
             </li>
           </ul>
+          {/* Display user info and sign out */}
+          {user && (
+            <div className={styles['user-info']}>
+              <span>Welcome, {user.username || user.userId}</span> {/* Display username or id */}
+              <button
+                onClick={async () => {
+                  if (signOut) {
+                    signOut();
+                  }
+                  navigate('/'); // Redirect to login page after signing out
+                }}
+                className={styles['sign-out-button']}
+              >
+                Sign Out
+              </button>
+            </div>
+          )}
         </nav>
       </div>
 

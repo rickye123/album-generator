@@ -16,6 +16,7 @@ export const getList = /* GraphQL */ `query GetList($id: ID!) {
       nextToken
       __typename
     }
+    userId
     createdAt
     updatedAt
     __typename
@@ -31,6 +32,7 @@ export const listLists = /* GraphQL */ `query ListLists(
     items {
       id
       name
+      userId
       createdAt
       updatedAt
       __typename
@@ -54,6 +56,16 @@ export const getAlbum = /* GraphQL */ `query GetAlbum($id: ID!) {
       nextToken
       __typename
     }
+    ListeningPileEntry {
+      id
+      albumId
+      order
+      userId
+      createdAt
+      updatedAt
+      __typename
+    }
+    userId
     createdAt
     updatedAt
     __typename
@@ -75,6 +87,7 @@ export const listAlbums = /* GraphQL */ `query ListAlbums(
       imageUrl
       genres
       hideAlbum
+      userId
       createdAt
       updatedAt
       __typename
@@ -102,6 +115,7 @@ export const getAlbumList = /* GraphQL */ `query GetAlbumList($id: ID!) {
       imageUrl
       genres
       hideAlbum
+      userId
       createdAt
       updatedAt
       __typename
@@ -109,10 +123,12 @@ export const getAlbumList = /* GraphQL */ `query GetAlbumList($id: ID!) {
     list {
       id
       name
+      userId
       createdAt
       updatedAt
       __typename
     }
+    userId
     createdAt
     updatedAt
     __typename
@@ -133,6 +149,7 @@ export const listAlbumLists = /* GraphQL */ `query ListAlbumLists(
       albumId
       listId
       played
+      userId
       createdAt
       updatedAt
       __typename
@@ -144,6 +161,62 @@ export const listAlbumLists = /* GraphQL */ `query ListAlbumLists(
 ` as GeneratedQuery<
   APITypes.ListAlbumListsQueryVariables,
   APITypes.ListAlbumListsQuery
+>;
+export const getListeningPileEntry = /* GraphQL */ `query GetListeningPileEntry($id: ID!) {
+  getListeningPileEntry(id: $id) {
+    id
+    albumId
+    order
+    album {
+      id
+      name
+      artist
+      spotifyUrl
+      release_date
+      imageUrl
+      genres
+      hideAlbum
+      userId
+      createdAt
+      updatedAt
+      __typename
+    }
+    userId
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetListeningPileEntryQueryVariables,
+  APITypes.GetListeningPileEntryQuery
+>;
+export const listListeningPileEntries = /* GraphQL */ `query ListListeningPileEntries(
+  $filter: ModelListeningPileEntryFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listListeningPileEntries(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      albumId
+      order
+      userId
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListListeningPileEntriesQueryVariables,
+  APITypes.ListListeningPileEntriesQuery
 >;
 export const albumListsByAlbumIdAndId = /* GraphQL */ `query AlbumListsByAlbumIdAndId(
   $albumId: ID!
@@ -166,6 +239,7 @@ export const albumListsByAlbumIdAndId = /* GraphQL */ `query AlbumListsByAlbumId
       albumId
       listId
       played
+      userId
       createdAt
       updatedAt
       __typename
@@ -199,6 +273,7 @@ export const albumListsByListIdAndId = /* GraphQL */ `query AlbumListsByListIdAn
       albumId
       listId
       played
+      userId
       createdAt
       updatedAt
       __typename
@@ -210,4 +285,37 @@ export const albumListsByListIdAndId = /* GraphQL */ `query AlbumListsByListIdAn
 ` as GeneratedQuery<
   APITypes.AlbumListsByListIdAndIdQueryVariables,
   APITypes.AlbumListsByListIdAndIdQuery
+>;
+export const listeningPileEntriesByAlbumIdAndId = /* GraphQL */ `query ListeningPileEntriesByAlbumIdAndId(
+  $albumId: ID!
+  $id: ModelIDKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelListeningPileEntryFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listeningPileEntriesByAlbumIdAndId(
+    albumId: $albumId
+    id: $id
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      albumId
+      order
+      userId
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListeningPileEntriesByAlbumIdAndIdQueryVariables,
+  APITypes.ListeningPileEntriesByAlbumIdAndIdQuery
 >;

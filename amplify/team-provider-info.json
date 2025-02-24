@@ -17,6 +17,9 @@
       },
       "hosting": {
         "S3AndCloudFront": {}
+      },
+      "auth": {
+        "albumgeneratorf5fb4951": {}
       }
     }
   }

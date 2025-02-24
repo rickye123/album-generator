@@ -10,6 +10,7 @@ import { AlbumData, SpotifyAlbumDetails } from '../model';
 import Wikipedia from '../components/Wikipedia';
 import Discogs from '../components/Discogs';
 import TrackList from '../components/TrackList';
+import Loader from '../components/Loader';
 
 const AlbumPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -38,6 +39,7 @@ const AlbumPage = () => {
     const loadDetails = async () => {
       if (album) {
         const spotifyInfo = await fetchSpotifyAlbumDetails(album.id);
+        console.log('Spotify info:', spotifyInfo);
         setSpotifyDetails(spotifyInfo);
 
         const wikiLink = await fetchWikipediaLink(album.name, album.artist);
@@ -61,7 +63,7 @@ const AlbumPage = () => {
     }
   };
 
-  if (!album) return <p>Loading...</p>;
+  if (!album) return <Loader />;
 
   return (
     <div className={styles['album-page']}>
@@ -92,7 +94,7 @@ const AlbumPage = () => {
         {wikipediaLink && <Wikipedia wikipediaUrl={wikipediaLink} />}
       </CollapsibleSection>
       <CollapsibleSection title="Discogs">
-        <Discogs />
+        <Discogs albumName={album.name} artistName={album.artist} />
       </CollapsibleSection>
     </div>
   );

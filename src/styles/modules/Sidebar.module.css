@@ -113,3 +113,22 @@ ul {
 .submenu li a {
   font-size: 0.9rem; /* Smaller font size for submenu items */
 }
+
+.user-info {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.sign-out-button {
+  background-color: #ff4d4d; /* Red button */
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+
+.sign-out-button:hover {
+  background-color: #e60000;
+}

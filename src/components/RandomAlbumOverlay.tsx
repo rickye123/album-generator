@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import darkStyles from '../styles/modules/AlbumList-dark.module.css';
 import lightStyles from '../styles/modules/AlbumList-light.module.css';
+import Loader from './Loader';
 
 interface RandomAlbumOverlayProps {
   randomAlbum: any; // Replace with a proper type if available
   onClose: () => void;
   togglePlayed?: (listId: string, albumId: string, played: boolean) => void;
   listId?: string; // Optional for AlbumList where lists are not used
+  generateNext: () => void;
 }
 
 const RandomAlbumOverlay: React.FC<RandomAlbumOverlayProps> = ({
@@ -15,12 +17,23 @@ const RandomAlbumOverlay: React.FC<RandomAlbumOverlayProps> = ({
   onClose,
   togglePlayed,
   listId,
+  generateNext
 }) => {
 
-const [theme] = useState<'light' | 'dark'>(() => {
+    const [theme] = useState<'light' | 'dark'>(() => {
     // Load theme preference from localStorage or default to 'light'
     return (localStorage.getItem('theme') as 'light' | 'dark') || 'light';
     });
+
+    const [loading, setLoading] = useState(false);
+
+    const handleGenerateNext = async () => {
+        setLoading(true);
+        // Wait for the generateNext function to complete
+        await new Promise((resolve) => setTimeout(resolve, 100)); // Small delay to ensure re-render
+        await generateNext(); 
+        setLoading(false);
+    };  
 
     // Use the appropriate styles based on the current theme
     const styles = theme === 'dark' ? darkStyles : lightStyles;
@@ -30,6 +43,7 @@ const [theme] = useState<'light' | 'dark'>(() => {
 
     return (
         <div className={styles['list-page-overlay']}>
+            {loading ? <Loader /> : (
             <div className={styles['list-page-overlay-content']}>
             <button className={styles['list-page-close-button']} onClick={onClose}>
                 &times;
@@ -60,7 +74,11 @@ const [theme] = useState<'light' | 'dark'>(() => {
                     <span className={styles['list-page-slider']}></span>
                 </label>
             )}
+            <button className={styles['custom-add-button']} onClick={handleGenerateNext}>
+                Generate Next
+            </button>
             </div>
+            )}
         </div>
         
     );

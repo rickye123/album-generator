@@ -564,6 +564,7 @@
   border: none;
   color: var(--dark-reverse);
   cursor: pointer;
+  background-color: var(--spotify-green);
 }
 
 .list-page-switch {
@@ -756,4 +757,11 @@
 
 .add-album-overlay-add-button:hover {
   background: var(--hover-color);
+}
+
+.added-tick {
+  color: var(--spotify-green);
+  font-size: 1.5rem; /* Make it slightly larger */
+  font-weight: bold;
+  margin-left: 8px; /* Adds spacing from the button */
 }

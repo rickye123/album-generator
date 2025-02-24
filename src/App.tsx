@@ -10,31 +10,38 @@ import Artists from './pages/Artists';
 import Years from './pages/Years';
 import Settings from './pages/Settings';
 import Genres from './pages/Genres';
+import ListeningPile from './pages/ListeningPile';
+import { Authenticator } from '@aws-amplify/ui-react';
 
 const App = () => {
   return (
-    <Router>
-      <div className="app-container">
-        <Sidebar />
-        <div className="main-content">
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/albums" element={<AlbumList />} />
-            <Route path="/add-album" element={<AddAlbumPage />} />
-            <Route path="/albums/:id" element={<AlbumPage />} />
-            <Route path="/artists" element={<Artists />} />
-            <Route path="/years" element={<Years />} />
-            <Route path="/lists" element={<Lists />} />
-            <Route path="/list/:listId" element={<ListPage />} />
-            <Route path="/albums/artist/:artist" element={<AlbumList />} />
-            <Route path="/albums/year/:year" element={<AlbumList />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/genres" element={<Genres />} />
-            <Route path="/albums/genre/:genre" element={<AlbumList />} />
-          </Routes>
+    <Authenticator>
+      {({ signOut, user }) => (
+      <Router>
+        <div className="app-container">
+          {user && signOut && <Sidebar user={user} signOut={signOut} />}
+          <div className="main-content">
+            <Routes>
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/albums" element={<AlbumList />} />
+              <Route path="/add-album" element={<AddAlbumPage />} />
+              <Route path="/albums/:id" element={<AlbumPage />} />
+              <Route path="/artists" element={<Artists />} />
+              <Route path="/years" element={<Years />} />
+              <Route path="/lists" element={<Lists />} />
+              <Route path="/list/:listId" element={<ListPage />} />
+              <Route path="/albums/artist/:artist" element={<AlbumList />} />
+              <Route path="/albums/year/:year" element={<AlbumList />} />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="/genres" element={<Genres />} />
+              <Route path="/albums/genre/:genre" element={<AlbumList />} />
+              <Route path="/listeningPile" element={<ListeningPile />} />
+            </Routes>
+          </div>
         </div>
-      </div>
-    </Router>
+      </Router>
+      )}
+  </Authenticator>
   );
 };
 

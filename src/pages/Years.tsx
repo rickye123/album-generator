@@ -4,9 +4,12 @@ import { Link } from 'react-router-dom';
 import darkStyles from '../styles/modules/Media-dark.module.css';
 import lightStyles from '../styles/modules/Media-light.module.css';
 import { AlbumData } from '../model';
+import Loader from '../components/Loader';
+import { getCurrentUserId } from '../core/users';
 
 const YearsPage = () => {
   const [years, setYears] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
   const [theme] = useState<'light' | 'dark'>(() => {
     // Load theme preference from localStorage or default to 'light'
     return (localStorage.getItem('theme') as 'light' | 'dark') || 'light';
@@ -19,11 +22,15 @@ const YearsPage = () => {
   useEffect(() => {
     const getYears = async () => {
       try {
-        const albums: AlbumData[] = await fetchAlbums();
+        setLoading(true);
+        const userId = (await getCurrentUserId()) || '';
+        const albums: AlbumData[] = await fetchAlbums(userId);
         const uniqueYears = Array.from(new Set(albums.map(album => album.release_date.split('-')[0]))).sort();
         setYears(uniqueYears);
       } catch (error) {
         console.error('Error fetching artists', error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -59,7 +66,7 @@ const YearsPage = () => {
   return (
     <div className={styles['media-page']}>
       <h1>Years</h1>
-      {years.length === 0 ? (
+      {loading ? <Loader /> : years.length === 0 ? (
         <p>No years found.</p>
       ) : (
       <div>

@@ -4,8 +4,12 @@ import { fetchLists, addList, removeList, fetchAlbumListEntriesForListId, remove
 import { ListData } from '../model';
 import darkStyles from '../styles/modules/Lists-dark.module.css';
 import lightStyles from '../styles/modules/Lists-light.module.css';
+import Loader from '../components/Loader';
+import { getCurrentUserId } from '../core/users';
 const Lists: React.FC = () => {
   const [listName, setListName] = useState('');
+  const [userId, setUserId] = useState('');
+  const [loading, setLoading] = useState(true);
   const [lists, setLists] = useState<ListData[]>([]);
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -19,15 +23,24 @@ const Lists: React.FC = () => {
   useEffect(() => {
     const loadLists = async () => {
       try {
-        const result = await fetchLists();
-        const sortedLists = result 
-          ? result.sort((a: ListData, b: ListData) => a.name.localeCompare(b.name)) 
-          : [];
-        setLists(sortedLists);
+        setLoading(true);
+        const userId = await getCurrentUserId();
+        if (userId) {
+          setUserId(userId);
+          const result = await fetchLists(userId);
+          const sortedLists = result 
+            ? result.sort((a: ListData, b: ListData) => a.name.localeCompare(b.name)) 
+            : [];
+          setLists(sortedLists);
+        } else {
+            setLists([]);
+        }
       } catch (err) {
         console.error('Error fetching lists:', err);
         setError('Error loading lists.');
         setLists([]);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -42,7 +55,7 @@ const Lists: React.FC = () => {
     }
 
     try {
-      const newList = await addList(listName);
+      const newList = await addList(listName, userId);
       if (newList) {
         setLists([...lists, newList]);
         setListName('');
@@ -56,7 +69,8 @@ const Lists: React.FC = () => {
 
   const handleDeleteList = async (id: string) => {
     try {
-
+      const confirmed = window.confirm('Are you sure you want to delete this Collection?');
+      if (!confirmed) return;
       // get album list entry (if one exists) and delete it
       const results = await fetchAlbumListEntriesForListId(id);
       console.log('Result: ', results);
@@ -82,10 +96,10 @@ const Lists: React.FC = () => {
   return (
     <div className={styles['lists-page']}>
       <div className={styles['container']}>
-        <h1>My Lists</h1>
+        <h1>My Collections</h1>
         <form onSubmit={handleCreateList}>
           <div>
-            <label htmlFor={styles['listName']}>New List Name:</label>
+            <label htmlFor={styles['listName']}>New Collection Name:</label>
             <input
               type="text"
               id={styles['listName']}
@@ -94,12 +108,12 @@ const Lists: React.FC = () => {
               required
             />
           </div>
-          <button type="submit">Create List</button>
+          <button type="submit">Create Collection</button>
         </form>
         {error && <p style={{ color: 'red' }}>{error}</p>}
-        <h2>Existing Lists</h2>
-        {lists.length === 0 ? (
-          <p className={styles['no-lists']}>No Lists found.</p>
+        <h2>Existing Collections</h2>
+        {loading ? <Loader /> : lists.length === 0 ? (
+          <p className={styles['no-lists']}>No Collections found.</p>
         ) : (
           <ul>
             {lists.map((list) => (

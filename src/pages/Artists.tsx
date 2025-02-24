@@ -4,9 +4,12 @@ import { Link } from 'react-router-dom';
 import darkStyles from '../styles/modules/Media-dark.module.css';
 import lightStyles from '../styles/modules/Media-light.module.css';
 import { AlbumData } from '../model';
+import Loader from '../components/Loader';
+import { getCurrentUserId } from '../core/users';
 
 const ArtistsPage = () => {
   const [artists, setArtists] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
   const [theme] = useState<'light' | 'dark'>(
     () => (localStorage.getItem('theme') as 'light' | 'dark') || 'light'
   );
@@ -18,7 +21,9 @@ const ArtistsPage = () => {
   useEffect(() => {
     const getArtists = async () => {
       try {
-        const albums: AlbumData[] = await fetchAlbums();
+        setLoading(true);
+        const userId = (await getCurrentUserId()) || '';
+        const albums: AlbumData[] = await fetchAlbums(userId);
         const uniqueArtists = Array.from(new Set(albums.map(album => album.artist))).sort((a, b) => {
 
           return stripThePrefix(a).localeCompare(stripThePrefix(b));
@@ -27,6 +32,8 @@ const ArtistsPage = () => {
         setArtists(uniqueArtists);
       } catch (error) {
         console.error('Error fetching artists', error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -68,7 +75,7 @@ const ArtistsPage = () => {
   return (
     <div className={styles['media-page']}>
       <h1>Artists</h1>
-      {artists.length === 0 ? (
+      {loading ? <Loader /> : artists.length === 0 ? (
         <p>No Artists found.</p>
       ) : (
       <div>

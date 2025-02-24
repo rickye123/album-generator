@@ -4,9 +4,12 @@ import { AlbumData } from '../model';
 import darkStyles from '../styles/modules/LandingPage-dark.module.css';
 import lightStyles from '../styles/modules/LandingPage-light.module.css';
 import { Link } from 'react-router-dom';
+import Loader from '../components/Loader';
+import { getCurrentUserId } from '../core/users';
 
 const LandingPage = () => {
   const [album, setAlbum] = useState<AlbumData | null>(null);
+  const [loading, setLoading] = useState(true);
   const [theme] = useState<'light' | 'dark'>(() => {
     // Load theme preference from localStorage or default to 'light'
     return (localStorage.getItem('theme') as 'light' | 'dark') || 'light';
@@ -14,8 +17,16 @@ const LandingPage = () => {
 
   useEffect(() => {
     const loadRandomAlbum = async () => {
-      const randomAlbum = await fetchRandomAlbum();
-      setAlbum(randomAlbum);
+      const userId = await getCurrentUserId();
+      console.log('User id is ', userId);
+      setLoading(true);
+      if (userId) {
+        const randomAlbum = await fetchRandomAlbum(userId);
+        setAlbum(randomAlbum);
+      } else {
+        console.error('User ID is undefined');
+      }
+      setLoading(false)
     };
     loadRandomAlbum();
   }, []);
@@ -26,7 +37,7 @@ const LandingPage = () => {
   return (
     <div className={styles['landing-page']}>
       <h1 className={styles['title']}>Album Generator</h1>
-      {album ? (
+      {loading ? <Loader /> : album ? (
         <div className={styles['album-details']}>
           <h2>
             <Link to={`/albums/${album.id}`} className={styles['album-link']}>{album.name}</Link>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { fetchAlbums, fetchLists, addAlbumToList, removeAlbum, fetchAlbumListEntriesForAlbumId, removeAlbumFromList, toggleHideAlbum, fetchRandomAlbum } from '../api/amplifyApi';
+import { fetchAlbums, fetchLists, addAlbumToList, removeAlbum, fetchAlbumListEntriesForAlbumId, removeAlbumFromList, toggleHideAlbum, fetchRandomAlbum, addAlbumToListeningPile } from '../api/amplifyApi';
 import { AlbumData, AlbumListData, ListData } from '../model';
 import darkStyles from '../styles/modules/AlbumList-dark.module.css';
 import lightStyles from '../styles/modules/AlbumList-light.module.css';
@@ -8,9 +8,13 @@ import AlbumTable from '../components/AlbumTable';
 import AlbumTableList from '../components/AlbumTableList';
 import AlbumTableBlock from '../components/AlbumTableBlock'; // Import the new component
 import RandomAlbumOverlay from '../components/RandomAlbumOverlay';
+import Loader from '../components/Loader';
+import { getCurrentUserId } from '../core/users';
 
 const AlbumList = () => {
   const [albums, setAlbums] = useState<AlbumData[]>([]);
+  const [userId, setUserId] = useState('');
+  const [loading, setLoading] = useState(true);
   const [lists, setLists] = useState<ListData[]>([]);
   const [selectedAlbum, setSelectedAlbum] = useState<AlbumData | null>(null);
   const [showOverlay, setShowOverlay] = useState(false);
@@ -32,7 +36,13 @@ const AlbumList = () => {
 
   useEffect(() => {
     const loadAlbums = async () => {
-      const albumList = await fetchAlbums();
+      setLoading(true);
+      const userId = await getCurrentUserId();
+      if (!userId) {
+        throw new Error('User ID is undefined');
+      }
+      setUserId(userId)
+      const albumList = await fetchAlbums(userId);
       albumList.filter((album: AlbumData) => album.hideAlbum === false);
       const filteredAlbums = artist
         ? albumList.filter((album: AlbumData) => album.artist === decodeURIComponent(artist))
@@ -46,6 +56,7 @@ const AlbumList = () => {
         ? filteredByYear.filter((album: AlbumData) => album.genres?.includes(decodeURIComponent(genre)))
         : filteredByYear;
       setAlbums(filteredByGenre);
+      setLoading(false);
     };
 
     loadAlbums();
@@ -57,7 +68,7 @@ const AlbumList = () => {
 
   const openOverlay = async (album: AlbumData) => {
     try {
-      const listData = await fetchLists();
+      const listData = await fetchLists(userId);
       setLists(listData);
       setSelectedAlbum(album);
       setShowOverlay(true);
@@ -89,7 +100,7 @@ const AlbumList = () => {
   const handleDeleteAlbum = async (albumId: string, listId: string) => {
     try {
       // get album list entry (if one exists) and delete it
-      const results = await fetchAlbumListEntriesForAlbumId(albumId);
+      const results = await fetchAlbumListEntriesForAlbumId(albumId, userId);
       console.log('Result: ', results);
       if(results) {
         // delete each album list entry
@@ -121,7 +132,7 @@ const AlbumList = () => {
       alert('Failed to update album visibility.');
 
       // Optionally, refetch the albums to revert optimistic updates
-      const updatedAlbums = await fetchAlbums();
+      const updatedAlbums = await fetchAlbums(userId);
       setAlbums(updatedAlbums);
     }
   };
@@ -158,6 +169,17 @@ const AlbumList = () => {
     }
   };
 
+  const handleAddToListeningPile = async (albumId: string, userId: string) => {
+    try {
+      const response = await addAlbumToListeningPile(albumId, userId);
+      console.log('Album added to listening pile:', response);
+      alert('Album added to listening pile successfully!');
+    } catch (error) {
+      console.error('Error adding album to listening pile:', error);
+      alert('Failed to add album to listening pile. Please try again.');
+    }
+  };
+
   const closeAlbumOverlay = () => setRandomAlbum(null);
 
   const renderView = () => {
@@ -171,6 +193,8 @@ const AlbumList = () => {
             menuOpen={menuOpen}
             openOverlay={openOverlay}
             hideAlbum={handleHideAlbum}
+            handleAddToListeningPile={handleAddToListeningPile}
+            userId={userId}
           />
         );
       case 'list':
@@ -182,6 +206,7 @@ const AlbumList = () => {
             menuOpen={menuOpen}
             openOverlay={openOverlay}
             hideAlbum={handleHideAlbum}
+            userId={userId}
           />
         );
       case 'block':
@@ -218,7 +243,7 @@ const AlbumList = () => {
           <span className={styles['list-page-slider']}></span>
         </label>
       </div>
-      {albums.length === 0 ? (
+      {loading ? <Loader /> : albums.length === 0 ? (
         <p className={styles['no-albums']}>No albums found.</p>
       ) : (
         renderView()
@@ -255,6 +280,7 @@ const AlbumList = () => {
         <RandomAlbumOverlay
           randomAlbum={randomAlbum}
           onClose={closeAlbumOverlay}
+          generateNext={randomizeAlbum}
         />
       )}
     </div>

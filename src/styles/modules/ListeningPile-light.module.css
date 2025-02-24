@@ -1,0 +1,112 @@
+@import url('Root.module.css'); /* Import global styles */
+
+/* General styling for the Listening Pile page */
+.listening-pile-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: var(--light-page-background-color);
+  padding: 20px;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  color: var(--light-contrast-color);
+}
+
+/* Page title */
+.listening-pile-page h1 {
+  font-size: 2.5rem;
+  color: var(--spotify-green);
+  margin-bottom: 20px;
+}
+
+/* Styles for album list items */
+.album-item {
+  display: flex;
+  align-items: center;
+  background-color: var(--light-card-background);
+  padding: 15px;
+  border-radius: 8px;
+  margin: 10px 0;
+  box-shadow: 0 4px 8px rgba(82, 82, 82, 0.5);
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.album-item:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(82, 82, 82, 0.7);
+}
+
+.album-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none; /* Prevent underline */
+  color: inherit; /* Inherit text color from parent */
+}
+
+/* Album image styling */
+.album-image {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  margin-right: 15px;
+  object-fit: cover;
+}
+
+/* Album title and artist styling */
+.album-item div {
+  flex-grow: 1;
+  text-align: left;
+}
+
+.album-item h3 {
+  font-size: 1.2rem;
+  color: var(--light-text-color);
+  margin: 0;
+}
+
+.album-item p {
+  font-size: 1rem;
+  color: var(--light-contrast-color);
+  margin: 5px 0 0;
+}
+
+.album-item .spotify-link {
+  color: var(--spotify-green);
+  font-size: 1rem;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.album-item .spotify-link img {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+}
+
+/* Hover effects for album link */
+.album-item .spotify-link:hover {
+  opacity: 0.8;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .album-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .album-image {
+    margin-bottom: 10px;
+  }
+
+  .album-item h3 {
+    font-size: 1.1rem;
+  }
+
+  .album-item p {
+    font-size: 0.9rem;
+  }
+}

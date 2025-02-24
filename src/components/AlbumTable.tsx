@@ -7,6 +7,7 @@ import lightStyles from '../styles/modules/AlbumList-light.module.css';
 
 interface AlbumTableProps {
   albums: AlbumListData[];
+  userId: string;
   listId?: string;
   handleRemove?: (albumId: string, listId: string) => void;
   togglePlayed?: (listId: string, albumId: string, played: boolean) => void;
@@ -15,10 +16,13 @@ interface AlbumTableProps {
   openOverlay?: (album: AlbumData) => void; // New prop for opening overlay
   hideAlbum?: (albumId: string, hideAlbum: boolean) => void;
   handleAdd?: (albumId: string) => void;
+  renderCustomButton?: (albumId: string) => JSX.Element | null; // New prop
+  handleAddToListeningPile?: (albumId: string, userId: string) => void;
 }
 
 const AlbumTable: React.FC<AlbumTableProps> = ({
   albums,
+  userId,
   listId,
   handleRemove,
   togglePlayed,
@@ -27,6 +31,8 @@ const AlbumTable: React.FC<AlbumTableProps> = ({
   openOverlay,
   hideAlbum,
   handleAdd,
+  renderCustomButton,
+  handleAddToListeningPile
 }) => {
   const {
     currentPage,
@@ -128,15 +134,20 @@ const AlbumTable: React.FC<AlbumTableProps> = ({
                         {hideAlbum && (<button onClick={() => hideAlbum(albumList.album.id, albumList.album.hideAlbum)}>{albumList.album.hideAlbum ? 'Unhide' : 'Hide'}</button>)} {/* Add hideAlbum button */}
                         <button onClick={() => handleRemove(albumList.album.id, "")}>Delete</button>
                         {openOverlay && (<button onClick={() => openOverlay(albumList.album)}>Add to List</button>)}
+                        {handleAddToListeningPile && <button onClick={() => handleAddToListeningPile(albumList.album.id, userId)}>Add to Listening Pile</button>}
                     </div>
                   )}
-                  {handleAdd && listId && (
-                    <button
-                    className={styles['add-album-overlay-add-button']}
-                    onClick={() => handleAdd(albumList.album.id)}
-                    >
-                      Add
-                    </button>
+                  {handleAdd && listId && renderCustomButton ? (
+                    renderCustomButton(albumList.album.id)
+                  ) : (
+                    handleAdd && listId && (
+                      <button
+                        className={styles['add-album-overlay-add-button']}
+                        onClick={() => handleAdd(albumList.album.id)}
+                      >
+                        Add
+                      </button>
+                    )
                   )}
                 </div>
               </td>

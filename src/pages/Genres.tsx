@@ -4,9 +4,12 @@ import { Link } from 'react-router-dom';
 import darkStyles from '../styles/modules/Media-dark.module.css';
 import lightStyles from '../styles/modules/Media-light.module.css';
 import { AlbumData } from '../model';
+import Loader from '../components/Loader';
+import { getCurrentUserId } from '../core/users';
 
 const Genres = () => {
   const [genres, setGenres] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
   const [theme] = useState<'light' | 'dark'>(() => {
     // Load theme preference from localStorage or default to 'light'
     return (localStorage.getItem('theme') as 'light' | 'dark') || 'light';
@@ -20,7 +23,9 @@ const Genres = () => {
   useEffect(() => {
     const getGenres = async () => {
       try {
-        const albums: AlbumData[] = await fetchAlbums();
+        setLoading(true);
+        const userId = (await getCurrentUserId()) || '';
+        const albums: AlbumData[] = await fetchAlbums(userId);
         const uniqueGenres = Array.from(
           new Set(
             albums
@@ -31,6 +36,8 @@ const Genres = () => {
         setGenres(uniqueGenres);
       } catch (error) {
         console.error('Error fetching genres', error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -64,7 +71,7 @@ const Genres = () => {
   return (
     <div className={styles['media-page']}>
       <h1>Genres</h1>
-      {genres.length === 0 ? (
+      {loading ? <Loader /> : genres.length === 0 ? (
         <p>No genres found.</p>
       ) : (
         <div>

@@ -15,6 +15,7 @@ query ListListsWithAlbums($filter: ModelListFilterInput, $limit: Int, $nextToken
             spotifyUrl
             release_date
             imageUrl
+            userId
             createdAt
             updatedAt
           }
@@ -44,6 +45,7 @@ export const getUnplayedAlbums = /* GraphQL */ `
           spotifyUrl
           release_date
           imageUrl
+          userId
           createdAt 
           updatedAt 
         }
@@ -51,4 +53,42 @@ export const getUnplayedAlbums = /* GraphQL */ `
       nextToken
     }
   }
+`;
+
+export const customListListeningPileEntries = /* GraphQL */ `query CustomListListeningPileEntries(
+  $filter: ModelListeningPileEntryFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listListeningPileEntries(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      albumId
+      order
+      album {  # This is the added field to get Album details
+        id
+        name
+        artist
+        spotifyUrl
+        release_date
+        imageUrl
+        genres
+        hideAlbum
+        userId
+        createdAt
+        updatedAt
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
 `;

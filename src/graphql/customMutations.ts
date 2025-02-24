@@ -15,3 +15,16 @@ export const toggleHidden = /* GraphQL */ `
     }
   }
 `;
+
+export const reorderListeningPile = /* GraphQL */ `mutation ReorderListeningPile(
+  $input: UpdateListeningPileEntryInput!
+) {
+  updateListeningPileEntry(input: $input) {
+    id
+    albumId
+    order
+    updatedAt
+    __typename
+  }
+}
+`;
