@@ -21,8 +21,8 @@ const RandomAlbumOverlay: React.FC<RandomAlbumOverlayProps> = ({
 }) => {
 
     const [theme] = useState<'light' | 'dark'>(() => {
-    // Load theme preference from localStorage or default to 'light'
-    return (localStorage.getItem('theme') as 'light' | 'dark') || 'light';
+        // Load theme preference from localStorage or default to 'light'
+        return (localStorage.getItem('theme') as 'light' | 'dark') || 'light';
     });
 
     const [loading, setLoading] = useState(false);
@@ -52,7 +52,7 @@ const RandomAlbumOverlay: React.FC<RandomAlbumOverlayProps> = ({
             <h2 className={styles['list-page-overlay-title']}><Link to={`/albums/${randomAlbum.album.id}`} className={styles['album-link']}>{randomAlbum.album.name}</Link></h2>
             <p className={styles['list-page-overlay-artist']}><Link to={`/albums/artist/${encodeURIComponent(randomAlbum.album.artist)}`} className={styles['album-link']}>{randomAlbum.album.artist}</Link></p>
             <p className={styles['list-page-overlay-year']}> <Link to={`/albums/year/${encodeURIComponent(randomAlbum.album.release_date.split('-')[0])}`} className={styles['album-link']}>{randomAlbum.album.release_date.split('-')[0]}</Link></p>
-            <a
+            {randomAlbum.album.spotifyUrl ? (<a
                 href={randomAlbum.album.spotifyUrl}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -64,6 +64,9 @@ const RandomAlbumOverlay: React.FC<RandomAlbumOverlayProps> = ({
                 className={styles['spotify-icon']}
                 />
             </a>
+            ) : (
+                <p className={styles['no-spotify']}>No Spotify link available.</p>
+            )}
             {listId && togglePlayed && (
                 <label className={styles['list-page-switch']}>
                     <input

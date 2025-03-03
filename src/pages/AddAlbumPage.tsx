@@ -6,7 +6,8 @@ import {
 import {
   addAlbum,
   fetchLists,
-  addAlbumToList
+  addAlbumToList,
+  uploadImageToS3
 } from '../api/amplifyApi';
 import darkStyles from '../styles/modules/AddAlbumPage-dark.module.css';
 import lightStyles from '../styles/modules/AddAlbumPage-light.module.css';
@@ -18,18 +19,21 @@ const AddAlbumPage = () => {
   const [userId, setUserId] = useState('');
   const [name, setAlbumName] = useState('');
   const [spotifyUrl, setSpotifyUrl] = useState('');
+  const [releaseDate, setReleaseDate] = useState('');
+  const [genres, setGenres] = useState<string[]>([]);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [manualEntry, setManualEntry] = useState(false);
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [error, setError] = useState('');
-  const [lists, setLists] = useState<ListData[]>([]); // Explicit type here
+  const [lists, setLists] = useState<ListData[]>([]);
   const [selectedListId, setSelectedListId] = useState('');
   const [theme] = useState<'light' | 'dark'>(() => {
-    // Load theme preference from localStorage or default to 'light'
     return (localStorage.getItem('theme') as 'light' | 'dark') || 'light';
   });
 
-  // Use the appropriate styles based on the current theme
   const styles = theme === 'dark' ? darkStyles : lightStyles;
+
   useEffect(() => {
     const loadLists = async () => {
       try {
@@ -46,7 +50,6 @@ const AddAlbumPage = () => {
         setError('Error loading lists.');
       }
     };
-
     loadLists();
   }, []);
 
@@ -58,43 +61,68 @@ const AddAlbumPage = () => {
 
     try {
       let album;
-      if (spotifyUrl) {
-        album = await fetchAlbumBySpotifyUrl(spotifyUrl);
+      let imageUrl = '';
+
+      if (manualEntry) {
+        let albumId = crypto.randomUUID();
+        // Upload image to S3
+        if (imageFile) {
+          imageUrl = await uploadImageToS3(imageFile, albumId);
+        }
+
+        album = {
+          id: albumId + '-' + userId,
+          name,
+          artist,
+          release_date: releaseDate,
+          spotifyUrl: '',
+          imageUrl,
+          genres,
+          hideAlbum: false,
+          userId,
+        };
       } else {
-        album = await fetchAlbum(name, artist);
+        if (spotifyUrl) {
+          album = await fetchAlbumBySpotifyUrl(spotifyUrl);
+        } else {
+          album = await fetchAlbum(name, artist);
+        }
+        
+        if (!album) {
+          setError('Album not found. Please check the details.');
+          setLoading(false);
+          return;
+        }
+
+        const newAlbum = {
+          id: album.id + '-' + userId,
+          name: album.name,
+          artist: album.artists[0].name,
+          release_date: album.release_date,
+          spotifyUrl: album.external_urls.spotify,
+          imageUrl: album.images[0]?.url || '',
+          hideAlbum: false,
+          userId: userId
+        };
+        album = newAlbum
+
       }
 
-      if (!album) {
-        setError('Album not found. Please check the details.');
-        setLoading(false);
-        return;
-      }
-
-      const newAlbum = {
-        id: album.id,
-        name: album.name,
-        artist: album.artists[0].name,
-        release_date: album.release_date,
-        spotifyUrl: album.external_urls.spotify,
-        imageUrl: album.images[0]?.url || '',
-        hideAlbum: false,
-        userId: userId
-      };
-
-      await addAlbum(newAlbum, userId);
+      await addAlbum(album, userId);
 
       if (selectedListId) {
-        await addAlbumToList(newAlbum.id, selectedListId);
-        setSuccessMessage(
-          `Album ${newAlbum.name} added successfully to the selected list!`
-        );
+        await addAlbumToList(album.id, selectedListId, userId);
+        setSuccessMessage(`Album ${album.name} added successfully to the selected list!`);
       } else {
-        setSuccessMessage(`Album ${newAlbum.name} added successfully!`);
+        setSuccessMessage(`Album ${album.name} added successfully!`);
       }
 
       setArtist('');
       setAlbumName('');
       setSpotifyUrl('');
+      setReleaseDate('');
+      setGenres([]);
+      setImageFile(null);
       setSelectedListId('');
     } catch (err) {
       console.error('Error adding album:', err);
@@ -107,43 +135,109 @@ const AddAlbumPage = () => {
   return (
     <div className={styles['add-album-page']}>
       <h1>Add a New Album</h1>
+      <div>
+        <button onClick={() => setManualEntry(false)} disabled={!manualEntry}>
+          Fetch from Spotify
+        </button>
+        <button onClick={() => setManualEntry(true)} disabled={manualEntry}>
+          Manual Entry
+        </button>
+      </div>
       <form onSubmit={handleAddAlbum} className={styles['add-album-form']}>
-        <div className={styles['form-group']}>
-          <label htmlFor="spotifyUrl">Spotify URL (Optional):</label>
-          <input
-            type="text"
-            id={styles['spotifyUrl']}
-            value={spotifyUrl}
-            onChange={(e) => setSpotifyUrl(e.target.value)}
-          />
-        </div>
-        <p>Or enter details below:</p>
-        <div className={styles['form-group']}>
-          <label htmlFor="artist">Artist:</label>
-          <input
-            type="text"
-            id={styles['artist']}
-            value={artist}
-            onChange={(e) => setArtist(e.target.value)}
-            required={!spotifyUrl}
-            disabled={!!spotifyUrl}
-          />
-        </div>
-        <div className={styles['form-group']}>
-          <label htmlFor="albumName">Album Name:</label>
-          <input
-            type="text"
-            id={styles['albumName']}
-            value={name}
-            onChange={(e) => setAlbumName(e.target.value)}
-            required={!spotifyUrl}
-            disabled={!!spotifyUrl}
-          />
-        </div>
+        {!manualEntry && (
+          <>
+          <div className={styles['form-group']}>
+            <label htmlFor="spotifyUrl">Spotify URL (Optional):</label>
+            <input
+              type="text"
+              id="spotifyUrl"
+              value={spotifyUrl}
+              onChange={(e) => setSpotifyUrl(e.target.value)}
+            />
+          </div>
+          <p>Or Enter Artist and Album Name:</p>
+          <div className={styles['form-group']}>
+            <label htmlFor="artist">Artist:</label>
+            <input
+              type="text"
+              id={styles['artist']}
+              value={artist}
+              onChange={(e) => setArtist(e.target.value)}
+              required={!spotifyUrl}
+              disabled={!!spotifyUrl}
+            />
+          </div>
+          <div className={styles['form-group']}>
+            <label htmlFor="albumName">Album Name:</label>
+              <input
+                type="text"
+                id={styles['albumName']}
+                value={name}
+                onChange={(e) => setAlbumName(e.target.value)}
+                required={!spotifyUrl}
+                disabled={!!spotifyUrl}
+              />
+          </div>
+          </>
+        )}
+
+        {manualEntry && (
+          <>
+            <div className={styles['form-group']}>
+              <label htmlFor="artist">Artist:</label>
+              <input
+                type="text"
+                id="artist"
+                value={artist}
+                onChange={(e) => setArtist(e.target.value)}
+                required
+              />
+            </div>
+            <div className={styles['form-group']}>
+              <label htmlFor="albumName">Album Name:</label>
+              <input
+                type="text"
+                id="albumName"
+                value={name}
+                onChange={(e) => setAlbumName(e.target.value)}
+                required
+              />
+            </div>
+            <div className={styles['form-group']}>
+              <label htmlFor="releaseDate">Release Date:</label>
+              <input
+                type="date"
+                id="releaseDate"
+                value={releaseDate}
+                onChange={(e) => setReleaseDate(e.target.value)}
+                required
+              />
+            </div>
+            <div className={styles['form-group']}>
+              <label htmlFor="genres">Genres (comma-separated):</label>
+              <input
+                type="text"
+                id="genres"
+                value={genres.join(', ')}
+                onChange={(e) => setGenres(e.target.value.split(',').map(g => g.trim()))}
+              />
+            </div>
+            <div className={styles['form-group']}>
+              <label htmlFor="image">Album Artwork:</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => setImageFile(e.target.files?.[0] || null)}
+                required
+              />
+            </div>
+          </>
+        )}
+
         <div className={styles['form-group']}>
           <label htmlFor="list">Add to List (Optional):</label>
           <select
-            id={styles['list']}
+            id="list"
             value={selectedListId}
             onChange={(e) => setSelectedListId(e.target.value)}
           >
@@ -155,13 +249,13 @@ const AddAlbumPage = () => {
             ))}
           </select>
         </div>
+
         <button type="submit" disabled={loading}>
           {loading ? 'Adding Album...' : 'Add Album'}
         </button>
+
         {error && <p className={styles['error-message']}>{error}</p>}
-        {successMessage && (
-          <p className={styles['success-message']}>{successMessage}</p>
-        )}
+        {successMessage && <p className={styles['success-message']}>{successMessage}</p>}
       </form>
     </div>
   );

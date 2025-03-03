@@ -87,6 +87,19 @@
   height: 20px;
 }
 
+.spotify-link-disabled {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: var(--spotify-green); /* Spotify green */
+  font-weight: bold;
+  height: 20px;
+  opacity: 0.1;
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+}
+
 .spotify-link img {
   width: 20px;
   height: 20px;
@@ -699,6 +712,15 @@
   .album-block:active .album-block-overlay {
     opacity: 1;
   }
+
+  .list-page-album-name,
+  .list-page-album-artist {
+    word-wrap: break-word; /* Ensures long words wrap */
+    overflow-wrap: break-word; /* Alternative for better support */
+    max-width: 7em; /* Ensures text does not exceed the container */
+    white-space: normal; /* Allows text to wrap */
+  }
+
 }
 
 @media (min-width: 769px) {

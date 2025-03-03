@@ -77,13 +77,15 @@ const AlbumPage = () => {
         onEdit={handleEditName}
       />
 
-      <CollapsibleSection title="Listen">
+      {album.spotifyUrl && (<CollapsibleSection title="Listen">
         <iframe
           src={`https://open.spotify.com/embed/album/${extractSpotifyAlbumId(album.spotifyUrl)}`}
           width="100%"
           height="352"
         />
       </CollapsibleSection>
+      )
+      }
 
       {spotifyDetails?.tracks && (
         <CollapsibleSection title="Track Listing">

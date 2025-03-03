@@ -45,7 +45,7 @@ const LandingPage = () => {
           <p>
             <Link to={`/albums/artist/${encodeURIComponent(album.artist)}`} className={styles['album-link']}>{album.artist}</Link>
           </p>
-          <a
+          {album.spotifyUrl ? (<a
             href={album.spotifyUrl}
             target="_blank"
             rel="noopener noreferrer"
@@ -58,6 +58,9 @@ const LandingPage = () => {
             />
             Listen on Spotify
           </a>
+          ) : (
+            <p className={styles['no-spotify']}>No Spotify link available.</p>
+          )}
           <img
             src={
               album.imageUrl && album.imageUrl.startsWith('http')
