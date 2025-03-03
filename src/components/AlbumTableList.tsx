@@ -89,7 +89,7 @@ const AlbumTableList: React.FC<AlbumTableListProps> = ({
                         </td>
                         <td className={styles['more-options-cell']}>
                           <div className={styles['more-options-container']}>
-                            <a
+                            {albumList.album.spotifyUrl && (<a
                               href={albumList.album.spotifyUrl}
                               target="_blank"
                               rel="noopener noreferrer"
@@ -101,6 +101,14 @@ const AlbumTableList: React.FC<AlbumTableListProps> = ({
                                 className={styles['spotify-link']}
                               />
                             </a>
+                            )}
+                            {!albumList.album.spotifyUrl && (
+                              <img
+                                src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg"
+                                alt="Spotify"
+                                className={styles['spotify-link-disabled']}
+                              />
+                            )}
                             {toggleMenu && (
                                 <button
                                 className={styles['more-options-button']}

@@ -1,0 +1,12 @@
+{
+  "resourceName": "albumArtBucket",
+  "policyUUID": "7f60b369",
+  "bucketName": "dev-albumgenerator-albumartbucket",
+  "storageAccess": "auth",
+  "guestAccess": [],
+  "authAccess": [
+    "CREATE_AND_UPDATE"
+  ],
+  "triggerFunction": "NONE",
+  "groupAccess": {}
+}

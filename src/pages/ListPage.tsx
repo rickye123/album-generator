@@ -163,7 +163,7 @@ const ListPage: React.FC = () => {
   const handleAddAlbumToList = async (albumId: string) => {
     try {
       if (list) {
-        await addAlbumToList(albumId, list.id);
+        await addAlbumToList(albumId, list.id, userId || '');
       } else {
         throw new Error('List is null');
       }

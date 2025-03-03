@@ -8,6 +8,8 @@ import { AlbumData, AlbumListData, ListData, ListeningPileEntry } from '../model
 import { List } from '../API';
 import { getUnplayedAlbums, customListListeningPileEntries as listListeningPileEntries, listListsWithAlbums } from '../graphql/customQueries';
 import { toggleHidden, togglePlayed } from '../graphql/customMutations';
+import { uploadData } from '@aws-amplify/storage';
+
 
 export const updateAlbumDetails = async (albumData: AlbumData): Promise<GraphQLResult<any>> => {
   try {
@@ -40,7 +42,13 @@ export const updateAlbumDetails = async (albumData: AlbumData): Promise<GraphQLR
 
 export const addAlbum = async (albumData: AlbumData, userId: string): Promise<GraphQLResult<any>> => {
   try {
-    const graphqlParams = graphqlOperation(createAlbum, { input: albumData, userId });
+
+    const graphqlParams = graphqlOperation(createAlbum, {
+      input: {
+        ...albumData,
+        userId
+      },
+    });
 
     const result = await GraphQLAPI.graphql(
       Amplify as any, // Pass the Amplify class instance
@@ -486,7 +494,7 @@ async function fetchAllAlbumListEntriesByAlbumIdAndListId(albumId: string, listI
   return allEntries;
 }
 
-export const addAlbumToList = async (albumId: string, listId: string) => {
+export const addAlbumToList = async (albumId: string, listId: string, userId: string) => {
 
   const existingEntries = await fetchAllAlbumListEntriesByAlbumIdAndListId(albumId, listId);
 
@@ -495,7 +503,7 @@ export const addAlbumToList = async (albumId: string, listId: string) => {
   }
 
   const response = await GraphQLAPI.graphql(Amplify as any, 
-    graphqlOperation(createAlbumList, { input: { albumId, listId, played: false } }),
+    graphqlOperation(createAlbumList, { input: { albumId, listId, userId, played: false } }),
     {}
   );
   // Check if the result is a Promise or Observable
@@ -798,3 +806,24 @@ export async function addAlbumToListeningPile(albumId: string, userId: string): 
   return result;
 }
 
+export const uploadImageToS3 = async (file: File, albumId: string): Promise<string> => {
+  try {
+    const fileExtension = file.name.split('.').pop;
+    const fileKey = `album-art/${albumId}.${fileExtension}`;
+
+    const result = await uploadData({
+      path: fileKey, 
+      data: file
+    }).result;
+
+    console.log('Result is ', result);
+
+    const imageUrl = `https://dev-albumgenerator-albumartbucketc60ec-dev.s3.eu-west-2.amazonaws.com/${fileKey}`;
+
+    // Return the image URL
+    return imageUrl;
+  } catch (error) {
+    console.error('Error uploading image to S3:', error);
+    throw new Error('Image upload failed.');
+  }
+};

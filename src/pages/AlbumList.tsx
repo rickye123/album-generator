@@ -88,7 +88,7 @@ const AlbumList = () => {
     if (!selectedAlbum) return;
 
     try {
-      await addAlbumToList(selectedAlbum.id, listId);
+      await addAlbumToList(selectedAlbum.id, listId, userId);
       alert(`${selectedAlbum.name} added to the list successfully!`);
       closeOverlay();
     } catch (err) {

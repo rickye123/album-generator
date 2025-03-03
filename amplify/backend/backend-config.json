@@ -1,30 +1,13 @@
 {
   "api": {
     "albumgenerator": {
-      "dependsOn": [
-        {
-          "attributes": [
-            "UserPoolId"
-          ],
-          "category": "auth",
-          "resourceName": "albumgeneratorf5fb4951"
-        }
-      ],
+      "dependsOn": [],
       "output": {
         "authConfig": {
-          "additionalAuthenticationProviders": [
-            {
-              "authenticationType": "AMAZON_COGNITO_USER_POOLS",
-              "userPoolConfig": {
-                "userPoolId": "authalbumgeneratorf5fb4951"
-              }
-            }
-          ],
+          "additionalAuthenticationProviders": [],
           "defaultAuthentication": {
             "apiKeyConfig": {
-              "apiKeyExpirationDate": "2026-02-24T08:32:25.638Z",
-              "apiKeyExpirationDays": 365,
-              "description": ""
+              "apiKeyExpirationDays": 7
             },
             "authenticationType": "API_KEY"
           }
@@ -35,7 +18,7 @@
     }
   },
   "auth": {
-    "albumgeneratorf5fb4951": {
+    "albumgenerator25ef2256": {
       "customAuth": false,
       "dependsOn": [],
       "frontendAuthConfig": {
@@ -51,9 +34,7 @@
           "EMAIL"
         ],
         "socialProviders": [],
-        "usernameAttributes": [
-          "EMAIL"
-        ],
+        "usernameAttributes": [],
         "verificationMechanisms": [
           "EMAIL"
         ]
@@ -63,9 +44,35 @@
     }
   },
   "hosting": {
-    "S3AndCloudFront": {
+    "amplifyhosting": {
       "providerPlugin": "awscloudformation",
-      "service": "S3AndCloudFront"
+      "service": "amplifyhosting",
+      "type": "manual"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_hosting_amplifyhosting_appId": {
+      "usedBy": [
+        {
+          "category": "hosting",
+          "resourceName": "amplifyhosting"
+        }
+      ]
+    },
+    "AMPLIFY_hosting_amplifyhosting_type": {
+      "usedBy": [
+        {
+          "category": "hosting",
+          "resourceName": "amplifyhosting"
+        }
+      ]
+    }
+  },
+  "storage": {
+    "albumArtBucket": {
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "S3"
     }
   }
 }

@@ -42,7 +42,7 @@ const AlbumTableBlock: React.FC<AlbumTableBlockProps> = ({ albums }) => {
       <div className={styles['album-block-container']}>
         {currentAlbums.map((albumList) => (
           <div key={albumList.album.id} className={`${styles['album-block']} ${albumList.album.hideAlbum ? styles['hidden-album-block'] : styles['visible-album-block']}` }>
-            <a href={albumList.album.spotifyUrl} target="_blank" rel="noopener noreferrer">
+            {albumList.album.spotifyUrl ? (<a href={albumList.album.spotifyUrl} target="_blank" rel="noopener noreferrer">
               <img src={albumList.album.imageUrl} alt={albumList.album.name} className={styles['album-block-image']} />
               <div className={styles['album-block-overlay']}>
                 <div className={styles['album-block-text']}>
@@ -51,6 +51,17 @@ const AlbumTableBlock: React.FC<AlbumTableBlockProps> = ({ albums }) => {
                 </div>
               </div>
             </a>
+            ) : (
+              <>
+              <img src={albumList.album.imageUrl} alt={albumList.album.name} className={styles['album-block-image']} />
+              <div className={styles['album-block-overlay']}>
+                <div className={styles['album-block-text']}>
+                  <p>{albumList.album.name}</p>
+                  <p>{albumList.album.artist}</p>
+                </div>
+              </div>
+              </>
+            )}
           </div>
         ))}
       </div>
