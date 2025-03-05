@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Papa from 'papaparse';
 import { fetchAlbum } from '../api/spotifyApi';
-import { addAlbum, addAlbumToList, fetchAlbumListEntriesForAlbumId, fetchLists, removeAlbum, removeAlbumFromList, removeListeningPileEntry } from '../api/amplifyApi';
+import { addAlbum, addAlbumToList, fetchAlbumListEntriesForAlbumId, fetchLists, removeAlbum, removeAlbumFromList } from '../api/amplifyApi';
 import { getCurrentUserId } from '../core/users';
 import darkStyles from '../styles/modules/AddAlbumPage-dark.module.css';
 import lightStyles from '../styles/modules/AddAlbumPage-light.module.css';

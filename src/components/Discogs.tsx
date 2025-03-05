@@ -17,7 +17,6 @@ interface VinylRecord {
 const Discogs = ({ albumName, artistName }: VinylSearchProps) => {
   const [vinylRecords, setVinylRecords] = useState<VinylRecord[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     const getVinylData = async () => {
@@ -38,7 +37,6 @@ const Discogs = ({ albumName, artistName }: VinylSearchProps) => {
   }, [albumName, artistName]);
 
   if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
 
   return (
     <div>
