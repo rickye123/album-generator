@@ -2,7 +2,7 @@ const AWS = require('aws-sdk');
 AWS.config.update({ region: 'eu-west-2' });
 
 const dynamoDB = new AWS.DynamoDB.DocumentClient();
-const tableName = 'ListeningPileEntry-f6kgrv6o2vdklagtebobyob3s4-dev';
+const tableName = 'AlbumList-f6kgrv6o2vdklagtebobyob3s4-dev';
 const deleteAlbumIds = async () => {
     let scanParams = { TableName: tableName };
     let count = 0;
