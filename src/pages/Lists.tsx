@@ -120,7 +120,7 @@ const Lists: React.FC = () => {
               <li key={list.id}>
                 <div onClick={() => handleListClick(list.id)}>
                   <h3>{list.name}</h3>
-                  <p>{list.albums?.length > 100 ? '>100' : list.albums?.length || 0} Albums</p>
+                  <p>{list.albums?.length > 99 ? '> 100' : list.albums?.length || 0} Albums</p>
                 </div>
                 <button
                   className={styles['delete-button']}

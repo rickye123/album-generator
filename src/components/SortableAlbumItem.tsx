@@ -54,13 +54,23 @@ const SortableAlbumItem = ({
 
   return (
     <li ref={setNodeRef} style={style} {...(isMobile ? handlers : { ...attributes, ...listeners })} className={styles['album-item']}>
-      <a href={entry.album.spotifyUrl} target="_blank" rel="noopener noreferrer" className={styles['album-link']}>
+      {entry.album.spotifyUrl && (<a href={entry.album.spotifyUrl} target="_blank" rel="noopener noreferrer" className={styles['album-link']}>
         <img src={entry.album.imageUrl} alt={entry.album.name} className={styles['album-image']} />
         <div>
           <h3>{entry.album.name}</h3>
           <p>{entry.album.artist}</p>
         </div>
       </a>
+      )}
+      {!entry.album.spotifyUrl && (
+        <>
+          <img src={entry.album.imageUrl} alt={entry.album.name} className={styles['album-image']} />
+          <div>
+            <h3>{entry.album.name}</h3>
+            <p>{entry.album.artist}</p>
+          </div>
+        </>
+      )}
     </li>
   );
 };

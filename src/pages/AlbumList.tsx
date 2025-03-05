@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { fetchAlbums, fetchLists, addAlbumToList, removeAlbum, fetchAlbumListEntriesForAlbumId, removeAlbumFromList, toggleHideAlbum, fetchRandomAlbum, addAlbumToListeningPile } from '../api/amplifyApi';
+import { fetchAlbums, fetchLists, addAlbumToList, removeAlbum, fetchAlbumListEntriesForAlbumId, removeAlbumFromList, toggleHideAlbum, addAlbumToListeningPile, removeListeningPileEntry } from '../api/amplifyApi';
 import { AlbumData, AlbumListData, ListData } from '../model';
 import darkStyles from '../styles/modules/AlbumList-dark.module.css';
 import lightStyles from '../styles/modules/AlbumList-light.module.css';
@@ -101,14 +101,19 @@ const AlbumList = () => {
     try {
       // get album list entry (if one exists) and delete it
       const results = await fetchAlbumListEntriesForAlbumId(albumId, userId);
-      console.log('Result: ', results);
       if(results) {
-        // delete each album list entry
-        results.forEach(async (element: { id: string; }) => {
-          await removeAlbumFromList(element.id);
-        });
-      }
+        if (results) {
+          for (const element of results) {
+            console.log(`Deleting AlbumList entry ${element.id} for album ${albumId}`);
+            await removeAlbumFromList(element.id);
 
+          }
+        }
+      }
+    
+      console.log('Deleting ListeningPile entry for album:', albumId);
+      await removeListeningPileEntry(albumId, userId);
+      
       await removeAlbum(albumId);
       setAlbums((prevAlbums) => prevAlbums.filter((album) => album.id !== albumId));
     } catch (err) {

@@ -38,9 +38,12 @@ const AlbumPage = () => {
   useEffect(() => {
     const loadDetails = async () => {
       if (album) {
-        const spotifyInfo = await fetchSpotifyAlbumDetails(album.id);
-        console.log('Spotify info:', spotifyInfo);
-        setSpotifyDetails(spotifyInfo);
+        if (album.spotifyUrl) {
+          console.log('Fetching Spotify details for album:', album.spotifyUrl);
+          const spotifyInfo = await fetchSpotifyAlbumDetails(extractSpotifyAlbumId(album.spotifyUrl));
+          console.log('Spotify info:', spotifyInfo);
+          setSpotifyDetails(spotifyInfo);
+        }
 
         const wikiLink = await fetchWikipediaLink(album.name, album.artist);
         setWikipediaLink(wikiLink);

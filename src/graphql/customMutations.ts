@@ -28,3 +28,21 @@ export const reorderListeningPile = /* GraphQL */ `mutation ReorderListeningPile
   }
 }
 `;
+
+export const customDeleteAlbumList = /* GraphQL */ `mutation CustomDeleteAlbumList(
+  $input: DeleteAlbumListInput!
+) {
+  deleteAlbumList(input: $input) {
+    id
+  }
+}
+`;
+
+export const customDeleteListeningPileEntry = /* GraphQL */ `mutation CustomDeleteListeningPileEntry(
+  $input: DeleteListeningPileEntryInput!
+) {
+  deleteListeningPileEntry(input: $input) {
+    id
+  }
+}
+`;

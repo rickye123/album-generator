@@ -66,6 +66,14 @@ export type UpdateListeningPileEntryInput = {
   userId?: string | null,
 };
 
+export type DeleteAlbumListInput = {
+  id: string,
+};
+
+export type DeleteListeningPileEntryInput = {
+  id: string,
+};
+
 export type ModelListFilterInput = {
   id?: ModelIDInput | null,
   name?: ModelStringInput | null,
@@ -274,10 +282,6 @@ export type UpdateAlbumListInput = {
   userId?: string | null,
 };
 
-export type DeleteAlbumListInput = {
-  id: string,
-};
-
 export type CreateListeningPileEntryInput = {
   id?: string | null,
   albumId: string,
@@ -294,10 +298,6 @@ export type ModelListeningPileEntryConditionInput = {
   not?: ModelListeningPileEntryConditionInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
-};
-
-export type DeleteListeningPileEntryInput = {
-  id: string,
 };
 
 export type ModelAlbumFilterInput = {
@@ -485,6 +485,28 @@ export type ReorderListeningPileMutation = {
     albumId: string,
     order: number,
     updatedAt: string,
+  } | null,
+};
+
+export type CustomDeleteAlbumListMutationVariables = {
+  input: DeleteAlbumListInput,
+};
+
+export type CustomDeleteAlbumListMutation = {
+  deleteAlbumList?:  {
+    __typename: "AlbumList",
+    id: string,
+  } | null,
+};
+
+export type CustomDeleteListeningPileEntryMutationVariables = {
+  input: DeleteListeningPileEntryInput,
+};
+
+export type CustomDeleteListeningPileEntryMutation = {
+  deleteListeningPileEntry?:  {
+    __typename: "ListeningPileEntry",
+    id: string,
   } | null,
 };
 

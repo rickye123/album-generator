@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import {
   addAlbumToList,
   fetchAlbumListEntry,
@@ -22,6 +22,8 @@ import { getCurrentUserId } from '../core/users';
 const ListPage: React.FC = () => {
   const { listId } = useParams<{ listId: string }>();
   const [userId, setUserId] = useState<string | null>(null);
+  const [showTooltip, setShowTooltip] = useState(false);
+  const [touchTimer, setTouchTimer] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [addedAlbums, setAddedAlbums] = useState<{ [key: string]: boolean }>({});
   const [list, setList] = useState<ListData | null>(null);
@@ -56,6 +58,30 @@ const ListPage: React.FC = () => {
 
     loadLists();
   }, [listId]);
+
+  const getStats = () => {
+    const totalAlbums = list?.albums.length || 0;
+    const playedAlbums = list?.albums.filter((album) => album.played).length || 0;
+    const unplayedAlbums = totalAlbums - playedAlbums;
+    return { totalAlbums, playedAlbums, unplayedAlbums };
+  };
+
+  // Tooltip event handlers
+  const handleMouseEnter = () => setShowTooltip(true);
+  const handleMouseLeave = () => setShowTooltip(false);
+
+  const handleTouchStart = () => {
+    const timer = window.setTimeout(() => setShowTooltip(true), 500); // Show after holding for 500ms
+    setTouchTimer(timer);
+  };
+
+  const handleTouchEnd = () => {
+    if (touchTimer) {
+      clearTimeout(touchTimer);
+      setTouchTimer(null);
+    }
+    setShowTooltip(false);
+  };
 
   const handleRemoveFromList = async (albumId: string, listId: string) => {
     try {
@@ -261,7 +287,21 @@ const ListPage: React.FC = () => {
 
   return (
     <div className={styles['album-list-page']}>
-      <h1 className={styles['list-page-title']}>{list?.name}</h1>
+      <h1 className={styles['list-page-title']}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
+        {list?.name}
+      </h1>
+      {!loading && showTooltip && (
+        <div className={styles['tooltip']}>
+          <p>Total Albums: {getStats().totalAlbums}</p>
+          <p>Played Albums: {getStats().playedAlbums}</p>
+          <p>Unplayed Albums: {getStats().unplayedAlbums}</p>
+        </div>
+      )}
       {error && <p className={styles['list-page-error']}>{error}</p>}
 
       <button className={styles['list-page-randomize-button']} onClick={randomizeAlbum}>

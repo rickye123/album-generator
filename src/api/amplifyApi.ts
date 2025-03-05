@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { AlbumData, AlbumListData, ListData, ListeningPileEntry } from '../model';
 import { List } from '../API';
 import { getUnplayedAlbums, customListListeningPileEntries as listListeningPileEntries, listListsWithAlbums } from '../graphql/customQueries';
-import { toggleHidden, togglePlayed } from '../graphql/customMutations';
+import { customDeleteAlbumList, customDeleteListeningPileEntry, toggleHidden, togglePlayed } from '../graphql/customMutations';
 import { uploadData } from '@aws-amplify/storage';
 
 
@@ -342,11 +342,7 @@ export const fetchAlbumListEntriesForAlbumId = async (albumId: string, userId: s
     try {
       const response = await GraphQLAPI.graphql(
         Amplify as any,
-        graphqlOperation(albumListsByAlbumIdAndId, { filter: {
-          albumId: { eq: albumId },
-          userId: { eq: userId },
-        }, 
-        limit: 100, nextToken }),
+        graphqlOperation(albumListsByAlbumIdAndId, { albumId, limit: 100, nextToken }),
         {}
       );
 
@@ -367,6 +363,7 @@ export const fetchAlbumListEntriesForAlbumId = async (albumId: string, userId: s
     }
   } while (nextToken);
 
+  console.log('All entries', allEntries);
   return allEntries;
 };
 
@@ -434,7 +431,7 @@ export const removeAlbumFromList = async (id: string) => {
   try {
     const response = await GraphQLAPI.graphql(
       Amplify as any,
-      graphqlOperation(deleteAlbumList, { input: { id } }),
+      graphqlOperation(customDeleteAlbumList, { input: { id } }),
       {}
     );
 
@@ -453,6 +450,21 @@ export const removeAlbumFromList = async (id: string) => {
     throw error;
   }
 
+};
+
+export const removeListeningPileEntry = async (albumId: string, userId: string) => {
+  try {
+    const existingEntries = await fetchAllListeningPileEntriesByAlbumId(albumId, userId);
+
+    if (existingEntries.length === 0) {
+      return;
+    }
+
+    return await removeFromListeningPile(existingEntries[0].id);
+  } catch (error) {
+    console.error('Error removing ListeningPile entry:', error);
+    throw error;
+  }
 };
 
 async function fetchAllAlbumListEntriesByAlbumIdAndListId(albumId: string, listId: string) {
@@ -496,6 +508,7 @@ async function fetchAllAlbumListEntriesByAlbumIdAndListId(albumId: string, listI
 
 export const addAlbumToList = async (albumId: string, listId: string, userId: string) => {
 
+  console.log('User id', userId);
   const existingEntries = await fetchAllAlbumListEntriesByAlbumIdAndListId(albumId, listId);
 
   if (existingEntries.length > 0) {
