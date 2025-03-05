@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import Papa from 'papaparse';
-import {
-  fetchAlbum
-} from '../api/spotifyApi';
+import { fetchAlbum } from '../api/spotifyApi';
 import { addAlbum, removeAlbum } from '../api/amplifyApi';
 import { getCurrentUserId } from '../core/users';
 import darkStyles from '../styles/modules/AddAlbumPage-dark.module.css';
@@ -16,6 +14,8 @@ const BulkAddAlbums = () => {
   const [addedAlbumIds, setAddedAlbumIds] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [progress, setProgress] = useState(0); // Progress for processing albums
+  const [rollbackProgress, setRollbackProgress] = useState(0); // Progress for rollback operation
   const [theme] = useState(() => localStorage.getItem('theme') || 'light');
   const styles = theme === 'dark' ? darkStyles : lightStyles;
 
@@ -49,8 +49,8 @@ const BulkAddAlbums = () => {
     setError('');
     setSuccessList([]);
     setFailureList([]);
-
     setAddedAlbumIds([]);
+    setProgress(0); // Reset progress
 
     const userId = await getCurrentUserId();
     if (!userId) {
@@ -80,8 +80,9 @@ const BulkAddAlbums = () => {
 
         let successes = [];
         let failures = [];
-
         let addedIds = [];
+
+        const totalItems = rows.length - 1; // Total number of albums to process
 
         for (let i = 1; i < rows.length; i++) {
           const row = rows[i];
@@ -114,11 +115,14 @@ const BulkAddAlbums = () => {
             const errorMessage = err instanceof Error ? err.message : 'Unknown error';
             failures.push({ artist, albumName, error: errorMessage });
           }
+
+          // Update the progress bar after processing each item
+          const currentProgress = Math.floor(((i) / totalItems) * 100);
+          setProgress(currentProgress);
         }
 
         setSuccessList(successes);
         setFailureList(failures);
-
         setAddedAlbumIds(addedIds);
         setLoading(false);
       },
@@ -129,10 +133,20 @@ const BulkAddAlbums = () => {
   const rollbackAlbums = async () => {
     if (!addedAlbumIds.length) return;
     setLoading(true);
+    setRollbackProgress(0); // Reset rollback progress
+
     try {
-      for (let albumId of addedAlbumIds) {
+      const totalItems = addedAlbumIds.length;
+
+      for (let i = 0; i < totalItems; i++) {
+        const albumId = addedAlbumIds[i];
         await removeAlbum(albumId);
+
+        // Update rollback progress
+        const currentProgress = Math.floor(((i + 1) / totalItems) * 100);
+        setRollbackProgress(currentProgress);
       }
+
       setSuccessList([]);
       setAddedAlbumIds([]);
       alert('Rollback successful. Albums removed.');
@@ -153,24 +167,40 @@ const BulkAddAlbums = () => {
       </button>
       {error && <p className={styles['error-message']}>{error}</p>}
 
+      {/* Progress Bar for Album Processing */}
+      {loading && !rollbackProgress && (
+        <div>
+          <progress value={progress} max="100" style={{ width: '100%' }}></progress>
+          <p>{progress}% completed</p>
+        </div>
+      )}
+
+      {/* Progress Bar for Rollback */}
+      {loading && rollbackProgress > 0 && (
+        <div>
+          <progress value={rollbackProgress} max="100" style={{ width: '100%' }}></progress>
+          <p>{rollbackProgress}% rollback completed</p>
+        </div>
+      )}
+
       {successList.length > 0 && (
         <>
-        <h2>Successfully Added Albums</h2>
-        <ul>
+          <h2>Successfully Added Albums</h2>
+          <ul>
             {successList.map((album, index) => (
-            <li key={index}>{album.artist} - {album.name}</li>
+              <li key={index}>{album.artist} - {album.name}</li>
             ))}
-        </ul>
+          </ul>
         </>
       )}
       {failureList.length > 0 && (
         <>
-        <h2>Failed Albums</h2>
-        <ul>
+          <h2>Failed Albums</h2>
+          <ul>
             {failureList.map((fail, index) => (
-            <li key={index}>{fail.artist} - {fail.albumName}: {fail.error}</li>
+              <li key={index}>{fail.artist} - {fail.albumName}: {fail.error}</li>
             ))}
-        </ul>
+          </ul>
         </>
       )}
 
