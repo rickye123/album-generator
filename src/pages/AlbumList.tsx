@@ -16,6 +16,8 @@ const AlbumList = () => {
   const [userId, setUserId] = useState('');
   const [loading, setLoading] = useState(true);
   const [lists, setLists] = useState<ListData[]>([]);
+  const [showTooltip, setShowTooltip] = useState(false);
+  const [touchTimer, setTouchTimer] = useState<number | null>(null);
   const [selectedAlbum, setSelectedAlbum] = useState<AlbumData | null>(null);
   const [showOverlay, setShowOverlay] = useState(false);
   const [error, setError] = useState('');
@@ -33,6 +35,29 @@ const AlbumList = () => {
 
   // Use the appropriate styles based on the current theme
   const styles = theme === 'dark' ? darkStyles : lightStyles;
+
+  const getStats = () => {
+    const totalAlbums = albums.length || 0;
+    const hiddenAlbums = albums.filter((album) => album.hideAlbum).length || 0;
+    return { totalAlbums,hiddenAlbums };
+  };
+
+  // Tooltip event handlers
+  const handleMouseEnter = () => setShowTooltip(true);
+  const handleMouseLeave = () => setShowTooltip(false);
+
+  const handleTouchStart = () => {
+    const timer = window.setTimeout(() => setShowTooltip(true), 500); // Show after holding for 500ms
+    setTouchTimer(timer);
+  };
+
+  const handleTouchEnd = () => {
+    if (touchTimer) {
+      clearTimeout(touchTimer);
+      setTouchTimer(null);
+    }
+    setShowTooltip(false);
+  };
 
   useEffect(() => {
     const loadAlbums = async () => {
@@ -223,7 +248,12 @@ const AlbumList = () => {
 
   return (
     <div className={styles['album-list-page']}>
-      <h1>
+      <h1
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
         {genre 
           ? `${genre} Albums`
           : year
@@ -232,6 +262,12 @@ const AlbumList = () => {
           ? `${artist}'s Albums`
           : 'All Albums'}
       </h1>
+      {!loading && showTooltip && (
+        <div className={styles['tooltip']}>
+          <p>Total Albums: {getStats().totalAlbums}</p>
+          <p>Hidden Albums: {getStats().hiddenAlbums}</p>
+        </div>
+      )}
 
       <button className={styles['list-page-randomize-button']} onClick={randomizeAlbum}>
         Generate Random Album

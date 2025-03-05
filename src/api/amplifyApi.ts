@@ -1,13 +1,13 @@
 import { GraphQLAPI, graphqlOperation } from '@aws-amplify/api-graphql';
-import { createAlbum, createList, deleteList, addAlbumToList as addAlbumToListMutation, deleteAlbum, createAlbumList, deleteAlbumList, updateAlbum, deleteListeningPileEntry, createListeningPileEntry } from '../graphql/mutations';
-import { albumListsByAlbumIdAndId, albumListsByListIdAndId, getAlbum, getList, listAlbumLists, listAlbums, listLists } from '../graphql/queries';
+import { createAlbum, createList, deleteList, deleteAlbum, createAlbumList, updateAlbum, deleteListeningPileEntry, createListeningPileEntry } from '../graphql/mutations';
+import { albumListsByAlbumIdAndId, albumListsByListIdAndId, getAlbum, listAlbumLists, listAlbums, listLists } from '../graphql/queries';
 import { GraphQLResult } from '@aws-amplify/api-graphql';
 import { Amplify } from '@aws-amplify/core';
 import { Observable } from 'rxjs';
 import { AlbumData, AlbumListData, ListData, ListeningPileEntry } from '../model';
 import { List } from '../API';
 import { getUnplayedAlbums, customListListeningPileEntries as listListeningPileEntries, listListsWithAlbums } from '../graphql/customQueries';
-import { customDeleteAlbumList, customDeleteListeningPileEntry, toggleHidden, togglePlayed } from '../graphql/customMutations';
+import { customDeleteAlbumList, toggleHidden, togglePlayed } from '../graphql/customMutations';
 import { uploadData } from '@aws-amplify/storage';
 
 
@@ -64,7 +64,7 @@ export const addAlbum = async (albumData: AlbumData, userId: string): Promise<Gr
     return result;
   } catch (error) {
     console.error('Error adding album:', error);
-    throw new Error('Error adding album');
+    throw new Error('Error adding album', error!);
   }
 };
 

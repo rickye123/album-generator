@@ -81,7 +81,7 @@ const AlbumPage = () => {
       />
 
       {album.spotifyUrl && (<CollapsibleSection title="Listen">
-        <iframe
+        <iframe title="Spotify Album"
           src={`https://open.spotify.com/embed/album/${extractSpotifyAlbumId(album.spotifyUrl)}`}
           width="100%"
           height="352"
