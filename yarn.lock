@@ -142,6 +142,18 @@
     fast-xml-parser "^4.4.1"
     tslib "^2.5.0"
 
+"@aws-amplify/storage@^6.7.11":
+  version "6.7.13"
+  resolved "https://registry.npmjs.org/@aws-amplify/storage/-/storage-6.7.13.tgz#8dceb11ad4095594fc22f357692f32539e185b10"
+  integrity sha512-O670hgGJqmWOpyvTSHwbEK0Pw4s0nfEoIBHylg8n8CnzOfUkr+LFKS4fD3jEnlCG77YGe9rjfLy1ipSaKTkLlA==
+  dependencies:
+    "@aws-sdk/types" "3.398.0"
+    "@smithy/md5-js" "2.0.7"
+    buffer "4.9.2"
+    crc-32 "1.2.2"
+    fast-xml-parser "^4.4.1"
+    tslib "^2.5.0"
+
 "@aws-amplify/ui-react-core@3.1.1":
   version "3.1.1"
   resolved "https://registry.npmjs.org/@aws-amplify/ui-react-core/-/ui-react-core-3.1.1.tgz"
@@ -4599,6 +4611,13 @@
   version "16.18.121"
   resolved "https://registry.npmjs.org/@types/node/-/node-16.18.121.tgz"
   integrity sha512-Gk/pOy8H0cvX8qNrwzElYIECpcUn87w4EAEFXFvPJ8qsP9QR/YqukUORSy0zmyDyvdo149idPpy4W6iC5aSbQA==
+
+"@types/papaparse@^5.3.15":
+  version "5.3.15"
+  resolved "https://registry.npmjs.org/@types/papaparse/-/papaparse-5.3.15.tgz#7cafa16757a1d121422deefbb10b6310b224ecc4"
+  integrity sha512-JHe6vF6x/8Z85nCX4yFdDslN11d+1pr12E526X8WAfhadOeaOTx5AuIkvDKIBopfvlzpzkdMx4YyvSKCM9oqtw==
+  dependencies:
+    "@types/node" "*"
 
 "@types/parse-json@^4.0.0":
   version "4.0.2"
@@ -9759,6 +9778,11 @@ package-json-from-dist@^1.0.0:
   version "1.0.1"
   resolved "https://registry.npmjs.org/package-json-from-dist/-/package-json-from-dist-1.0.1.tgz"
   integrity sha512-UEZIS3/by4OC8vL3P2dTXRETpebLI2NiI5vIrjaD/5UtrkFX/tNbwjTSRAGC/+7CAo2pIcBaRgWmcBBHcsaCIw==
+
+papaparse@^5.5.2:
+  version "5.5.2"
+  resolved "https://registry.npmjs.org/papaparse/-/papaparse-5.5.2.tgz#fb67cc5a03ba8930cb435dc4641a25d6804bd4d7"
+  integrity sha512-PZXg8UuAc4PcVwLosEEDYjPyfWnTEhOrUfdv+3Bx+NuAb+5NhDmXzg5fHWmdCh1mP5p7JAZfFr3IMQfcntNAdA==
 
 param-case@^3.0.4:
   version "3.0.4"

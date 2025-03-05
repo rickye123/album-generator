@@ -64,7 +64,7 @@ export const addAlbum = async (albumData: AlbumData, userId: string): Promise<Gr
     return result;
   } catch (error) {
     console.error('Error adding album:', error);
-    throw new Error('Error adding album');
+    throw new Error('Error adding album', error!);
   }
 };
 
