@@ -6,6 +6,7 @@ import lightStyles from '../styles/modules/Media-light.module.css';
 import { AlbumData } from '../model';
 import Loader from '../components/Loader';
 import { getCurrentUserId } from '../core/users';
+import { getAlbumsByUser } from '../service/dataAccessors/albumDataAccesor';
 
 const Genres = () => {
   const [genres, setGenres] = useState<string[]>([]);
@@ -25,14 +26,22 @@ const Genres = () => {
       try {
         setLoading(true);
         const userId = (await getCurrentUserId()) || '';
-        const albums: AlbumData[] = await fetchAlbums(userId);
+        const albums: AlbumData[] = await getAlbumsByUser(userId);
+        for (const album of albums) {
+          if (album.genres === null || album.genres === undefined) {
+            console.log('Album:', album);
+          }
+          console.log('Genre:', album.genres);
+        }
         const uniqueGenres = Array.from(
           new Set(
             albums
-              .flatMap((album) => album.genres || []) // Flatten all genres into one array
+              .flatMap((album) => album.genres || []) // Flatten all genres into one array, skipping null/undefined
+              .filter((genre) => genre && genre.trim() !== '' || genre !== '') // Filter out invalid genres, including empty strings
               .map((genre) => genre.trim()) // Normalize genres
           )
         ).sort();
+        console.log('Unique Genre', uniqueGenres);
         setGenres(uniqueGenres);
       } catch (error) {
         console.error('Error fetching genres', error);
@@ -45,6 +54,8 @@ const Genres = () => {
   }, []);
 
   const groupedGenres = genres.reduce<Record<string, string[]>>((acc, genre) => {
+    console.log('Genre:', genre);
+    console.log('acc:', acc);
     const letter = genre[0].toUpperCase();
     if (!acc[letter]) {
       acc[letter] = [];

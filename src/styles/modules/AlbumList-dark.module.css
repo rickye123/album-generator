@@ -809,3 +809,23 @@
     font-size: 12px;
   }
 }
+
+.tooltip-inline {
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.8); /* Dark background for visibility */
+  color: black;
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  white-space: nowrap; /* Prevents text wrapping */
+  z-index: 1000; /* Ensures it appears above everything */
+  left: 50%; /* Center it */
+  transform: translateX(-50%); /* Ensures it's properly centered */
+  pointer-events: none; /* Prevents interfering with mouse events */
+}
+
+@media (max-width: 768px) {
+  .tooltip-inline {
+    font-size: 12px;
+  }
+}

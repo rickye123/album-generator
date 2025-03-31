@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { fetchLists, addList, removeList, fetchAlbumListEntriesForListId, removeAlbumFromList } from '../api/amplifyApi';
+import { fetchAlbumListEntriesForListId, removeAlbumFromList } from '../api/amplifyApi';
 import { ListData } from '../model';
 import darkStyles from '../styles/modules/Lists-dark.module.css';
 import lightStyles from '../styles/modules/Lists-light.module.css';
 import Loader from '../components/Loader';
 import { getCurrentUserId } from '../core/users';
+import { createList, deleteList, getListsByUser } from '../service/dataAccessors/listDataAccessor';
 const Lists: React.FC = () => {
   const [listName, setListName] = useState('');
   const [userId, setUserId] = useState('');
@@ -27,7 +28,7 @@ const Lists: React.FC = () => {
         const userId = await getCurrentUserId();
         if (userId) {
           setUserId(userId);
-          const result = await fetchLists(userId);
+          const result = await getListsByUser(userId);
           const sortedLists = result 
             ? result.sort((a: ListData, b: ListData) => a.name.localeCompare(b.name)) 
             : [];
@@ -55,7 +56,7 @@ const Lists: React.FC = () => {
     }
 
     try {
-      const newList = await addList(listName, userId);
+      const newList = await createList(listName, userId);
       if (newList) {
         setLists([...lists, newList]);
         setListName('');
@@ -81,7 +82,7 @@ const Lists: React.FC = () => {
         });
       }
 
-      await removeList(id);
+      await deleteList(id, userId);
       setLists(lists.filter((list) => list.id !== id));
     } catch (error) {
       console.error('Error deleting list:', error);

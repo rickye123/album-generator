@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { fetchRandomAlbum } from '../api/amplifyApi';
 import { AlbumData } from '../model';
 import darkStyles from '../styles/modules/LandingPage-dark.module.css';
 import lightStyles from '../styles/modules/LandingPage-light.module.css';
 import { Link } from 'react-router-dom';
 import Loader from '../components/Loader';
 import { getCurrentUserId } from '../core/users';
+import { getRandomAlbum } from '../service/dataAccessors/albumDataAccesor';
 
 const LandingPage = () => {
   const [album, setAlbum] = useState<AlbumData | null>(null);
@@ -21,7 +21,7 @@ const LandingPage = () => {
       console.log('User id is ', userId);
       setLoading(true);
       if (userId) {
-        const randomAlbum = await fetchRandomAlbum(userId);
+        const randomAlbum = await getRandomAlbum(userId);
         setAlbum(randomAlbum);
       } else {
         console.error('User ID is undefined');

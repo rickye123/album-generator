@@ -1,13 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import {
-  addAlbumToList,
   fetchAlbumListEntry,
-  fetchAlbums,
-  fetchAlbumsByListId,
-  getUnplayedAlbumsInList,
-  removeAlbumFromList,
-  togglePlayedAlbumList,
+  fetchAlbumsByListId
 } from '../api/amplifyApi';
 import darkStyles from '../styles/modules/AlbumList-dark.module.css';
 import lightStyles from '../styles/modules/AlbumList-light.module.css';
@@ -18,9 +13,13 @@ import AlbumTableBlock from '../components/AlbumTableBlock';
 import RandomAlbumOverlay from '../components/RandomAlbumOverlay';
 import Loader from '../components/Loader';
 import { getCurrentUserId } from '../core/users';
+import { getAlbumsByUser } from '../service/dataAccessors/albumDataAccesor';
+import { addAlbumToListForUser, getAlbumsByListId, getUnplayedAlbumsInList, togglePlayedAlbum } from '../service/dataAccessors/albumListDataAccessor';
+import { deleteAlbumFromListForUser } from '../service/dataAccessors/listDataAccessor';
 
 const ListPage: React.FC = () => {
   const { listId } = useParams<{ listId: string }>();
+  const [loadingAlbums, setLoadingAlbums] = useState<{ [key: string]: boolean }>({});
   const [userId, setUserId] = useState<string | null>(null);
   const [showTooltip, setShowTooltip] = useState(false);
   const [touchTimer, setTouchTimer] = useState<number | null>(null);
@@ -46,7 +45,7 @@ const ListPage: React.FC = () => {
         const userId = await getCurrentUserId();
         setUserId(userId || null);
         setLoading(true);
-        const foundList = await fetchAlbumsByListId(listId!);
+        const foundList = await getAlbumsByListId(listId!);
         setList(foundList || null);
       } catch (err) {
         console.error('Error fetching collection:', err);
@@ -91,8 +90,9 @@ const ListPage: React.FC = () => {
         throw new Error('Failed to find AlbumList entry for removal.');
       }
 
-      await removeAlbumFromList(albumListEntry.id);
+      await deleteAlbumFromListForUser(albumListEntry.id, listId!, userId!);
       const foundList = await fetchAlbumsByListId(listId!);
+      setAddedAlbums((prev) => ({ ...prev, [albumId]: false }));
       setList(foundList || null);
     } catch (err) {
       console.error('Error removing album:', err);
@@ -122,7 +122,7 @@ const ListPage: React.FC = () => {
       if (!albumListEntry?.id) {
         throw new Error('Failed to find AlbumList entry for toggle.');
       }
-      await togglePlayedAlbumList(albumListEntry.id, !played);
+      await togglePlayedAlbum(userId!, listId, albumListEntry.id, !played);
       const foundList = await fetchAlbumsByListId(listId!);
       setList(foundList || null);
     } catch (err) {
@@ -143,7 +143,7 @@ const ListPage: React.FC = () => {
       for (const album of list!.albums) {
         const albumListEntry = await fetchAlbumListEntry(list!.id, album.album.id);
         if (albumListEntry?.id && albumListEntry.played) {
-          await togglePlayedAlbumList(albumListEntry.id, false);
+          await togglePlayedAlbum(userId!, list!.id, albumListEntry.id, false);
         }
       }
       const foundList = await fetchAlbumsByListId(listId!);
@@ -159,10 +159,10 @@ const ListPage: React.FC = () => {
       if (!userId) {
         throw new Error('User ID is undefined');
       }
-      const albums = await fetchAlbums(userId);
+      const albums = await getAlbumsByUser(userId);
       // cycle through all albums and remove any that are already in the list
       const albumIds = list?.albums.map((album) => album.album.id) || [];
-      const filteredAlbums = albums.filter((album) => !albumIds.includes(album.id));
+      const filteredAlbums = albums.filter((album: { id: string; }) => !albumIds.includes(album.id));
       setAllAlbums(filteredAlbums);
       setShowAddAlbumOverlay(true);
     } catch (err) {
@@ -187,9 +187,10 @@ const ListPage: React.FC = () => {
   };
 
   const handleAddAlbumToList = async (albumId: string) => {
+    setLoadingAlbums((prev) => ({ ...prev, [albumId]: true })); // Set album as loading
     try {
       if (list) {
-        await addAlbumToList(albumId, list.id, userId || '');
+        await addAlbumToListForUser(albumId, list.id, userId || '');
       } else {
         throw new Error('List is null');
       }
@@ -200,6 +201,8 @@ const ListPage: React.FC = () => {
       console.error('Error adding album to collection:', err);
       setError('Failed to add album. Please try again.');
       alert('Album failed to be added to collection');
+    } finally {
+      setLoadingAlbums((prev) => ({ ...prev, [albumId]: false })); // Remove from loading state
     }
   };
 
@@ -213,6 +216,9 @@ const ListPage: React.FC = () => {
   };
 
   const renderAddButton = (albumId: string) => {
+    if (loadingAlbums[albumId]) {
+      return <Loader />; // Show loader while adding
+    }
     return addedAlbums[albumId] ? (
       <span className={styles['added-tick']}>&#10003;</span>
     ) : (

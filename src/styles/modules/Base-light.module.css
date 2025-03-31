@@ -1,0 +1,11 @@
+  [data-amplify-authenticator] {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: var(--light-default); /* Dark background */
+  }
+
+ [data-amplify-router] {
+    background-color: var(--light-default);
+  }

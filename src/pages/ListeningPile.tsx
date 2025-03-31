@@ -102,14 +102,14 @@ const handleSwipeDown = async (id: string) => {
 
   return (
     <div className={styles['listening-pile-page']}>
-      <h1>Listening Pile</h1>
+      <h1>Queue</h1>
 
       {loading ? (
         <Loader />
       ) : (
         <>
           {listeningPile.length === 0 ? (
-            <p>No albums in the pile.</p>
+            <p>No albums in the queue.</p>
           ) : (
             <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
               <SortableContext items={listeningPile.map((item) => item.id)} strategy={verticalListSortingStrategy}>

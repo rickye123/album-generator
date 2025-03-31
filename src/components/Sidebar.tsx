@@ -81,13 +81,8 @@ const Sidebar: React.FC<SidebarProps> = ({ user, signOut }) => {
               </Link>
             </li>
             <li>
-              <Link to="/listeningPile" onClick={toggleSidebar}>
-                Listening Pile
-              </Link>
-            </li>
-            <li>
-              <Link to="/add-album" onClick={toggleSidebar}>
-                Add Album
+              <Link to="/queue" onClick={toggleSidebar}>
+                Queue
               </Link>
             </li>
             <li>
@@ -113,6 +108,11 @@ const Sidebar: React.FC<SidebarProps> = ({ user, signOut }) => {
             <li>
               <Link to="/settings" onClick={toggleSidebar}>
                 Settings
+              </Link>
+            </li>
+            <li>
+              <Link to="/add-album" onClick={toggleSidebar}>
+                Add Album
               </Link>
             </li>
           </ul>

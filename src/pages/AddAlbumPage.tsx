@@ -4,9 +4,6 @@ import {
   fetchAlbumBySpotifyUrl
 } from '../api/spotifyApi';
 import {
-  addAlbum,
-  fetchLists,
-  addAlbumToList,
   uploadImageToS3
 } from '../api/amplifyApi';
 import darkStyles from '../styles/modules/AddAlbumPage-dark.module.css';
@@ -14,6 +11,9 @@ import lightStyles from '../styles/modules/AddAlbumPage-light.module.css';
 import { ListData } from '../model';
 import { getCurrentUserId } from '../core/users';
 import BulkAddAlbums from '../components/BulkAddAlbums';
+import { getListsByUser } from '../service/dataAccessors/listDataAccessor';
+import { createAlbum } from '../service/dataAccessors/albumDataAccesor';
+import { addAlbumToListForUser } from '../service/dataAccessors/albumListDataAccessor';
 
 const AddAlbumPage = () => {
   const [artist, setArtist] = useState('');
@@ -41,7 +41,7 @@ const AddAlbumPage = () => {
         const userId = await getCurrentUserId();
         if (userId) {
           setUserId(userId);
-          const result = await fetchLists(userId);
+          const result = await getListsByUser(userId);
           setLists(result || []);
         } else {
           setError('User ID not found.');
@@ -109,10 +109,10 @@ const AddAlbumPage = () => {
 
       }
 
-      await addAlbum(album, userId);
+      await createAlbum(album, userId);
 
       if (selectedListId) {
-        await addAlbumToList(album.id, selectedListId, userId);
+        await addAlbumToListForUser(album.id, selectedListId, userId);
         setSuccessMessage(`Album ${album.name} added successfully to the selected list!`);
       } else {
         setSuccessMessage(`Album ${album.name} added successfully!`);

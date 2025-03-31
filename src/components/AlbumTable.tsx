@@ -45,6 +45,12 @@ const AlbumTable: React.FC<AlbumTableProps> = ({
     currentAlbums,
     filteredAlbums,
     indexOfLastAlbum,
+    handleMouseEnter,
+    handleMouseLeave,
+    handleTouchStart,
+    handleTouchEnd,
+    activeTooltip,
+    lists
   } = useAlbumTable(albums);
 
   const albumsPerPage = 10; // Define albumsPerPage
@@ -80,11 +86,20 @@ const AlbumTable: React.FC<AlbumTableProps> = ({
         </thead>
         <tbody>
           {currentAlbums.map((albumList) => (
-            <tr key={albumList.album.id} className={albumList.album.hideAlbum ? styles['hidden-album'] : styles['visible-album']}>
+            <tr key={albumList.album.id} className={albumList.album.hideAlbum ? styles['hidden-album'] : styles['visible-album']}
+              onMouseEnter={() => handleMouseEnter(albumList.album.id)}
+              onMouseLeave={handleMouseLeave}
+              onTouchStart={() => handleTouchStart(albumList.album.id)}
+              onTouchEnd={handleTouchEnd}>
               <td className={styles['artist-album-cell']}>
                 <Link to={`/albums/${albumList.album.id}`}>
                   <img src={albumList.album.imageUrl} alt={albumList.album.name} className={styles['list-page-album-image']} />
                 </Link>
+                {activeTooltip === albumList.album.id && lists && (
+                  <div className={styles['tooltip-inline']}>
+                    <p>{lists}</p>
+                  </div>
+                )}
               </td>
               <td>
                 <h3 className={styles['list-page-album-name']}>{albumList.album.name}</h3>

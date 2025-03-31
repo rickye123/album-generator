@@ -5,7 +5,7 @@ export async function fetchUser() {
         const user = await getCurrentUser();
         console.log("User Info:", user);
         if (user.signInDetails) {
-            console.log("User ID (sub):", user.signInDetails.loginId); // 👈 Correct way to get userId
+            console.log("User ID (sub):", user.signInDetails.loginId);
         } else {
             console.log("User signInDetails is undefined");
         }

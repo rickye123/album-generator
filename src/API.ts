@@ -177,6 +177,36 @@ export type ModelListeningPileEntryConnection = {
   nextToken?: string | null,
 };
 
+export type ModelAlbumFilterInput = {
+  id?: ModelIDInput | null,
+  name?: ModelStringInput | null,
+  artist?: ModelStringInput | null,
+  spotifyUrl?: ModelStringInput | null,
+  release_date?: ModelStringInput | null,
+  imageUrl?: ModelStringInput | null,
+  genres?: ModelStringInput | null,
+  hideAlbum?: ModelBooleanInput | null,
+  userId?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+  and?: Array< ModelAlbumFilterInput | null > | null,
+  or?: Array< ModelAlbumFilterInput | null > | null,
+  not?: ModelAlbumFilterInput | null,
+};
+
+export type ModelBooleanInput = {
+  ne?: boolean | null,
+  eq?: boolean | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+};
+
+export type ModelAlbumConnection = {
+  __typename: "ModelAlbumConnection",
+  items:  Array<Album | null >,
+  nextToken?: string | null,
+};
+
 export type CreateListInput = {
   id?: string | null,
   name: string,
@@ -229,13 +259,6 @@ export type ModelAlbumConditionInput = {
   not?: ModelAlbumConditionInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
-};
-
-export type ModelBooleanInput = {
-  ne?: boolean | null,
-  eq?: boolean | null,
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
 };
 
 export type UpdateAlbumInput = {
@@ -300,29 +323,6 @@ export type ModelListeningPileEntryConditionInput = {
   updatedAt?: ModelStringInput | null,
 };
 
-export type ModelAlbumFilterInput = {
-  id?: ModelIDInput | null,
-  name?: ModelStringInput | null,
-  artist?: ModelStringInput | null,
-  spotifyUrl?: ModelStringInput | null,
-  release_date?: ModelStringInput | null,
-  imageUrl?: ModelStringInput | null,
-  genres?: ModelStringInput | null,
-  hideAlbum?: ModelBooleanInput | null,
-  userId?: ModelStringInput | null,
-  createdAt?: ModelStringInput | null,
-  updatedAt?: ModelStringInput | null,
-  and?: Array< ModelAlbumFilterInput | null > | null,
-  or?: Array< ModelAlbumFilterInput | null > | null,
-  not?: ModelAlbumFilterInput | null,
-};
-
-export type ModelAlbumConnection = {
-  __typename: "ModelAlbumConnection",
-  items:  Array<Album | null >,
-  nextToken?: string | null,
-};
-
 export type ModelAlbumListFilterInput = {
   id?: ModelIDInput | null,
   albumId?: ModelIDInput | null,
@@ -336,6 +336,12 @@ export type ModelAlbumListFilterInput = {
   not?: ModelAlbumListFilterInput | null,
 };
 
+export enum ModelSortDirection {
+  ASC = "ASC",
+  DESC = "DESC",
+}
+
+
 export type ModelIDKeyConditionInput = {
   eq?: string | null,
   le?: string | null,
@@ -345,12 +351,6 @@ export type ModelIDKeyConditionInput = {
   between?: Array< string | null > | null,
   beginsWith?: string | null,
 };
-
-export enum ModelSortDirection {
-  ASC = "ASC",
-  DESC = "DESC",
-}
-
 
 export type ModelSubscriptionListFilterInput = {
   id?: ModelSubscriptionIDInput | null,
@@ -612,6 +612,30 @@ export type CustomListListeningPileEntriesQuery = {
       },
       createdAt: string,
       updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type CustomListAlbumsQueryVariables = {
+  filter?: ModelAlbumFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type CustomListAlbumsQuery = {
+  listAlbums?:  {
+    __typename: "ModelAlbumConnection",
+    items:  Array< {
+      __typename: "Album",
+      id: string,
+      name: string,
+      artist: string,
+      spotifyUrl: string,
+      release_date: string,
+      imageUrl?: string | null,
+      genres?: Array< string | null > | null,
+      hideAlbum?: boolean | null,
     } | null >,
     nextToken?: string | null,
   } | null,
@@ -1230,6 +1254,58 @@ export type ListListeningPileEntriesQuery = {
   } | null,
 };
 
+export type ListsByUserQueryVariables = {
+  userId: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelListFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListsByUserQuery = {
+  listsByUser?:  {
+    __typename: "ModelListConnection",
+    items:  Array< {
+      __typename: "List",
+      id: string,
+      name: string,
+      userId: string,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type AlbumsByUserQueryVariables = {
+  userId: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelAlbumFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type AlbumsByUserQuery = {
+  albumsByUser?:  {
+    __typename: "ModelAlbumConnection",
+    items:  Array< {
+      __typename: "Album",
+      id: string,
+      name: string,
+      artist: string,
+      spotifyUrl: string,
+      release_date: string,
+      imageUrl?: string | null,
+      genres?: Array< string | null > | null,
+      hideAlbum?: boolean | null,
+      userId: string,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
 export type AlbumListsByAlbumIdAndIdQueryVariables = {
   albumId: string,
   id?: ModelIDKeyConditionInput | null,
@@ -1282,6 +1358,31 @@ export type AlbumListsByListIdAndIdQuery = {
   } | null,
 };
 
+export type AlbumListsByUserQueryVariables = {
+  userId: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelAlbumListFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type AlbumListsByUserQuery = {
+  albumListsByUser?:  {
+    __typename: "ModelAlbumListConnection",
+    items:  Array< {
+      __typename: "AlbumList",
+      id: string,
+      albumId: string,
+      listId: string,
+      played: boolean,
+      userId: string,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
 export type ListeningPileEntriesByAlbumIdAndIdQueryVariables = {
   albumId: string,
   id?: ModelIDKeyConditionInput | null,
@@ -1293,6 +1394,30 @@ export type ListeningPileEntriesByAlbumIdAndIdQueryVariables = {
 
 export type ListeningPileEntriesByAlbumIdAndIdQuery = {
   listeningPileEntriesByAlbumIdAndId?:  {
+    __typename: "ModelListeningPileEntryConnection",
+    items:  Array< {
+      __typename: "ListeningPileEntry",
+      id: string,
+      albumId: string,
+      order: number,
+      userId: string,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type ListeningPileEntriesByUserQueryVariables = {
+  userId: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelListeningPileEntryFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListeningPileEntriesByUserQuery = {
+  listeningPileEntriesByUser?:  {
     __typename: "ModelListeningPileEntryConnection",
     items:  Array< {
       __typename: "ListeningPileEntry",

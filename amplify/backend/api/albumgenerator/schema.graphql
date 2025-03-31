@@ -6,7 +6,7 @@ type List @model {
   id: ID!
   name: String!
   albums: [AlbumList] @hasMany(indexName: "byList", fields: ["id"])
-  userId: String!
+  userId: String! @index(name: "byUser", queryField: "listsByUser")
 }
 
 type Album @model {
@@ -20,7 +20,7 @@ type Album @model {
   hideAlbum: Boolean
   lists: [AlbumList] @hasMany(indexName: "byAlbum", fields: ["id"])
   ListeningPileEntry: ListeningPileEntry @hasOne(fields: ["id"])
-  userId: String!
+  userId: String! @index(name: "byUser", queryField: "albumsByUser")
 }
 
 type AlbumList @model {
@@ -30,7 +30,7 @@ type AlbumList @model {
   played: Boolean!
   album: Album! @belongsTo(fields: ["albumId"])
   list: List! @belongsTo(fields: ["listId"])
-  userId: String!
+  userId: String! @index(name: "byUser", queryField: "albumListsByUser")
 }
 
 type ListeningPileEntry @model {
@@ -38,7 +38,7 @@ type ListeningPileEntry @model {
   albumId: ID! @index(name: "byAlbum", sortKeyFields: ["id"])
   order: Int!
   album: Album! @belongsTo(fields: ["albumId"])  # This defines the relationship
-  userId: String!
+  userId: String! @index(name: "byUser", queryField: "listeningPileEntriesByUser")
 }
 
 type Mutation {

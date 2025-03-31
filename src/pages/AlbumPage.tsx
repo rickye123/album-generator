@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { fetchAlbumById, fetchWikipediaLink, updateAlbumDetails } from '../api/amplifyApi';
+import { fetchAlbumById, fetchWikipediaLink } from '../api/amplifyApi';
 import { fetchSpotifyAlbumDetails } from '../api/spotifyApi';
 import AlbumDetails from '../components/AlbumDetails';
 import CollapsibleSection from '../components/CollapsibleSection';
@@ -11,9 +11,12 @@ import Wikipedia from '../components/Wikipedia';
 import Discogs from '../components/Discogs';
 import TrackList from '../components/TrackList';
 import Loader from '../components/Loader';
+import { getCurrentUserId } from '../core/users';
+import { updateAlbumDetailsByUser } from '../service/dataAccessors/albumDataAccesor';
 
 const AlbumPage = () => {
   const { id } = useParams<{ id: string }>();
+  const [userId, setUserId] = useState<string | null>(null);
   const [album, setAlbum] = useState<AlbumData | null>(null);
   const [spotifyDetails, setSpotifyDetails] = useState<SpotifyAlbumDetails | null>(null);
   const [wikipediaLink, setWikipediaLink] = useState<string | null>(null);
@@ -28,6 +31,8 @@ const AlbumPage = () => {
   useEffect(() => {
     const loadAlbum = async () => {
       if (id) {
+        const userId = await getCurrentUserId();
+        setUserId(userId || null);
         const fetchedAlbum = await fetchAlbumById(id);
         setAlbum(fetchedAlbum);
       }
@@ -58,7 +63,7 @@ const AlbumPage = () => {
       setAlbum(updatedAlbum);
 
       try {
-        await updateAlbumDetails(updatedAlbum);
+        await updateAlbumDetailsByUser(updatedAlbum, userId!);
         console.log('Album updated successfully');
       } catch (error) {
         console.error('Failed to update album:', error);

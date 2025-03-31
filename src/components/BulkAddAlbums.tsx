@@ -148,7 +148,7 @@ const BulkAddAlbums = () => {
     const handleDeleteAlbum = async (albumId: string, userId: string) => {
         try {
             // get album list entry (if one exists) and delete it
-            const results = await fetchAlbumListEntriesForAlbumId(albumId, userId);
+            const results = await fetchAlbumListEntriesForAlbumId(albumId);
             if (results) {
                 if (results) {
                     for (const element of results) {

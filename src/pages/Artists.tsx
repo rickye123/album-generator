@@ -1,11 +1,11 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { fetchAlbums } from '../api/amplifyApi';
+import { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import darkStyles from '../styles/modules/Media-dark.module.css';
 import lightStyles from '../styles/modules/Media-light.module.css';
 import { AlbumData } from '../model';
 import Loader from '../components/Loader';
 import { getCurrentUserId } from '../core/users';
+import { getAlbumsByUser } from '../service/dataAccessors/albumDataAccesor';
 
 const ArtistsPage = () => {
   const [artists, setArtists] = useState<string[]>([]);
@@ -23,7 +23,7 @@ const ArtistsPage = () => {
       try {
         setLoading(true);
         const userId = (await getCurrentUserId()) || '';
-        const albums: AlbumData[] = await fetchAlbums(userId);
+        const albums: AlbumData[] = await getAlbumsByUser(userId);
         const uniqueArtists = Array.from(new Set(albums.map(album => album.artist))).sort((a, b) => {
 
           return stripThePrefix(a).localeCompare(stripThePrefix(b));

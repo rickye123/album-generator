@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
 import { AlbumListData } from '../model';
+import { getAlbumListsWithNames } from '../service/dataAccessors/albumListDataAccessor';
 
 const useAlbumTable = (albums: AlbumListData[]) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -7,6 +8,9 @@ const useAlbumTable = (albums: AlbumListData[]) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortKey, setSortKey] = useState('artist');
   const [sortDirection, setSortDirection] = useState('asc');
+  const [activeTooltip, setActiveTooltip] = useState<string | null>(null);
+  const [lists, setLists] = useState<string>('');
+  const [touchTimer, setTouchTimer] = useState<number | null>(null);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
@@ -33,6 +37,41 @@ const useAlbumTable = (albums: AlbumListData[]) => {
   const stripThePrefix = (name: string) => {
     const lowerCaseName = name.toLowerCase();
     return lowerCaseName.startsWith("the ") ? name.slice(4) : name;
+  };
+
+  // Tooltip event handlers
+  const handleMouseEnter = (albumId: string) => {
+    setActiveTooltip(albumId);
+    retrieveStats(albumId);
+  }
+  const handleMouseLeave = () => {
+    setActiveTooltip(null);
+    setLists('');
+  }
+  
+  const handleTouchStart = (albumId: string) => {
+    const timer = window.setTimeout(() => setActiveTooltip(albumId), 500); // Show after holding for 500ms
+    setTouchTimer(timer);
+    retrieveStats(albumId);
+  };
+
+  const handleTouchEnd = () => {
+    if (touchTimer) {
+      clearTimeout(touchTimer);
+      setTouchTimer(null);
+    }
+    setActiveTooltip(null);
+    setLists('');
+  };
+
+  const retrieveStats = async (albumId: string) => {
+    if (lists.length <= 0) {
+      const lists = await getAlbumListsWithNames(albumId);
+      console.log('Lists:', lists);
+      const listNames = lists.map((list: { list: { name: any; }; }) => list.list.name).join(', ');
+      console.log('List names:', listNames);
+      setLists(listNames);
+    }
   };
 
   const indexOfLastAlbum = currentPage * albumsPerPage;
@@ -77,6 +116,13 @@ const useAlbumTable = (albums: AlbumListData[]) => {
     currentAlbums,
     filteredAlbums,
     indexOfLastAlbum,
+    handleMouseEnter,
+    handleMouseLeave,
+    handleTouchStart,
+    handleTouchEnd,
+    activeTooltip,
+    lists,
+    retrieveStats
   };
 };
 

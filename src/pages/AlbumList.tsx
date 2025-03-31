@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { fetchAlbums, fetchLists, addAlbumToList, removeAlbum, fetchAlbumListEntriesForAlbumId, removeAlbumFromList, toggleHideAlbum, addAlbumToListeningPile, removeListeningPileEntry } from '../api/amplifyApi';
+import { addAlbumToListeningPile, fetchAlbums } from '../api/amplifyApi';
 import { AlbumData, AlbumListData, ListData } from '../model';
 import darkStyles from '../styles/modules/AlbumList-dark.module.css';
 import lightStyles from '../styles/modules/AlbumList-light.module.css';
@@ -10,6 +10,9 @@ import AlbumTableBlock from '../components/AlbumTableBlock'; // Import the new c
 import RandomAlbumOverlay from '../components/RandomAlbumOverlay';
 import Loader from '../components/Loader';
 import { getCurrentUserId } from '../core/users';
+import { deleteAlbumByUser, getAlbumsByUser } from '../service/dataAccessors/albumDataAccesor';
+import { getListsByUser } from '../service/dataAccessors/listDataAccessor';
+import { addAlbumToListForUser, toggleHideAlbumForUser } from '../service/dataAccessors/albumListDataAccessor';
 
 const AlbumList = () => {
   const [albums, setAlbums] = useState<AlbumData[]>([]);
@@ -67,7 +70,7 @@ const AlbumList = () => {
         throw new Error('User ID is undefined');
       }
       setUserId(userId)
-      const albumList = await fetchAlbums(userId);
+      const albumList = await getAlbumsByUser(userId);
       albumList.filter((album: AlbumData) => album.hideAlbum === false);
       const filteredAlbums = artist
         ? albumList.filter((album: AlbumData) => album.artist === decodeURIComponent(artist))
@@ -93,7 +96,7 @@ const AlbumList = () => {
 
   const openOverlay = async (album: AlbumData) => {
     try {
-      const listData = await fetchLists(userId);
+      const listData = await getListsByUser(userId);
       setLists(listData);
       setSelectedAlbum(album);
       setShowOverlay(true);
@@ -113,7 +116,7 @@ const AlbumList = () => {
     if (!selectedAlbum) return;
 
     try {
-      await addAlbumToList(selectedAlbum.id, listId, userId);
+      await addAlbumToListForUser(selectedAlbum.id, listId, userId);
       alert(`${selectedAlbum.name} added to the list successfully!`);
       closeOverlay();
     } catch (err) {
@@ -125,21 +128,7 @@ const AlbumList = () => {
   const handleDeleteAlbum = async (albumId: string, listId: string) => {
     try {
       // get album list entry (if one exists) and delete it
-      const results = await fetchAlbumListEntriesForAlbumId(albumId, userId);
-      if(results) {
-        if (results) {
-          for (const element of results) {
-            console.log(`Deleting AlbumList entry ${element.id} for album ${albumId}`);
-            await removeAlbumFromList(element.id);
-
-          }
-        }
-      }
-    
-      console.log('Deleting ListeningPile entry for album:', albumId);
-      await removeListeningPileEntry(albumId, userId);
-      
-      await removeAlbum(albumId);
+      deleteAlbumByUser(albumId, userId);
       setAlbums((prevAlbums) => prevAlbums.filter((album) => album.id !== albumId));
     } catch (err) {
       console.error('Error deleting album:', err);
@@ -155,7 +144,7 @@ const AlbumList = () => {
           album.id === albumId ? { ...album, hideAlbum: !hidden } : album
         )
       );
-      await toggleHideAlbum(albumId, !hidden); // Toggle the current state
+      await toggleHideAlbumForUser(userId, albumId, !hidden); // Toggle the current state
       console.log(`Album ${hidden ? 'unhidden' : 'hidden'} successfully!`);
     } catch (error) {
       console.error('Error hiding album:', error);
