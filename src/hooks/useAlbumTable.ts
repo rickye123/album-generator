@@ -1,9 +1,10 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { AlbumListData } from '../model';
 import { getAlbumListsWithNames } from '../service/dataAccessors/albumListDataAccessor';
 
 const useAlbumTable = (albums: AlbumListData[]) => {
-  const [currentPage, setCurrentPage] = useState(1);
+  const storedPage = localStorage.getItem('currentPage');
+  const [currentPage, setCurrentPage] = useState(storedPage ? parseInt(storedPage) : 1);
   const [albumsPerPage] = useState(10);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortKey, setSortKey] = useState('artist');
@@ -12,17 +13,33 @@ const useAlbumTable = (albums: AlbumListData[]) => {
   const [lists, setLists] = useState<string>('');
   const [touchTimer, setTouchTimer] = useState<number | null>(null);
 
+  useEffect(() => {
+    localStorage.setItem('currentPage', currentPage.toString());
+  }, [currentPage]);
+
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
     setCurrentPage(1);
   };
 
-  const handlePageChange = (direction: 'next' | 'prev') => {
-    if (direction === 'next' && indexOfLastAlbum < filteredAlbums.length) {
-      setCurrentPage((prev) => prev + 1);
-    } else if (direction === 'prev' && currentPage > 1) {
-      setCurrentPage((prev) => prev - 1);
-    }
+  const handlePageChange = (direction: 'next' | 'prev' | 'first' | 'last') => {
+    setCurrentPage((prev) => {
+      let newPage;
+      if (direction === 'next' && indexOfLastAlbum < filteredAlbums.length) {
+        newPage = prev + 1;
+      } else if (direction === 'prev' && prev > 1) {
+        newPage = prev - 1;
+      } else if (direction === 'first') {
+        newPage = 1;
+      } else if (direction === 'last') {
+        newPage = Math.ceil(filteredAlbums.length / albumsPerPage);
+      } else {
+        return prev; // No change
+      }
+  
+      localStorage.setItem('currentPage', String(newPage)); // Save page state
+      return newPage;
+    });
   };
 
   const handleSortChange = (key: string) => {

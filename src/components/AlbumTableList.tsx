@@ -147,6 +147,9 @@ const AlbumTableList: React.FC<AlbumTableListProps> = ({
                   </tbody>
                 </table>
                 <div className={styles['pagination-controls']}>
+                  <button onClick={() => handlePageChange('first')} disabled={currentPage === 1}>
+                    First
+                  </button>
                   <button onClick={() => handlePageChange('prev')} disabled={currentPage === 1}>
                     Previous
                   </button>
@@ -158,6 +161,12 @@ const AlbumTableList: React.FC<AlbumTableListProps> = ({
                     disabled={indexOfLastAlbum >= filteredAlbums.length}
                   >
                     Next
+                  </button>
+                  <button
+                    onClick={() => handlePageChange('last')}
+                    disabled={indexOfLastAlbum >= filteredAlbums.length}
+                  >
+                    Last
                   </button>
                 </div>
               </>
