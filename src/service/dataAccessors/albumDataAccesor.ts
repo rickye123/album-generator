@@ -1,7 +1,7 @@
 import { GraphQLResult } from "@aws-amplify/api-graphql";
 import { AlbumData } from "../../model";
 import { addAlbum, fetchAlbums, removeAlbum, removeListeningPileEntry, updateAlbumDetails } from "../../api/amplifyApi";
-import { albumListWithNamesStore, albumStore, cacheData, clearAlbumCache, getCachedData } from "../../core/caching";
+import { albumStore, cacheData, clearAlbumCache, getCachedData } from "../../core/caching";
 import { getAlbumListEntriesForAlbumId } from "./albumListDataAccessor";
 import { deleteAlbumFromList } from "./listDataAccessor";
 
@@ -13,8 +13,13 @@ export const createAlbum = async (albumData: AlbumData, userId: string): Promise
 export const getRandomAlbum = async (userId: string) => {
   const albums = await getAlbumsByUser(userId);
   if (albums.length > 0) {
-    const randomIndex = Math.floor(Math.random() * albums.length);
-    return albums[randomIndex];
+    const hideAlbumsFlag = localStorage.getItem('hideAlbums') === 'true';
+
+    const albumsToUse = hideAlbumsFlag
+      ? albums.filter((album: AlbumData) => album.hideAlbum !== true)
+      : albums;
+    const randomIndex = Math.floor(Math.random() * albumsToUse.length);
+    return albumsToUse[randomIndex];
   }
   return null;
 };

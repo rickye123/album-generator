@@ -3,13 +3,16 @@ import darkStyles from '../styles/modules/Settings-dark.module.css';
 import lightStyles from '../styles/modules/Settings-light.module.css';
 const Settings: React.FC = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [hideAlbums, setHideAlbums] = useState<boolean>(false);
   const [landingPage, setLandingPage] = useState<'list' | 'albums' | 'year'>('list');
   const [selectedList, setSelectedList] = useState<string>('defaultList');
   const [randomizationMethod, setRandomizationMethod] = useState<'alphabetical' | 'popularity' | 'custom'>('alphabetical');
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme') || 'light';
+    const savedHideAlbums = localStorage.getItem('hideAlbums') || 'false';
     setTheme(savedTheme as 'light' | 'dark');
+    setHideAlbums(savedHideAlbums === 'true');
   
     // CSS Modules will handle class scoping, so no need for dynamic imports
     document.documentElement.setAttribute('data-theme', savedTheme);
@@ -19,7 +22,13 @@ const Settings: React.FC = () => {
     setTheme(newTheme);
     localStorage.setItem('theme', newTheme);
     document.documentElement.setAttribute('data-theme', newTheme);
-  };  
+  };
+
+  const handleHideAlbumsChange = (checked: boolean) => {
+    setHideAlbums(checked);
+    localStorage.setItem('hideAlbums', JSON.stringify(checked));
+  };
+
   // Use the appropriate styles based on the current theme
   const styles = theme === 'dark' ? darkStyles : lightStyles;
   return (
@@ -94,7 +103,7 @@ const Settings: React.FC = () => {
       {landingPage === 'list' && (
         <section className={styles['settings-section']}>
           <h2>Select List</h2>
-          <select
+          <select className={styles['select-list']}
             value={selectedList}
             onChange={(e) => setSelectedList(e.target.value)}
           >
@@ -144,6 +153,25 @@ const Settings: React.FC = () => {
           </div>
         </section>
       )}
+
+      {/* Feature Flags */}
+      <section className={styles['settings-section']}>
+        <h2>Feature Flags</h2>
+        <div className={styles['landing-page-options']}>
+          <div className={styles['list-page-switch']}>
+            <label>
+              Hide Albums
+              <input
+                type="checkbox"
+                name="hideAlbums"
+                checked={hideAlbums}
+                onChange={(e) => handleHideAlbumsChange(e.target.checked)}
+              />
+              <span className={styles['list-page-slider']}></span>
+            </label>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };

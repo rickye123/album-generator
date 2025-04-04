@@ -71,7 +71,9 @@ const AlbumList = () => {
       }
       setUserId(userId)
       const albumList = await getAlbumsByUser(userId);
+
       albumList.filter((album: AlbumData) => album.hideAlbum === false);
+
       const filteredAlbums = artist
         ? albumList.filter((album: AlbumData) => album.artist === decodeURIComponent(artist))
         : albumList;
@@ -267,12 +269,13 @@ const AlbumList = () => {
         <button onClick={() => setView('list')} className={view === 'list' ? styles['active'] : ''}>List View</button>
         <button onClick={() => setView('block')} className={view === 'block' ? styles['active'] : ''}>Block View</button>
       </div>
-      <div className={styles['list-page-switch']}>
+      {localStorage.getItem('hideAlbums') === 'true' && (<div className={styles['list-page-switch']}>
         <label>
           <input type="checkbox" checked={showHidden} onChange={toggleShowHidden} />
           <span className={styles['list-page-slider']}></span>
         </label>
       </div>
+      )}
       {loading ? <Loader /> : albums.length === 0 ? (
         <p className={styles['no-albums']}>No albums found.</p>
       ) : (
