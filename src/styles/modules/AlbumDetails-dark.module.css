@@ -5,10 +5,10 @@
   gap: 10px;
   margin-bottom: 20px;
   max-width: 600px;
-  background: #464545;
+  background: var(--dark-page-background-color); /* Dark background */
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 4px 10px #737373;
+  box-shadow: 0 4px 10px rgba(201, 201, 201, 0.5);
 }
 
 .album-link {
@@ -19,7 +19,7 @@
 }
 
 .album-link:hover {
-  color: #14843d; /* Darker green for hover */
+  color: var(--hover-color); /* Darker green for hover */
   text-decoration: underline;
 }
 
@@ -32,7 +32,7 @@
   
   .album-details p {
     font-size: 1.2rem;
-    color: #ffffff;
+    color: var(--dark-reverse);
     margin: 0;
   }
 
@@ -50,7 +50,7 @@
     display: flex;
     align-items: center;
     text-decoration: none;
-    color: #1db954;
+    color: var(--spotify-green); /* Spotify green */
     font-weight: bold;
   }
   

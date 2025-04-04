@@ -5,7 +5,7 @@
   gap: 10px;
   margin-bottom: 20px;
   max-width: 600px;
-  background: #fff;
+  background: var(--light-page-background-color);
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -19,7 +19,7 @@
 }
 
 .album-link:hover {
-  color: #14843d; /* Darker green for hover */
+  color: var(--hover-color); /* Darker green for hover */
   text-decoration: underline;
 }
 
@@ -50,7 +50,7 @@
     display: flex;
     align-items: center;
     text-decoration: none;
-    color: #1db954;
+    color: var(--spotify-green); /* Spotify green */
     font-weight: bold;
   }
   
