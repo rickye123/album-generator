@@ -59,7 +59,7 @@ select {
   color: var(--dark-reverse);
 }
 
-button {
+.addAlbumPageButton button {
   background-color: var(--spotify-green);
   color: var(--dark-default);
   font-size: 1rem;
@@ -71,12 +71,12 @@ button {
   transition: background-color 0.3s ease;
 }
 
-button:disabled {
+.addAlbumPageButton button:disabled {
   background-color: var(--dark-button-disabled);
   cursor: not-allowed;
 }
 
-button:hover:not(:disabled) {
+.addAlbumPageButton button:hover:not(:disabled) {
   background-color: var(--hover-color);
 }
 

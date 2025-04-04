@@ -7,6 +7,7 @@
     padding: 0;
     background-color: var(--light-page-background-color);
     color: var(--light-contrast-color);
+    min-height: 100vh;
   }
   
   /* Page container */
@@ -18,12 +19,13 @@
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     text-align: center; /* Center-align content */
+    min-height: 100vh;
   }
   
   /* Header styling */
   .lists-page h1 {
     font-size: 2rem;
-    color: var(--light-reverse);
+    color: var(--spotify-green);
     border-bottom: 2px solid var(--light-off-default);
     padding-bottom: 10px;
     margin-bottom: 20px;
@@ -33,7 +35,7 @@
   .lists-page h2 {
     font-size: 1.5rem;
     margin: 20px 0 10px;
-    color: var(--light-more-contrast-color);
+    color: var(--spotify-green);
   }
   
   /* Form styling */
@@ -47,8 +49,9 @@
   
   .lists-page form label {
     font-size: 1rem;
-    color: var(--light-contrast-color);
+    color: var(--light-more-contrast-color);
     font-weight: bold;
+    text-align: center;
   }
   
   .lists-page form input {
@@ -68,7 +71,7 @@
   
   .lists-page form button {
     background-color: var(--spotify-green);
-    color: var(--light-for);
+    color: var(--light-default);
     font-size: 1rem;
     padding: 10px 20px;
     border: none;
@@ -115,12 +118,14 @@
     margin: 0;
     font-size: 1.2rem;
     color: var(--light-contrast-color);
+    text-align: left;
   }
   
   .lists-page li p {
     margin: 0;
     font-size: 0.9rem;
     color: var(--light-more-contrast-color);
+    text-align: left;
   }
   
   /* No lists message */

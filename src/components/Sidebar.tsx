@@ -10,6 +10,7 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ user, signOut }) => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
+  const [isMediaOpen, setIsMediaOpen] = useState(false); // State for Media dropdown
   const [showBurgerButton, setShowBurgerButton] = useState(true);
   const [theme] = useState<'light' | 'dark'>(() => {
     // Load theme preference from localStorage or default to 'light'
@@ -22,6 +23,10 @@ const Sidebar: React.FC<SidebarProps> = ({ user, signOut }) => {
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
+  };
+
+  const toggleMediaDropdown = () => {
+    setIsMediaOpen(!isMediaOpen);
   };
 
   const handleScroll = () => {
@@ -85,41 +90,36 @@ const Sidebar: React.FC<SidebarProps> = ({ user, signOut }) => {
                 Queue
               </Link>
             </li>
-            <li>
-              Media
-              <ul className={styles.submenu}>
-                <li>
-                  <Link to="/artists" onClick={toggleSidebar}>
-                    Artists
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/years" onClick={toggleSidebar}>
-                    Years
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/genres" onClick={toggleSidebar}>
-                    Genres
-                  </Link>
-                </li>
+            {/* Media Dropdown */}
+            <li className={styles['dropdown']}>
+              <button className={styles['dropdown-toggle']} onClick={toggleMediaDropdown}>
+                Media {isMediaOpen ? '▲' : '▼'}
+              </button>
+              <ul className={`${styles['submenu']} ${isMediaOpen ? styles['open'] : ''}`}>
+                <li><Link to="/artists" onClick={toggleSidebar}>Artists</Link></li>
+                <li><Link to="/years" onClick={toggleSidebar}>Years</Link></li>
+                <li><Link to="/genres" onClick={toggleSidebar}>Genres</Link></li>
               </ul>
-            </li>
-            <li>
-              <Link to="/settings" onClick={toggleSidebar}>
-                Settings
-              </Link>
             </li>
             <li>
               <Link to="/add-album" onClick={toggleSidebar}>
                 Add Album
               </Link>
             </li>
+            <li>
+              <Link to="/settings" onClick={toggleSidebar}>
+                Settings
+              </Link>
+            </li>
           </ul>
           {/* Display user info and sign out */}
           {user && (
             <div className={styles['user-info']}>
+              <br/>
+              <br/>
               <span>Welcome, {user.username || user.userId}</span> {/* Display username or id */}
+              <>
+              <br/>
               <button
                 onClick={async () => {
                   if (signOut) {
@@ -131,6 +131,7 @@ const Sidebar: React.FC<SidebarProps> = ({ user, signOut }) => {
               >
                 Sign Out
               </button>
+              </>
             </div>
           )}
         </nav>

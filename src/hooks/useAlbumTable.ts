@@ -121,6 +121,25 @@ const useAlbumTable = (albums: AlbumListData[]) => {
 
   const currentAlbums = sortedAlbums.slice(indexOfFirstAlbum, indexOfLastAlbum);
 
+  const totalPages = Math.ceil(filteredAlbums.length / albumsPerPage);
+
+  // Handle manual page input
+  const handlePageInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (/^\d*$/.test(value)) { // Allow only numbers
+      setCurrentPage(value === "" ? 1 : Math.max(1, Math.min(totalPages, Number(value))));
+    }
+  };
+
+  // Ensure a valid number is set when input loses focus
+  const handlePageInputBlur = () => {
+    if (currentPage < 1) {
+      setCurrentPage(1);
+    } else if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  };
+
   return {
     currentPage,
     albumsPerPage,
@@ -139,7 +158,10 @@ const useAlbumTable = (albums: AlbumListData[]) => {
     handleTouchEnd,
     activeTooltip,
     lists,
-    retrieveStats
+    retrieveStats,
+    handlePageInputChange,
+    handlePageInputBlur,
+    totalPages
   };
 };
 

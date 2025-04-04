@@ -137,13 +137,13 @@ const AddAlbumPage = () => {
     <div className={styles['add-album-page']}>
       <h1>Add a New Album</h1>
       <div>
-        <button onClick={() => setEntryMode('spotify')} disabled={entryMode === 'spotify'}>
+        <button className='addAlbumPageButton' onClick={() => setEntryMode('spotify')} disabled={entryMode === 'spotify'}>
           Fetch from Spotify
         </button>
-        <button onClick={() => setEntryMode('manual')} disabled={entryMode === 'manual'}>
+        <button className='addAlbumPageButton' onClick={() => setEntryMode('manual')} disabled={entryMode === 'manual'}>
           Manual Entry
         </button>
-        <button onClick={() => setEntryMode('bulk')} disabled={entryMode === 'bulk'}>
+        <button className='addAlbumPageButton' onClick={() => setEntryMode('bulk')} disabled={entryMode === 'bulk'}>
           Bulk Upload
         </button>
       </div>
@@ -258,7 +258,7 @@ const AddAlbumPage = () => {
             </select>
           </div>
 
-          <button type="submit" disabled={loading}>
+          <button className='addAlbumPageButton' type="submit" disabled={loading}>
             {loading ? 'Adding Album...' : 'Add Album'}
           </button>
 

@@ -316,7 +316,6 @@
   .album-table {
     display: block;
     width: 100%;
-    overflow-x: auto;
   }
 
   .album-table thead {
@@ -417,7 +416,7 @@
 
 .dropdown-menu {
   position: absolute;
-  top: 100%;
+  top: 50%;
   right: 0;
   background: var(--dark-default);
   border: 1px solid var(--dark-off-default);
@@ -828,4 +827,19 @@
   .tooltip-inline {
     font-size: 12px;
   }
+}
+
+.page-input {
+  width: 100px;
+  padding: 5px;
+  border: 1px solid var(--dark-off-default);
+  border-radius: 4px;
+  text-align: center;
+  font-size: 1rem;
+  margin: 0 10px;
+}
+
+.page-input:focus {
+  outline: none;
+  box-shadow: 0 0 5px var(--spotify-green);
 }

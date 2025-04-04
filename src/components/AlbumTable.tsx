@@ -50,7 +50,10 @@ const AlbumTable: React.FC<AlbumTableProps> = ({
     handleTouchStart,
     handleTouchEnd,
     activeTooltip,
-    lists
+    lists,
+    handlePageInputChange,
+    handlePageInputBlur,
+    totalPages
   } = useAlbumTable(albums);
 
   const albumsPerPage = 10; // Define albumsPerPage
@@ -186,7 +189,17 @@ const AlbumTable: React.FC<AlbumTableProps> = ({
           Previous
         </button>
         <span>
-          Page {currentPage} of {Math.ceil(filteredAlbums.length / albumsPerPage)}
+          Page 
+          <input 
+            type="number"
+            value={currentPage}
+            onChange={handlePageInputChange}
+            onBlur={handlePageInputBlur}
+            min="1"
+            max={totalPages}
+            className={styles['page-input']}
+          /> 
+          of {totalPages}
         </span>
         <button
           onClick={() => handlePageChange('next')}

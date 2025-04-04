@@ -7,6 +7,7 @@
   padding: 0;
   background-color: var(--dark-page-background-color);
   color: var(--dark-contrast-color);
+  min-height: 100vh;
 }
 
 /* Page container */
@@ -18,12 +19,13 @@
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   text-align: center; /* Center-align content */
+  min-height: 100vh;
 }
 
 /* Header styling */
 .lists-page h1 {
   font-size: 2rem;
-  color: var(--dark-reverse);
+  color: var(--spotify-green);
   border-bottom: 2px solid var(--dark-off-default);
   padding-bottom: 10px;
   margin-bottom: 20px;
@@ -115,12 +117,14 @@
   margin: 0;
   font-size: 1.2rem;
   color: var(--dark-contrast-color);
+  text-align: left;
 }
 
 .lists-page li p {
   margin: 0;
   font-size: 0.9rem;
   color: var(--dark-more-contrast-color);
+  text-align: left;
 }
 
 /* No lists message */
