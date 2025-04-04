@@ -31,6 +31,7 @@ const Settings: React.FC = () => {
         <h2>Theme</h2>
         <div className={styles['theme-options']}>
           <label>
+            Light Mode
             <input
               type="radio"
               name="theme"
@@ -38,9 +39,9 @@ const Settings: React.FC = () => {
               checked={theme === 'light'}
               onChange={() => handleThemeChange('light')}
             />
-            Light Mode
           </label>
           <label>
+            Dark Mode
             <input
               type="radio"
               name="theme"
@@ -48,7 +49,6 @@ const Settings: React.FC = () => {
               checked={theme === 'dark'}
               onChange={() => handleThemeChange('dark')}
             />
-            Dark Mode
           </label>
         </div>
       </section>
@@ -58,6 +58,7 @@ const Settings: React.FC = () => {
         <h2>Landing Page Randomization</h2>
         <div className={styles['landing-page-options']}>
           <label>
+            List
             <input
               type="radio"
               name="landingPage"
@@ -65,9 +66,9 @@ const Settings: React.FC = () => {
               checked={landingPage === 'list'}
               onChange={() => setLandingPage('list')}
             />
-            List
           </label>
           <label>
+            Albums
             <input
               type="radio"
               name="landingPage"
@@ -75,9 +76,9 @@ const Settings: React.FC = () => {
               checked={landingPage === 'albums'}
               onChange={() => setLandingPage('albums')}
             />
-            Albums
           </label>
           <label>
+            Year
             <input
               type="radio"
               name="landingPage"
@@ -85,7 +86,6 @@ const Settings: React.FC = () => {
               checked={landingPage === 'year'}
               onChange={() => setLandingPage('year')}
             />
-            Year
           </label>
         </div>
       </section>
@@ -112,6 +112,7 @@ const Settings: React.FC = () => {
           <h2>Randomization Method</h2>
           <div className={styles['randomization-options']}>
             <label>
+              Alphabetical
               <input
                 type="radio"
                 name="randomizationMethod"
@@ -119,9 +120,9 @@ const Settings: React.FC = () => {
                 checked={randomizationMethod === 'alphabetical'}
                 onChange={() => setRandomizationMethod('alphabetical')}
               />
-              Alphabetical
             </label>
             <label>
+              Popularity
               <input
                 type="radio"
                 name="randomizationMethod"
@@ -129,9 +130,9 @@ const Settings: React.FC = () => {
                 checked={randomizationMethod === 'popularity'}
                 onChange={() => setRandomizationMethod('popularity')}
               />
-              Popularity
             </label>
             <label>
+              Custom
               <input
                 type="radio"
                 name="randomizationMethod"
@@ -139,7 +140,6 @@ const Settings: React.FC = () => {
                 checked={randomizationMethod === 'custom'}
                 onChange={() => setRandomizationMethod('custom')}
               />
-              Custom
             </label>
           </div>
         </section>

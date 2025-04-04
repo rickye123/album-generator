@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { addAlbumToListeningPile, fetchAlbums } from '../api/amplifyApi';
 import { AlbumData, AlbumListData, ListData } from '../model';
 import darkStyles from '../styles/modules/AlbumList-dark.module.css';
@@ -62,40 +62,33 @@ const AlbumList = () => {
     setShowTooltip(false);
   };
 
-  const loadAlbums = useCallback(async () => {
-    setLoading(true);
-  
-    try {
-      const userId = await getCurrentUserId();
-      if (!userId) throw new Error('User ID is undefined');
-      
-      setUserId(userId);
-  
-      let albumList = await getAlbumsByUser(userId);
-      albumList = albumList.filter((album: AlbumData) => !album.hideAlbum); // Fix filtering
-  
-      if (artist) {
-        albumList = albumList.filter((album: AlbumData) => album.artist === decodeURIComponent(artist));
-      }
-      if (year) {
-        albumList = albumList.filter((album: AlbumData) => album.release_date.split('-')[0] === decodeURIComponent(year));
-      }
-      if (genre) {
-        albumList = albumList.filter((album: AlbumData) => album.genres?.includes(decodeURIComponent(genre)));
-      }
-  
-      setAlbums(albumList);
-    } catch (err) {
-      console.error('Error loading albums:', err);
-      setError('Failed to load albums. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  }, [artist, year, genre]);
-
   useEffect(() => {
+    const loadAlbums = async () => {
+      setLoading(true);
+      const userId = await getCurrentUserId();
+      if (!userId) {
+        throw new Error('User ID is undefined');
+      }
+      setUserId(userId)
+      const albumList = await getAlbumsByUser(userId);
+      albumList.filter((album: AlbumData) => album.hideAlbum === false);
+      const filteredAlbums = artist
+        ? albumList.filter((album: AlbumData) => album.artist === decodeURIComponent(artist))
+        : albumList;
+      const filteredByYear = year
+        ? filteredAlbums.filter((album: AlbumData) => album.release_date.split('-')[0] === decodeURIComponent(year))
+        : filteredAlbums;
+        console.log('filteredByYear', filteredByYear);
+        console.log('decodeURIComponent', decodeURIComponent(genre!));
+      const filteredByGenre = genre
+        ? filteredByYear.filter((album: AlbumData) => album.genres?.includes(decodeURIComponent(genre)))
+        : filteredByYear;
+      setAlbums(filteredByGenre);
+      setLoading(false);
+    };
+
     loadAlbums();
-  }, [loadAlbums]); // Dependency is now stable
+  }, [artist, year, genre]);
 
   const toggleShowHidden = () => {
     setShowHidden((prev) => !prev);
