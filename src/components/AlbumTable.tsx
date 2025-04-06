@@ -53,7 +53,7 @@ const AlbumTable: React.FC<AlbumTableProps> = ({
     lists,
     handlePageInputChange,
     handlePageInputBlur,
-    totalPages
+    totalPages,
   } = useAlbumTable(albums);
 
   const albumsPerPage = 10; // Define albumsPerPage
@@ -74,6 +74,14 @@ const AlbumTable: React.FC<AlbumTableProps> = ({
           value={searchQuery}
           onChange={handleSearch}
         />
+      </div>
+      <div className={styles['mobile-sort-buttons']}>
+        <button onClick={() => handleSortChange('artist')} className={styles['mobile-sort-button']}>
+          Sort Artist
+        </button>
+        <button onClick={() => handleSortChange('name')} className={styles['mobile-sort-button']}>
+          Sort Album
+        </button>
       </div>
       <table className={styles['album-table']}>
         <thead>

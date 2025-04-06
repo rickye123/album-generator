@@ -4,6 +4,7 @@ import lightStyles from '../styles/modules/Settings-light.module.css';
 const Settings: React.FC = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [hideAlbums, setHideAlbums] = useState<boolean>(false);
+  const [listStats, setListStats] = useState<boolean>(false);
   const [landingPage, setLandingPage] = useState<'list' | 'albums' | 'year'>('list');
   const [selectedList, setSelectedList] = useState<string>('defaultList');
   const [randomizationMethod, setRandomizationMethod] = useState<'alphabetical' | 'popularity' | 'custom'>('alphabetical');
@@ -11,8 +12,10 @@ const Settings: React.FC = () => {
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme') || 'light';
     const savedHideAlbums = localStorage.getItem('hideAlbums') || 'false';
+    const savedListStats = localStorage.getItem('listStats') || 'false';
     setTheme(savedTheme as 'light' | 'dark');
     setHideAlbums(savedHideAlbums === 'true');
+    setListStats(savedListStats === 'true');
   
     // CSS Modules will handle class scoping, so no need for dynamic imports
     document.documentElement.setAttribute('data-theme', savedTheme);
@@ -27,6 +30,11 @@ const Settings: React.FC = () => {
   const handleHideAlbumsChange = (checked: boolean) => {
     setHideAlbums(checked);
     localStorage.setItem('hideAlbums', JSON.stringify(checked));
+  };
+
+  const handleListStatsChange = (checked: boolean) => {
+    setListStats(checked);
+    localStorage.setItem('listStats', JSON.stringify(checked));
   };
 
   // Use the appropriate styles based on the current theme
@@ -166,6 +174,19 @@ const Settings: React.FC = () => {
                 name="hideAlbums"
                 checked={hideAlbums}
                 onChange={(e) => handleHideAlbumsChange(e.target.checked)}
+              />
+              <span className={styles['list-page-slider']}></span>
+            </label>
+          </div>
+          <br/>
+          <div className={styles['list-page-switch']}>
+            <label>
+              List Stats
+              <input
+                type="checkbox"
+                name="listStats"
+                checked={listStats}
+                onChange={(e) => handleListStatsChange(e.target.checked)}
               />
               <span className={styles['list-page-slider']}></span>
             </label>

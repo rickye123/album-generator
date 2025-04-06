@@ -1,10 +1,12 @@
 import { useState, useMemo, useEffect } from 'react';
 import { AlbumListData } from '../model';
 import { getAlbumListsWithNames } from '../service/dataAccessors/albumListDataAccessor';
+import { useSearchParams } from 'react-router-dom';
 
 const useAlbumTable = (albums: AlbumListData[]) => {
-  const storedPage = localStorage.getItem('currentPage');
-  const [currentPage, setCurrentPage] = useState(storedPage ? parseInt(storedPage) : 1);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const pageParam = parseInt(searchParams.get('page') || '1', 10);
+  const [currentPage, setCurrentPageState] = useState(pageParam);
   const [albumsPerPage] = useState(10);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortKey, setSortKey] = useState('artist');
@@ -13,17 +15,21 @@ const useAlbumTable = (albums: AlbumListData[]) => {
   const [lists, setLists] = useState<string>('');
   const [touchTimer, setTouchTimer] = useState<number | null>(null);
 
-  useEffect(() => {
-    localStorage.setItem('currentPage', currentPage.toString());
-  }, [currentPage]);
-
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCurrentPageState(1); // Reset to the first page on search
+    setSearchParams({ page: '1' });
     setSearchQuery(e.target.value);
-    setCurrentPage(1);
   };
 
+  const setCurrentPage = (page: number) => {
+    const clampedPage = Math.max(1, page);
+    setCurrentPageState(clampedPage);
+    setSearchParams({ page: clampedPage.toString() });
+  };
+
+
   const handlePageChange = (direction: 'next' | 'prev' | 'first' | 'last') => {
-    setCurrentPage((prev) => {
+    setCurrentPageState((prev: number) => {
       let newPage;
       if (direction === 'next' && indexOfLastAlbum < filteredAlbums.length) {
         newPage = prev + 1;
@@ -34,10 +40,9 @@ const useAlbumTable = (albums: AlbumListData[]) => {
       } else if (direction === 'last') {
         newPage = Math.ceil(filteredAlbums.length / albumsPerPage);
       } else {
-        return prev; // No change
+        return prev;
       }
-  
-      localStorage.setItem('currentPage', String(newPage)); // Save page state
+      setSearchParams({ page: newPage.toString() });
       return newPage;
     });
   };
@@ -59,7 +64,9 @@ const useAlbumTable = (albums: AlbumListData[]) => {
   // Tooltip event handlers
   const handleMouseEnter = (albumId: string) => {
     setActiveTooltip(albumId);
-    retrieveStats(albumId);
+    if (localStorage.getItem('listStats') === 'true') {
+      retrieveStats(albumId);
+  }
   }
   const handleMouseLeave = () => {
     setActiveTooltip(null);
@@ -69,7 +76,9 @@ const useAlbumTable = (albums: AlbumListData[]) => {
   const handleTouchStart = (albumId: string) => {
     const timer = window.setTimeout(() => setActiveTooltip(albumId), 500); // Show after holding for 500ms
     setTouchTimer(timer);
-    retrieveStats(albumId);
+    if (localStorage.getItem('listStats') === 'true') {
+        retrieveStats(albumId);
+    }
   };
 
   const handleTouchEnd = () => {
@@ -126,8 +135,9 @@ const useAlbumTable = (albums: AlbumListData[]) => {
   // Handle manual page input
   const handlePageInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    if (/^\d*$/.test(value)) { // Allow only numbers
-      setCurrentPage(value === "" ? 1 : Math.max(1, Math.min(totalPages, Number(value))));
+    if (/^\d*$/.test(value)) {
+      const numericValue = value === '' ? 1 : Math.max(1, Math.min(totalPages, Number(value)));
+      setCurrentPage(numericValue);
     }
   };
 

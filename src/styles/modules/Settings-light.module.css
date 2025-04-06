@@ -41,6 +41,7 @@
 .randomization-options {
   display: flex;
   gap: 12px;
+  flex-direction: column;
 }
 
 /* Radio Group Labels */
