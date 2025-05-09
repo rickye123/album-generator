@@ -16,9 +16,9 @@ export const updateAlbumDetails = async (albumData: AlbumData): Promise<GraphQLR
     const graphqlParams = graphqlOperation(updateAlbum, { input: albumData });
 
     const response = await GraphQLAPI.graphql(
-      Amplify as any, // Pass the Amplify class instance
-      graphqlParams,  // GraphQL options
-      {}              // Additional headers
+      Amplify as any,
+      graphqlParams,
+      {}
     );
 
     // Check if the result is a Promise or Observable
@@ -51,12 +51,11 @@ export const addAlbum = async (albumData: AlbumData, userId: string): Promise<Gr
     });
 
     const result = await GraphQLAPI.graphql(
-      Amplify as any, // Pass the Amplify class instance
-      graphqlParams,  // GraphQL options
-      {}              // Additional headers
+      Amplify as any,
+      graphqlParams,
+      {}
     );
 
-    // Check if the result is a Promise or Observable
     if (result instanceof Observable) {
       throw new Error('Expected a non-subscription query/mutation but received a subscription.');
     }
@@ -76,15 +75,12 @@ export const fetchAlbumById = async(albumId: string): Promise<AlbumData | null> 
       {}
     );
 
-    // Check if the result is a Promise or Observable
     if (response instanceof Observable) {
       throw new Error('Expected a non-subscription query/mutation but received a subscription.');
     }
 
-    // Ensure response is properly typed
     const typedResponse = response as GraphQLResult<any>;
 
-    // Access the `data` field
     if (typedResponse.data && typedResponse.data.getAlbum) {
       const album = typedResponse.data.getAlbum;
       return {
@@ -540,9 +536,9 @@ export { listLists };
 
 export const fetchWikipediaLink = async (albumName: string, artistName: string): Promise<string | null> => {
   const queries = [
-    `${albumName}`,                // Search for album name first
-    `${albumName} ${artistName}`,  // Album and artist name combined
-    `${artistName}`                // Artist name as fallback
+    `${albumName}`,
+    `${albumName} ${artistName}`,
+    `${artistName}`
   ];
 
   const wikipediaApiUrl = (query: string) =>
@@ -557,7 +553,6 @@ export const fetchWikipediaLink = async (albumName: string, artistName: string):
         // Search results found
         const searchResults = data.query.search;
 
-        // Attempt to find the most relevant page
         for (const result of searchResults) {
           const pageTitle = result.title;
 
@@ -572,7 +567,7 @@ export const fetchWikipediaLink = async (albumName: string, artistName: string):
       }
     }
 
-    return null; // No relevant Wikipedia page found
+    return null;
   } catch (error) {
     console.error('Error fetching Wikipedia link:', error);
     return null;
@@ -602,7 +597,7 @@ export const toggleHideAlbum = async (albumId: string, hideAlbum: boolean) => {
   try {
     const response = await GraphQLAPI.graphql(
       Amplify as any,
-      graphqlOperation(toggleHidden, { id: albumId, hideAlbum }), // Use `id` as expected by the mutation
+      graphqlOperation(toggleHidden, { id: albumId, hideAlbum }),
       {}
     );
 
@@ -658,7 +653,7 @@ export async function fetchListeningPile(userId: string) {
       Amplify as any,
       graphqlOperation(listListeningPileEntries, {
         filter: { userId: { eq: userId } },
-        limit: 50, // Adjust limit as needed
+        limit: 50,
         nextToken,
       }),
       {}
@@ -680,7 +675,7 @@ export async function fetchListeningPile(userId: string) {
     nextToken = existingEntries.data.listListeningPileEntries.nextToken;
   } while (nextToken);
 
-  return allEntries.sort((a, b) => a.order - b.order); // Ensure sorting
+  return allEntries.sort((a, b) => a.order - b.order);
 }
 
 export async function reorderListeningPile(entryId: string, newOrder: number) {
@@ -756,7 +751,7 @@ async function getHighestListeningPileOrder(userId: string): Promise<number> {
     Amplify as any,
     graphqlOperation(listListeningPileEntries, {
       filter: { userId: { eq: userId } },
-      limit: 1,  // Only fetch one item, sorted by order in descending order to get the highest one
+      limit: 1,
       sortDirection: 'DESC',
     }),
     {}
@@ -772,7 +767,6 @@ async function getHighestListeningPileOrder(userId: string): Promise<number> {
     throw new Error('Failed to fetch listening pile entries.');
   }
 
-  // If no entries exist, return 0 (start at the first position)
   const highestOrder = result.data.listListeningPileEntries.items.length > 0
     ? result.data.listListeningPileEntries.items[0].order
     : 0;
@@ -782,10 +776,8 @@ async function getHighestListeningPileOrder(userId: string): Promise<number> {
 
 export async function addAlbumToListeningPile(albumId: string, userId: string): Promise<GraphQLResult<any>> {
 
-  const highestOrder = await getHighestListeningPileOrder(userId);  // Get the highest order value
+  const highestOrder = await getHighestListeningPileOrder(userId); 
 
-  console.log('Highest order in pile is:', highestOrder);
-  // Check if the album is already in the listening pile
   const existingEntries = await fetchAllListeningPileEntriesByAlbumId(albumId, userId);
 
   if (existingEntries.length > 0) {
@@ -793,7 +785,6 @@ export async function addAlbumToListeningPile(albumId: string, userId: string): 
   }
 
   const newOrder = highestOrder + 1;
-  console.log(`Adding album to listening pile with order ${newOrder} and albumId ${albumId}`);
   const response = await GraphQLAPI.graphql(
     Amplify as any,
     graphqlOperation(createListeningPileEntry, {
@@ -833,7 +824,6 @@ export const uploadImageToS3 = async (file: File, albumId: string): Promise<stri
 
     const imageUrl = `https://dev-albumgenerator-albumartbucketc60ec-dev.s3.eu-west-2.amazonaws.com/${fileKey}`;
 
-    // Return the image URL
     return imageUrl;
   } catch (error) {
     console.error('Error uploading image to S3:', error);
