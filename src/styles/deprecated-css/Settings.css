@@ -3,39 +3,38 @@
     margin: 0 auto;
     padding: 20px;
     font-family: Arial, sans-serif;
-  }
-  
-  .settings-page h1 {
+}
+
+.settings-page h1 {
     text-align: center;
     margin-bottom: 20px;
-  }
-  
-  .settings-section {
+}
+
+.settings-section {
     margin-bottom: 30px;
-  }
-  
-  .settings-section h2 {
+}
+
+.settings-section h2 {
     margin-bottom: 10px;
     font-size: 1.2em;
-  }
-  
-  .theme-options,
-  .landing-page-options,
-  .randomization-options {
+}
+
+.theme-options,
+.landing-page-options,
+.randomization-options {
     display: flex;
     flex-direction: column;
     gap: 10px;
-  }
-  
-  label {
+}
+
+label {
     display: flex;
     align-items: center;
     gap: 10px;
-  }
-  
-  select {
+}
+
+select {
     width: 100%;
     padding: 8px;
     font-size: 1em;
-  }
-  
+}

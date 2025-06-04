@@ -4,8 +4,8 @@
 
 import * as APITypes from "../API";
 type GeneratedQuery<InputType, OutputType> = string & {
-  __generatedQueryInput: InputType;
-  __generatedQueryOutput: OutputType;
+    __generatedQueryInput: InputType;
+    __generatedQueryOutput: OutputType;
 };
 
 export const getList = /* GraphQL */ `query GetList($id: ID!) {
@@ -97,8 +97,8 @@ export const listAlbums = /* GraphQL */ `query ListAlbums(
   }
 }
 ` as GeneratedQuery<
-  APITypes.ListAlbumsQueryVariables,
-  APITypes.ListAlbumsQuery
+    APITypes.ListAlbumsQueryVariables,
+    APITypes.ListAlbumsQuery
 >;
 export const getAlbumList = /* GraphQL */ `query GetAlbumList($id: ID!) {
   getAlbumList(id: $id) {
@@ -135,8 +135,8 @@ export const getAlbumList = /* GraphQL */ `query GetAlbumList($id: ID!) {
   }
 }
 ` as GeneratedQuery<
-  APITypes.GetAlbumListQueryVariables,
-  APITypes.GetAlbumListQuery
+    APITypes.GetAlbumListQueryVariables,
+    APITypes.GetAlbumListQuery
 >;
 export const listAlbumLists = /* GraphQL */ `query ListAlbumLists(
   $filter: ModelAlbumListFilterInput
@@ -159,8 +159,8 @@ export const listAlbumLists = /* GraphQL */ `query ListAlbumLists(
   }
 }
 ` as GeneratedQuery<
-  APITypes.ListAlbumListsQueryVariables,
-  APITypes.ListAlbumListsQuery
+    APITypes.ListAlbumListsQueryVariables,
+    APITypes.ListAlbumListsQuery
 >;
 export const getListeningPileEntry = /* GraphQL */ `query GetListeningPileEntry($id: ID!) {
   getListeningPileEntry(id: $id) {
@@ -188,8 +188,8 @@ export const getListeningPileEntry = /* GraphQL */ `query GetListeningPileEntry(
   }
 }
 ` as GeneratedQuery<
-  APITypes.GetListeningPileEntryQueryVariables,
-  APITypes.GetListeningPileEntryQuery
+    APITypes.GetListeningPileEntryQueryVariables,
+    APITypes.GetListeningPileEntryQuery
 >;
 export const listListeningPileEntries = /* GraphQL */ `query ListListeningPileEntries(
   $filter: ModelListeningPileEntryFilterInput
@@ -215,8 +215,8 @@ export const listListeningPileEntries = /* GraphQL */ `query ListListeningPileEn
   }
 }
 ` as GeneratedQuery<
-  APITypes.ListListeningPileEntriesQueryVariables,
-  APITypes.ListListeningPileEntriesQuery
+    APITypes.ListListeningPileEntriesQueryVariables,
+    APITypes.ListListeningPileEntriesQuery
 >;
 export const listsByUser = /* GraphQL */ `query ListsByUser(
   $userId: String!
@@ -245,8 +245,8 @@ export const listsByUser = /* GraphQL */ `query ListsByUser(
   }
 }
 ` as GeneratedQuery<
-  APITypes.ListsByUserQueryVariables,
-  APITypes.ListsByUserQuery
+    APITypes.ListsByUserQueryVariables,
+    APITypes.ListsByUserQuery
 >;
 export const albumsByUser = /* GraphQL */ `query AlbumsByUser(
   $userId: String!
@@ -281,8 +281,8 @@ export const albumsByUser = /* GraphQL */ `query AlbumsByUser(
   }
 }
 ` as GeneratedQuery<
-  APITypes.AlbumsByUserQueryVariables,
-  APITypes.AlbumsByUserQuery
+    APITypes.AlbumsByUserQueryVariables,
+    APITypes.AlbumsByUserQuery
 >;
 export const albumListsByAlbumIdAndId = /* GraphQL */ `query AlbumListsByAlbumIdAndId(
   $albumId: ID!
@@ -315,8 +315,8 @@ export const albumListsByAlbumIdAndId = /* GraphQL */ `query AlbumListsByAlbumId
   }
 }
 ` as GeneratedQuery<
-  APITypes.AlbumListsByAlbumIdAndIdQueryVariables,
-  APITypes.AlbumListsByAlbumIdAndIdQuery
+    APITypes.AlbumListsByAlbumIdAndIdQueryVariables,
+    APITypes.AlbumListsByAlbumIdAndIdQuery
 >;
 export const albumListsByListIdAndId = /* GraphQL */ `query AlbumListsByListIdAndId(
   $listId: ID!
@@ -349,8 +349,8 @@ export const albumListsByListIdAndId = /* GraphQL */ `query AlbumListsByListIdAn
   }
 }
 ` as GeneratedQuery<
-  APITypes.AlbumListsByListIdAndIdQueryVariables,
-  APITypes.AlbumListsByListIdAndIdQuery
+    APITypes.AlbumListsByListIdAndIdQueryVariables,
+    APITypes.AlbumListsByListIdAndIdQuery
 >;
 export const albumListsByUser = /* GraphQL */ `query AlbumListsByUser(
   $userId: String!
@@ -381,8 +381,8 @@ export const albumListsByUser = /* GraphQL */ `query AlbumListsByUser(
   }
 }
 ` as GeneratedQuery<
-  APITypes.AlbumListsByUserQueryVariables,
-  APITypes.AlbumListsByUserQuery
+    APITypes.AlbumListsByUserQueryVariables,
+    APITypes.AlbumListsByUserQuery
 >;
 export const listeningPileEntriesByAlbumIdAndId = /* GraphQL */ `query ListeningPileEntriesByAlbumIdAndId(
   $albumId: ID!
@@ -414,8 +414,8 @@ export const listeningPileEntriesByAlbumIdAndId = /* GraphQL */ `query Listening
   }
 }
 ` as GeneratedQuery<
-  APITypes.ListeningPileEntriesByAlbumIdAndIdQueryVariables,
-  APITypes.ListeningPileEntriesByAlbumIdAndIdQuery
+    APITypes.ListeningPileEntriesByAlbumIdAndIdQueryVariables,
+    APITypes.ListeningPileEntriesByAlbumIdAndIdQuery
 >;
 export const listeningPileEntriesByUser = /* GraphQL */ `query ListeningPileEntriesByUser(
   $userId: String!
@@ -445,6 +445,6 @@ export const listeningPileEntriesByUser = /* GraphQL */ `query ListeningPileEntr
   }
 }
 ` as GeneratedQuery<
-  APITypes.ListeningPileEntriesByUserQueryVariables,
-  APITypes.ListeningPileEntriesByUserQuery
+    APITypes.ListeningPileEntriesByUserQueryVariables,
+    APITypes.ListeningPileEntriesByUserQuery
 >;

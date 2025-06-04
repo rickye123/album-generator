@@ -2,25 +2,29 @@ import axios from 'axios';
 
 // Replace with your Discogs API consumer key
 const DISCOGS_API_URL = "https://api.discogs.com";
-const CONSUMER_KEY = "nsppNOZgnVkOpzkpiMfV"; // Add your consumer key
-const CONSUMER_SECRET = "SnKZTMBUEbOLcBBRkIzVIwlTmsZmjSHX"; // Add your consumer secret
+const CONSUMER_KEY = process.env.REACT_APP_DISCOGS_CONSUMER_KEY;
+const CONSUMER_SECRET = process.env.REACT_APP_DISCOGS_CONSUMER_SECRET;
+
+if (!CONSUMER_KEY || !CONSUMER_SECRET) {
+    throw new Error("API Key and secret not found! Please check your .env file or environment variables are set.");
+}
 
 export const fetchVinylRecords = async (albumName: string, artistName: string) => {
     try {
         // Step 1: Search for the album by name and artist
         const searchResponse = await axios.get(`${DISCOGS_API_URL}/database/search`, {
             params: {
-            q: albumName, // Search query
-            artist: artistName, // Filter by artist name
-            type: "release", // We want to search for specific releases
-            per_page: 10, // Number of results to return (adjust as needed)
-            key: CONSUMER_KEY, // Correct way to pass auth
-            secret: CONSUMER_SECRET, // Correct way to pass auth
+                q: albumName, // Search query
+                artist: artistName, // Filter by artist name
+                type: "release", // We want to search for specific releases
+                per_page: 10, // Number of results to return (adjust as needed)
+                key: CONSUMER_KEY, // Correct way to pass auth
+                secret: CONSUMER_SECRET, // Correct way to pass auth
             },
         });
-  
+
         const releases = searchResponse.data.results;
-  
+
         if (!releases || releases.length === 0) {
             console.error("No releases found.");
             return [];

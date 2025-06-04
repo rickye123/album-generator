@@ -14,8 +14,8 @@ export interface AlbumData {
 }
 
 export interface AlbumListData {
-  played: boolean;
-  album: AlbumData;
+    played: boolean;
+    album: AlbumData;
 }
 
 export interface SpotifyAlbumDetails {
@@ -27,13 +27,13 @@ export interface SpotifyAlbumDetails {
     totalTracks: number;
     totalDuration: number;
     tracks: {
-      id: string;
-      name: string;
-      durationMs: number;
-      trackNumber: number;
+        id: string;
+        name: string;
+        durationMs: number;
+        trackNumber: number;
     }[];
-  }
-  
+}
+
 
 export interface ListData {
     id: string;

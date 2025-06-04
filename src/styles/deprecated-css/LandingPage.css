@@ -10,15 +10,18 @@
     text-align: center;
     min-height: 100vh;
     padding: 20px;
-    background-color: #f9f9f9; /* Light grey background */
-    color: #333; /* Darker text for contrast */
+    background-color: #f9f9f9;
+    /* Light grey background */
+    color: #333;
+    /* Darker text for contrast */
     font-family: Arial, sans-serif;
 }
 
 /* Title styling */
 .landing-page h1 {
     font-size: 2.5rem;
-    color: #1DB954; /* Spotify green */
+    color: #1DB954;
+    /* Spotify green */
     margin-bottom: 20px;
 }
 

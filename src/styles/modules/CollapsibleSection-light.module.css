@@ -6,26 +6,26 @@
     margin-bottom: 20px;
     overflow: hidden;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .collapsible-section.open .section-content {
+}
+
+.collapsible-section.open .section-content {
     max-height: 1000px;
     padding: 20px;
     transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out;
-  }
-  
-  .collapsible-section.closed .section-content {
+}
+
+.collapsible-section.closed .section-content {
     max-height: 0;
     padding: 0;
     transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out;
-  }
-  
-  .section-content {
+}
+
+.section-content {
     background-color: #f9f9f9;
     overflow: hidden;
-  }
-  
-  .toggle-header {
+}
+
+.toggle-header {
     font-size: 1.2rem;
     font-weight: bold;
     padding: 10px 20px;
@@ -34,20 +34,19 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-  
-  .arrow {
+}
+
+.arrow {
     border: solid #333;
     border-width: 0 2px 2px 0;
     display: inline-block;
     padding: 4px;
-  }
-  
-  .arrow.right {
+}
+
+.arrow.right {
     transform: rotate(45deg);
-  }
-  
-  .arrow.down {
+}
+
+.arrow.down {
     transform: rotate(135deg);
-  }
-  
+}

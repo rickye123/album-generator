@@ -8,68 +8,72 @@
     background-color: var(--light-page-background-color);
     color: var(--light-contrast-color);
     min-height: 100vh;
-  }
-  
-  /* Page container */
-  .lists-page .container {
+}
+
+/* Page container */
+.lists-page .container {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
     background: var(--light-page-default);
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    text-align: center; /* Center-align content */
+    text-align: center;
+    /* Center-align content */
     min-height: 100vh;
-  }
-  
-  /* Header styling */
-  .lists-page h1 {
+}
+
+/* Header styling */
+.lists-page h1 {
     font-size: 2rem;
     color: var(--spotify-green);
     border-bottom: 2px solid var(--light-off-default);
     padding-bottom: 10px;
     margin-bottom: 20px;
     text-align: center;
-  }
-  
-  .lists-page h2 {
+}
+
+.lists-page h2 {
     font-size: 1.5rem;
     margin: 20px 0 10px;
     color: var(--spotify-green);
-  }
-  
-  /* Form styling */
-  .lists-page form {
+}
+
+/* Form styling */
+.lists-page form {
     display: flex;
     flex-direction: column;
     gap: 15px;
     margin-bottom: 20px;
-    align-items: center; /* Center-align form */
-  }
-  
-  .lists-page form label {
+    align-items: center;
+    /* Center-align form */
+}
+
+.lists-page form label {
     font-size: 1rem;
     color: var(--light-more-contrast-color);
     font-weight: bold;
     text-align: center;
-  }
-  
-  .lists-page form input {
+}
+
+.lists-page form input {
     padding: 10px;
     font-size: 1rem;
     border: 1px solid var(--light-contrast-off-default);
     border-radius: 4px;
     transition: border-color 0.3s ease;
-    width: 100%; /* Full width for input */
-    max-width: 400px; /* Limit maximum width */
-  }
-  
-  .lists-page form input:focus {
+    width: 100%;
+    /* Full width for input */
+    max-width: 400px;
+    /* Limit maximum width */
+}
+
+.lists-page form input:focus {
     border-color: var(--spotify-green);
     outline: none;
-  }
-  
-  .lists-page form button {
+}
+
+.lists-page form button {
     background-color: var(--spotify-green);
     color: var(--light-default);
     font-size: 1rem;
@@ -78,25 +82,25 @@
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-  }
-  
-  .lists-page form button:hover {
+}
+
+.lists-page form button:hover {
     background-color: var(--hover-color);
-  }
-  
-  /* Error message */
-  .lists-page .error {
+}
+
+/* Error message */
+.lists-page .error {
     color: var(--light-bootstrap-error);
     font-size: 0.9rem;
-  }
-  
-  /* List container */
-  .lists-page ul {
+}
+
+/* List container */
+.lists-page ul {
     list-style-type: none;
     padding: 0;
-  }
-  
-  .lists-page li {
+}
+
+.lists-page li {
     background-color: var(--light-off-default);
     margin-bottom: 10px;
     padding: 15px;
@@ -106,37 +110,37 @@
     align-items: center;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  
-  .lists-page li:hover {
+}
+
+.lists-page li:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
     cursor: pointer;
-  }
-  
-  .lists-page li h3 {
+}
+
+.lists-page li h3 {
     margin: 0;
     font-size: 1.2rem;
     color: var(--light-contrast-color);
     text-align: left;
-  }
-  
-  .lists-page li p {
+}
+
+.lists-page li p {
     margin: 0;
     font-size: 0.9rem;
     color: var(--light-more-contrast-color);
     text-align: left;
-  }
-  
-  /* No lists message */
-  .lists-page .no-lists {
+}
+
+/* No lists message */
+.lists-page .no-lists {
     font-size: 1rem;
     color: var(--light-more-contrast-color);
     text-align: center;
     margin: 20px 0;
-  }
-  
-  /* Delete Button */
+}
+
+/* Delete Button */
 .lists-page .delete-button {
     background-color: var(--light-bootstrap-error);
     color: var(--light-default);
@@ -147,8 +151,8 @@
     font-size: 0.9rem;
     margin-left: 10px;
     transition: background-color 0.3s ease;
-  }
-  
-  .lists-page .delete-button:hover {
+}
+
+.lists-page .delete-button:hover {
     background-color: var(--light-darker-error);
-  }
+}

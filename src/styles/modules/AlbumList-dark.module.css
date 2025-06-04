@@ -1,403 +1,515 @@
-@import url('Root.module.css'); /* Import the global styles */
+@import url('Root.module.css');
+/* Import the global styles */
 
 .hidden-album {
-  background-color: rgba(255, 0, 0, 0.1); /* Light red background for visibility */
-  color: #900; /* Darker text color for emphasis */
-  border-bottom: 1px solid var(--dark-off-default);
-  display: table-row;
-  justify-content: space-between;
-  padding: 10px;
+    background-color: rgba(255, 0, 0, 0.1);
+    /* Light red background for visibility */
+    color: #900;
+    /* Darker text color for emphasis */
+    border-bottom: 1px solid var(--dark-off-default);
+    display: table-row;
+    justify-content: space-between;
+    padding: 10px;
 }
 
 .hidden-album-block {
-  background-color: rgba(255, 0, 0, 0.555); /* Light red background for visibility */
-  opacity: 0.1;
+    background-color: rgba(255, 0, 0, 0.555);
+    /* Light red background for visibility */
+    opacity: 0.1;
 }
 
 /* General container for the album list page */
 .album-list-page {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  background-color: var(--dark-page-background-color); /* Light grey background */
-  padding: 20px;
-  text-align: center;
-  font-family: Arial, sans-serif;
-  color: var(--dark-contrast-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: var(--dark-page-background-color);
+    /* Light grey background */
+    padding: 20px;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    color: var(--dark-contrast-color);
 }
 
 /* Page title */
 .album-list-page h1 {
-  font-size: 2.5rem;
-  color: var(--spotify-green); /* Spotify green */
-  margin-bottom: 20px;
+    font-size: 2.5rem;
+    color: var(--spotify-green);
+    /* Spotify green */
+    margin-bottom: 20px;
 }
 
 /* No albums message */
 .album-list-page .no-albums {
-  font-size: 1.5rem;
-  color: var(--dark-more-contrast-color); /* Lighter black text */
-  margin-top: 40px;
+    font-size: 1.5rem;
+    color: var(--dark-more-contrast-color);
+    /* Lighter black text */
+    margin-top: 40px;
 }
 
 /* Table styles */
 .album-table {
-  width: 100%;
-  max-width: 800px;
-  border-collapse: collapse;
-  margin: 20px 0;
-  background: var(--dark-default); /* White background */
-  box-shadow: 0 4px 10px rgb(41, 41, 41);
+    width: 100%;
+    max-width: 800px;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background: var(--dark-default);
+    /* White background */
+    box-shadow: 0 4px 10px rgb(41, 41, 41);
 }
 
 .album-table th,
 .album-table td {
-  padding: 12px 20px;
-  text-align: left;
+    padding: 12px 20px;
+    text-align: left;
 }
 
 .album-table th {
-  background-color: var(--spotify-green); /* Spotify green */
-  color: var(--dark-default);
-  font-size: 1.2rem;
+    background-color: var(--spotify-green);
+    /* Spotify green */
+    color: var(--dark-default);
+    font-size: 1.2rem;
 }
 
 .album-table tr.visible-album:nth-child(even) {
-  background-color: var(--dark-table-even-color);
+    background-color: var(--dark-table-even-color);
 }
 
 .album-table tr.visible-album:hover {
-  background-color: var(--dark-table-hover-color);;
+    background-color: var(--dark-table-hover-color);
+    ;
 }
 
 .album-table td {
-  font-size: 1rem;
-  color: var(--dark-contrast-color); /* Darker text color */
+    font-size: 1rem;
+    color: var(--dark-contrast-color);
+    /* Darker text color */
 }
 
 /* Spotify link styles */
 .spotify-link {
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-  color: var(--spotify-green); /* Spotify green */
-  font-weight: bold;
-  height: 20px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: var(--spotify-green);
+    /* Spotify green */
+    font-weight: bold;
+    height: 20px;
 }
 
 .spotify-link-disabled {
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-  color: var(--spotify-green); /* Spotify green */
-  font-weight: bold;
-  height: 20px;
-  opacity: 0.1;
-  width: 20px;
-  height: 20px;
-  margin-right: 8px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: var(--spotify-green);
+    /* Spotify green */
+    font-weight: bold;
+    height: 20px;
+    opacity: 0.1;
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
 }
 
 .spotify-link img {
-  width: 20px;
-  height: 20px;
-  margin-right: 8px;
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
 }
 
 .spotify-link:hover {
-  opacity: 0.8;
+    opacity: 0.8;
 }
 
 .spotify-icon {
-  width: 24px;
-  height: 24px;
-  margin-right: 8px;
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
 }
 
 /* Add to list button */
 .add-to-list-button {
-  background-color: var(--spotify-green); /* Spotify green */
-  color: var(--dark-default);
-  border: none;
-  padding: 8px 16px;
-  font-size: 1rem;
-  cursor: pointer;
-  border-radius: 4px;
-  transition: background-color 0.3s;
+    background-color: var(--spotify-green);
+    /* Spotify green */
+    color: var(--dark-default);
+    border: none;
+    padding: 8px 16px;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
 }
 
 .add-to-list-button:hover {
-  background-color: var(--hover-color); /* Darker green for hover */
+    background-color: var(--hover-color);
+    /* Darker green for hover */
 }
 
 /* Overlay styles */
 .overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgb(31, 31, 31);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgb(31, 31, 31);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
 }
 
 .overlay-content {
-  background: var(--dark-default);
-  padding: 20px;
-  border-radius: 10px;
-  width: 400px;
-  text-align: center;
-  box-shadow: 0 4px 10px rgb(255, 255, 255);
+    background: var(--dark-default);
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgb(255, 255, 255);
 }
 
 .overlay-content h2 {
-  font-size: 1.5rem;
-  color: var(--dark-contrast-color); /* Darker text color */
-  margin-bottom: 20px;
+    font-size: 1.5rem;
+    color: var(--dark-contrast-color);
+    /* Darker text color */
+    margin-bottom: 20px;
 }
 
 .error-message {
-  color: var(--dark-bootstrap-error);
-  margin-bottom: 10px;
+    color: var(--dark-bootstrap-error);
+    margin-bottom: 10px;
 }
 
 /* List table for the overlay */
 .list-table {
-  list-style: none;
-  padding: 0;
-  margin: 10px 0;
-  text-align: left;
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+    text-align: left;
 }
 
 .list-table li {
-  margin: 10px 0;
+    margin: 10px 0;
 }
 
 .list-select-button {
-  background-color: var(--spotify-green);
-  color: var(--dark-default);
-  border: none;
-  padding: 10px 16px;
-  font-size: 1rem;
-  cursor: pointer;
-  border-radius: 4px;
-  transition: background-color 0.3s;
+    background-color: var(--spotify-green);
+    color: var(--dark-default);
+    border: none;
+    padding: 10px 16px;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
 }
 
 .list-select-dropdown {
-  width: 100%;
-  padding: 10px;
-  font-size: 1rem;
-  border: 1px solid var(--dark-off-default);
-  border-radius: 4px;
-  background-color: var(--dark-default);
-  color: var(--dark-contrast-color);
-  margin-top: 10px;
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid var(--dark-off-default);
+    border-radius: 4px;
+    background-color: var(--dark-default);
+    color: var(--dark-contrast-color);
+    margin-top: 10px;
 }
 
 .album-link {
-  text-decoration: none;
-  font-weight: bold;
-  transition: color 0.3s ease;
-  color: var(--spotify-green);
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+    color: var(--spotify-green);
 }
 
 .album-link:hover {
-  color: var(--hover-color); /* Darker green for hover */
-  text-decoration: underline;
+    color: var(--hover-color);
+    /* Darker green for hover */
+    text-decoration: underline;
 }
 
 .list-select-button:hover {
-  background-color: var(--hover-color); /* Darker green for hover */
+    background-color: var(--hover-color);
+    /* Darker green for hover */
 }
 
 /* Close overlay button */
 .close-overlay-button {
-  background-color: var(--dark-bootstrap-error); /* Bootstrap red */
-  color: var(--dark-reverse);
-  border: none;
-  padding: 10px 20px;
-  margin-top: 20px;
-  cursor: pointer;
-  border-radius: 4px;
-  font-size: 1rem;
+    background-color: var(--dark-bootstrap-error);
+    /* Bootstrap red */
+    color: var(--dark-reverse);
+    border: none;
+    padding: 10px 20px;
+    margin-top: 20px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 1rem;
 }
 
 .close-overlay-button:hover {
-  background-color: var(--dark-darker-error); /* Darker red for hover */
+    background-color: var(--dark-darker-error);
+    /* Darker red for hover */
 }
 
 /* Search Bar */
 .search-bar {
-  margin: 20px 0;
-  width: 100%;
-  text-align: center;
+    margin: 20px 0;
+    width: 100%;
+    text-align: center;
 }
 
 .search-bar input {
-  padding: 8px 12px;
-  font-size: 1rem;
-  border: 1px solid var(--dark-off-default);
-  border-radius: 4px;
-  width: 300px;
-  transition: box-shadow 0.2s ease;
+    padding: 8px 12px;
+    font-size: 1rem;
+    border: 1px solid var(--dark-off-default);
+    border-radius: 4px;
+    width: 300px;
+    transition: box-shadow 0.2s ease;
 }
 
 .search-bar input:focus {
-  box-shadow: 0 0 5px var(--spotify-green);
-  outline: none;
+    box-shadow: 0 0 5px var(--spotify-green);
+    outline: none;
 }
 
 /* Pagination Controls */
 .pagination-controls {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 20px 0;
-  gap: 10px;
-  font-size: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+    gap: 10px;
+    font-size: 1rem;
 }
 
 .pagination-controls button {
-  background-color: var(--spotify-green);
-  color: var(--dark-default);
-  border: none;
-  padding: 8px 16px;
-  cursor: pointer;
-  border-radius: 4px;
-  transition: background-color 0.3s ease;
+    background-color: var(--spotify-green);
+    color: var(--dark-default);
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
 }
 
 .pagination-controls button:disabled {
-  background-color: var(--dark-button-disabled);
-  cursor: not-allowed;
+    background-color: var(--dark-button-disabled);
+    cursor: not-allowed;
 }
 
 .album-table th {
-  cursor: pointer;
-  user-select: none;
-  text-decoration: underline;
-  transition: color 0.2s ease;
+    cursor: pointer;
+    user-select: none;
+    text-decoration: underline;
+    transition: color 0.2s ease;
 }
 
 .album-table th:hover {
-  color: var(--hover-color);
+    color: var(--hover-color);
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .album-table th,
-  .album-table td {
-    font-size: 0.8rem;
-    padding: 0.5rem;
-  }
 
-  .album-table {
-    font-size: 0.8rem;
-  }
+    .album-table th,
+    .album-table td {
+        font-size: 0.8rem;
+        padding: 0.5rem;
+    }
 
-  .spotify-link img {
-    width: 16px;
-    height: 16px;
-  }
+    .album-table {
+        font-size: 0.8rem;
+    }
 
-  .add-to-list-button,
-  .delete-album-button {
-    display: none; /* Hide these buttons for tablets and smaller devices */
-  }
+    .spotify-link img {
+        width: 16px;
+        height: 16px;
+    }
+
+    .add-to-list-button,
+    .delete-album-button {
+        display: none;
+        /* Hide these buttons for tablets and smaller devices */
+    }
 }
 
 @media (max-width: 480px) {
-  .album-table {
-    display: block;
-    width: 100%;
-  }
+    .album-table {
+        display: block;
+        width: 100%;
+    }
 
-  .album-table thead {
-    display: none;
-  }
+    .album-table thead {
+        display: none;
+    }
 
-  .album-table td:first-child,
-  .album-table td:nth-child(2) {
-    flex: 1; /* Share available space equally */
-    padding: 8px 10px;
-    font-size: 0.9rem;
-  }
+    .album-table td:first-child,
+    .album-table td:nth-child(2) {
+        flex: 1;
+        /* Share available space equally */
+        padding: 8px 10px;
+        font-size: 0.9rem;
+    }
 
-  .album-table tbody {
-    display: block;
-  }
+    .album-table tbody {
+        display: block;
+    }
 
-  .album-table tr.visible-album {
-    display: flex;
-    justify-content: space-between;
-    border-bottom: 1px solid var(--dark-off-default);
-    padding: 10px;
-  }
+    .album-table tr.visible-album {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid var(--dark-off-default);
+        padding: 10px;
+    }
 
-  .album-table tr.hidden-album {
-    display: flex;
-    justify-content: space-between;
-    border-bottom: 1px solid var(--light-off-default);
-    padding: 10px;
-  }
+    .album-table tr.hidden-album {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid var(--light-off-default);
+        padding: 10px;
+    }
 
-  .album-table td {
-    display: block; /* Stack each cell vertically */
-    padding: 8px 10px; /* Add padding instead of flexbox adjustments */
-    font-size: 0.8rem;
-  }
+    .album-table td {
+        display: block;
+        /* Stack each cell vertically */
+        padding: 8px 10px;
+        /* Add padding instead of flexbox adjustments */
+        font-size: 0.8rem;
+    }
 
-  /* Ensure Spotify link fits within this layout */
-  .spotify-link img {
-    width: 20px; /* Adjust as needed */
-    height: 20px;
-    margin-right: 8px;
-    object-fit: contain; /* Ensures the image scales properly */
-  }
+    /* Ensure Spotify link fits within this layout */
+    .spotify-link img {
+        width: 20px;
+        /* Adjust as needed */
+        height: 20px;
+        margin-right: 8px;
+        object-fit: contain;
+        /* Ensures the image scales properly */
+    }
 
-  .pagination-controls {
-    flex-direction: column;
-    gap: 10px;
-  }
+    .pagination-controls {
+        flex-direction: column;
+        gap: 10px;
+    }
 
-  .overlay-content {
-    max-width: 90vw;
-    max-height: 80vh;
-  }
+    .overlay-content {
+        max-width: 90vw;
+        max-height: 80vh;
+    }
 
-  .artist-album-cell {
+    .artist-album-cell {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        margin-top: 10px;
+        text-decoration: none;
+    }
+
+    .more-options-button {
+        background: none;
+        border: none;
+        color: var(--dark-reverse);
+        /* Change the button color to black */
+        font-size: 1.5rem;
+        cursor: pointer;
+        margin-top: 0px;
+        padding: 0px;
+    }
+
+    .mobile-sort-buttons {
+        display: flex;
+        margin: 10px 0;
+        gap: 10px;
+        justify-content: center;
+    }
+
+    .mobile-sort-button {
+        padding: 8px 12px;
+        font-size: 14px;
+        background-color: #333;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+}
+
+/* For more options dropdown */
+.more-options-cell {
     display: flex;
     justify-content: space-between;
     align-items: center;
     position: relative;
-    margin-top: 10px;
-    text-decoration: none;
-  }
+}
 
-  .more-options-button {
+.more-options-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.more-options-button {
     background: none;
     border: none;
-    color: var(--dark-reverse); /* Change the button color to black */
+    color: var(--dark-reverse);
+    /* Change the button color to black */
     font-size: 1.5rem;
     cursor: pointer;
     margin-top: 0px;
-    padding: 0px;
-  }
+}
 
-  .mobile-sort-buttons {
-    display: flex;
+.dropdown-menu {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    background: var(--dark-default);
+    border: 1px solid var(--dark-off-default);
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgb(255, 255, 255);
+    z-index: 10;
+    overflow: hidden;
+    text-align: left;
+}
+
+.dropdown-menu button {
+    display: block;
+    width: 100%;
+    padding: 10px 15px;
+    background: var(--dark-default);
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    font-size: 1rem;
+    color: var(--dark-reverse);
+    /* Ensure text color is black */
+}
+
+.dropdown-menu button:hover {
+    background: var(--dark-page-background-color);
+    /* Light gray background on hover */
+}
+
+.more-options-button:focus+.dropdown-menu,
+.dropdown-menu:hover {
+    display: block;
+}
+
+.dropdown-menu {
+    display: none;
+    /* Hidden by default */
+}
+
+
+.mobile-sort-buttons {
+    display: none;
     margin: 10px 0;
     gap: 10px;
     justify-content: center;
-  }
-  
-  .mobile-sort-button {
+}
+
+.mobile-sort-button {
     padding: 8px 12px;
     font-size: 14px;
     background-color: #333;
@@ -405,476 +517,419 @@
     border: none;
     border-radius: 8px;
     cursor: pointer;
-  }
-}
-
-/* For more options dropdown */
-.more-options-cell {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: relative;
-}
-
-.more-options-container {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.more-options-button {
-  background: none;
-  border: none;
-  color: var(--dark-reverse); /* Change the button color to black */
-  font-size: 1.5rem;
-  cursor: pointer;
-  margin-top: 0px;
-}
-
-.dropdown-menu {
-  position: absolute;
-  top: 50%;
-  right: 0;
-  background: var(--dark-default);
-  border: 1px solid var(--dark-off-default);
-  border-radius: 5px;
-  box-shadow: 0 4px 8px rgb(255, 255, 255);
-  z-index: 10;
-  overflow: hidden;
-  text-align: left;
-}
-
-.dropdown-menu button {
-  display: block;
-  width: 100%;
-  padding: 10px 15px;
-  background: var(--dark-default);
-  border: none;
-  text-align: left;
-  cursor: pointer;
-  font-size: 1rem;
-  color: var(--dark-reverse); /* Ensure text color is black */
-}
-
-.dropdown-menu button:hover {
-  background: var(--dark-page-background-color); /* Light gray background on hover */
-}
-
-.more-options-button:focus + .dropdown-menu,
-.dropdown-menu:hover {
-  display: block;
-}
-
-.dropdown-menu {
-  display: none; /* Hidden by default */
-}
-
-
-.mobile-sort-buttons {
-  display: none;
-  margin: 10px 0;
-  gap: 10px;
-  justify-content: center;
-}
-
-.mobile-sort-button {
-  padding: 8px 12px;
-  font-size: 14px;
-  background-color: #333;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
 }
 
 .list-page-wrapper {
-  font-family: Arial, sans-serif;
-  text-align: center;
-  margin: 20px auto;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 20px auto;
 }
 
 .list-page-container {
-  max-width: 800px;
-  margin: 0 auto;
-  background: var(--dark-default);
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgb(255, 255, 255);
+    max-width: 800px;
+    margin: 0 auto;
+    background: var(--dark-default);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgb(255, 255, 255);
 }
 
 .list-page-title {
-  margin-bottom: 20px;
-  font-size: 1.8em;
-  color: var(--dark-contrast-color)
+    margin-bottom: 20px;
+    font-size: 1.8em;
+    color: var(--dark-contrast-color)
 }
 
 .list-page-error {
-  color: var(--dark-bootstrap-error);
+    color: var(--dark-bootstrap-error);
 }
 
 .list-page-randomize-button {
-  background-color: var(--spotify-green);
-  color: var(--white);
-  border: none;
-  padding: 10px 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  font-size: 1em;
+    background-color: var(--spotify-green);
+    color: var(--white);
+    border: none;
+    padding: 10px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 1em;
 }
 
 .list-page-unplayed-button {
-  background-color: var(--spotify-green);
+    background-color: var(--spotify-green);
 }
 
 .list-page-randomize-button:hover {
-  background-color: var(--hover-color);
+    background-color: var(--hover-color);
 }
 
 .list-page-album-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 0 auto;
-  text-align: left;
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 auto;
+    text-align: left;
 }
 
 .list-page-album-table th,
 .list-page-album-table td {
-  padding: 12px 10px;
+    padding: 12px 10px;
 }
 
 .list-page-even-row {
-  background-color: var(--dark-even-row);
+    background-color: var(--dark-even-row);
 }
 
 .list-page-odd-row {
-  background-color: var(--dark-default);
+    background-color: var(--dark-default);
 }
 
 .list-page-album-image {
-  width: 80px;
-  height: 80px;
-  border-radius: 6px;
-  object-fit: cover;
+    width: 80px;
+    height: 80px;
+    border-radius: 6px;
+    object-fit: cover;
 }
 
 .list-page-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(26, 26, 26, 0.836);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(26, 26, 26, 0.836);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .list-page-overlay-content {
-  background: var(--dark-default);
-  padding: 30px;
-  border-radius: 10px;
-  width: 90%;
-  max-width: 500px;
-  box-shadow: 0 6px 12px rgb(255, 255, 255);
+    background: var(--dark-default);
+    padding: 30px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 6px 12px rgb(255, 255, 255);
 }
 
 .list-page-overlay-image {
-  width: 100%;
-  max-width: 300px;
-  border-radius: 10px;
-  margin-bottom: 20px;
-  object-fit: cover;
+    width: 100%;
+    max-width: 300px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    object-fit: cover;
 }
 
 .list-page-overlay-title,
 .list-page-overlay-artist,
 .list-page-overlay-year {
-  margin: 10px 0;
+    margin: 10px 0;
 }
 
 .list-page-overlay-link {
-  display: inline-block;
-  color: var(--dark-default);
-  text-decoration: none;
-  padding: 10px 16px;
-  border-radius: 4px;
-  transition: background-color 0.3s;
+    display: inline-block;
+    color: var(--dark-default);
+    text-decoration: none;
+    padding: 10px 16px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
 }
 
 .list-page-close-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 1.5em;
-  background: none;
-  border: none;
-  color: var(--dark-reverse);
-  cursor: pointer;
-  background-color: var(--spotify-green);
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.5em;
+    background: none;
+    border: none;
+    color: var(--dark-reverse);
+    cursor: pointer;
+    background-color: var(--spotify-green);
 }
 
 .list-page-switch {
-  position: relative;
-  display: inline-flex;
-  width: 60px;
-  height: 34px;
+    position: relative;
+    display: inline-flex;
+    width: 60px;
+    height: 34px;
 }
 
 .list-page-switch input[type="checkbox"] {
-  opacity: 0; /* Hides the checkbox */
-  width: 0;   /* Prevents the checkbox from taking up space */
-  height: 0;  /* Prevents the checkbox from taking up space */
-  position: absolute; /* Removes it from the layout flow */
+    opacity: 0;
+    /* Hides the checkbox */
+    width: 0;
+    /* Prevents the checkbox from taking up space */
+    height: 0;
+    /* Prevents the checkbox from taking up space */
+    position: absolute;
+    /* Removes it from the layout flow */
 }
 
 .list-page-slider {
-  position: relative;
-  cursor: pointer;
-  background-color: var(--dark-off-default);
-  transition: 0.4s;
-  border-radius: 20px;
-  width: 34px; /* Match switch width */
-  height: 20px; /* Match switch height */
+    position: relative;
+    cursor: pointer;
+    background-color: var(--dark-off-default);
+    transition: 0.4s;
+    border-radius: 20px;
+    width: 34px;
+    /* Match switch width */
+    height: 20px;
+    /* Match switch height */
 }
 
 .list-page-slider:before {
-  content: '';
-  position: absolute;
-  background-color: var(--dark-default);
-  border-radius: 50%;
-  height: 14px;
-  width: 14px;
-  left: 3px;
-  bottom: 3px;
-  transition: 0.4s;
+    content: '';
+    position: absolute;
+    background-color: var(--dark-default);
+    border-radius: 50%;
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    transition: 0.4s;
 }
 
 /* When the checkbox is checked */
-.list-page-switch input:checked + .list-page-slider {
-  background-color: var(--spotify-green); /* Toggle background */
+.list-page-switch input:checked+.list-page-slider {
+    background-color: var(--spotify-green);
+    /* Toggle background */
 }
 
-.list-page-switch input:checked + .list-page-slider:before {
-  transform: translateX(14px); /* Move the circle */
+.list-page-switch input:checked+.list-page-slider:before {
+    transform: translateX(14px);
+    /* Move the circle */
 }
 
 /* View toggle buttons */
 .view-toggle {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
 }
 
 .view-toggle button {
-  padding: 10px 20px;
-  border: none;
-  background-color: var(--dark-contrast-off-default);
-  cursor: pointer;
+    padding: 10px 20px;
+    border: none;
+    background-color: var(--dark-contrast-off-default);
+    cursor: pointer;
 }
 
 .view-toggle button.active {
-  background-color: var(--spotify-green);
-  color: var(--dark-default);
+    background-color: var(--spotify-green);
+    color: var(--dark-default);
 }
 
 /* AlbumTableBlock styles */
 .album-block-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 20px;
-  justify-content: center;
-  margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 20px;
+    justify-content: center;
+    margin-top: 20px;
 }
 
 .album-block {
-  position: relative;
-  width: 100%;
-  height: 150px;
-  overflow: hidden;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(82, 82, 82, 0.459);
-  transition: transform 0.3s ease;
+    position: relative;
+    width: 100%;
+    height: 150px;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(82, 82, 82, 0.459);
+    transition: transform 0.3s ease;
 }
 
 .album-block:hover {
-  transform: scale(1.05);
+    transform: scale(1.05);
 }
 
 .album-block-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 10px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
 }
 
 .album-block-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.660);
-  color: var(--dark-default);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  border-radius: 10px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.660);
+    color: var(--dark-default);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 10px;
 }
 
 .album-block:hover .album-block-overlay,
 .album-block:active .album-block-overlay {
-  opacity: 1;
+    opacity: 1;
 }
 
 .album-block-text {
-  text-align: center;
+    text-align: center;
 }
 
 .album-block-text p {
-  margin: 0;
-  font-size: 1rem;
+    margin: 0;
+    font-size: 1rem;
 }
 
 @media (max-width: 768px) {
-  .album-block-container {
-    grid-template-columns: repeat(2, 1fr);
-  }
+    .album-block-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
 
-  .album-block:active .album-block-overlay {
-    opacity: 1;
-  }
+    .album-block:active .album-block-overlay {
+        opacity: 1;
+    }
 
-  .list-page-album-name,
-  .list-page-album-artist {
-    word-wrap: break-word; /* Ensures long words wrap */
-    overflow-wrap: break-word; /* Alternative for better support */
-    max-width: 7em; /* Ensures text does not exceed the container */
-    white-space: normal; /* Allows text to wrap */
-  }
+    .list-page-album-name,
+    .list-page-album-artist {
+        word-wrap: break-word;
+        /* Ensures long words wrap */
+        overflow-wrap: break-word;
+        /* Alternative for better support */
+        max-width: 7em;
+        /* Ensures text does not exceed the container */
+        white-space: normal;
+        /* Allows text to wrap */
+    }
 
 }
 
 @media (min-width: 769px) {
-  .album-block-container {
-    grid-template-columns: repeat(5, 1fr);
-  }
+    .album-block-container {
+        grid-template-columns: repeat(5, 1fr);
+    }
 }
 
 .add-album-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
 }
 
 .add-album-overlay-content {
-  background: var(--dark-default);
-  padding: 20px;
-  border-radius: 8px;
-  width: 90%;
-  max-width: 600px;
-  overflow-y: auto;
-  max-height: 100vh;
+    background: var(--dark-default);
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 600px;
+    overflow-y: auto;
+    max-height: 100vh;
 }
 
 .add-album-overlay-album-row {
-  display: flex;
-  align-items: center;
-  margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
 }
 
 .add-album-overlay-album-image {
-  width: 50px;
-  height: 50px;
-  margin-right: 15px;
+    width: 50px;
+    height: 50px;
+    margin-right: 15px;
 }
 
 .add-album-overlay-album-details {
-  flex-grow: 1;
+    flex-grow: 1;
 }
 
 .add-album-overlay-add-button {
-  background: var(--spotify-green);
-  color: var(--dark-reverse);
-  border: none;
-  padding: 5px 10px;
-  cursor: pointer;
-  border-radius: 4px;
+    background: var(--spotify-green);
+    color: var(--dark-reverse);
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
 }
 
 .add-album-overlay-add-button:hover {
-  background: var(--hover-color);
+    background: var(--hover-color);
 }
 
 .added-tick {
-  color: var(--spotify-green);
-  font-size: 1.5rem; /* Make it slightly larger */
-  font-weight: bold;
-  margin-left: 8px; /* Adds spacing from the button */
+    color: var(--spotify-green);
+    font-size: 1.5rem;
+    /* Make it slightly larger */
+    font-weight: bold;
+    margin-left: 8px;
+    /* Adds spacing from the button */
 }
 
 .tooltip {
-  position: absolute;
-  background: rgba(0, 0, 0, 0.8);
-  color: white;
-  padding: 8px;
-  border-radius: 5px;
-  top: 50px; /* Adjust positioning */
-  left: 50%;
-  transform: translateX(-50%);
-  white-space: nowrap;
-  z-index: 10;
-  font-size: 14px;
-  pointer-events: none; /* Prevents interfering with other interactions */
+    position: absolute;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 8px;
+    border-radius: 5px;
+    top: 50px;
+    /* Adjust positioning */
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    z-index: 10;
+    font-size: 14px;
+    pointer-events: none;
+    /* Prevents interfering with other interactions */
 }
 
 @media (max-width: 768px) {
-  .tooltip {
-    top: 80px; /* Adjust for mobile */
-    font-size: 12px;
-  }
+    .tooltip {
+        top: 80px;
+        /* Adjust for mobile */
+        font-size: 12px;
+    }
 }
 
 .tooltip-inline {
-  position: absolute;
-  background-color: rgba(255, 255, 255, 0.8); /* Dark background for visibility */
-  color: black;
-  padding: 8px;
-  border-radius: 4px;
-  font-size: 14px;
-  white-space: nowrap; /* Prevents text wrapping */
-  z-index: 1000; /* Ensures it appears above everything */
-  left: 50%; /* Center it */
-  transform: translateX(-50%); /* Ensures it's properly centered */
-  pointer-events: none; /* Prevents interfering with mouse events */
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.8);
+    /* Dark background for visibility */
+    color: black;
+    padding: 8px;
+    border-radius: 4px;
+    font-size: 14px;
+    white-space: nowrap;
+    /* Prevents text wrapping */
+    z-index: 1000;
+    /* Ensures it appears above everything */
+    left: 50%;
+    /* Center it */
+    transform: translateX(-50%);
+    /* Ensures it's properly centered */
+    pointer-events: none;
+    /* Prevents interfering with mouse events */
 }
 
 @media (max-width: 768px) {
-  .tooltip-inline {
-    font-size: 12px;
-  }
+    .tooltip-inline {
+        font-size: 12px;
+    }
 }
 
 .page-input {
-  width: 100px;
-  padding: 5px;
-  border: 1px solid var(--dark-off-default);
-  border-radius: 4px;
-  text-align: center;
-  font-size: 1rem;
-  margin: 0 10px;
+    width: 100px;
+    padding: 5px;
+    border: 1px solid var(--dark-off-default);
+    border-radius: 4px;
+    text-align: center;
+    font-size: 1rem;
+    margin: 0 10px;
 }
 
 .page-input:focus {
-  outline: none;
-  box-shadow: 0 0 5px var(--spotify-green);
+    outline: none;
+    box-shadow: 0 0 5px var(--spotify-green);
 }

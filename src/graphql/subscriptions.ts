@@ -4,8 +4,8 @@
 
 import * as APITypes from "../API";
 type GeneratedSubscription<InputType, OutputType> = string & {
-  __generatedSubscriptionInput: InputType;
-  __generatedSubscriptionOutput: OutputType;
+    __generatedSubscriptionInput: InputType;
+    __generatedSubscriptionOutput: OutputType;
 };
 
 export const onCreateList = /* GraphQL */ `subscription OnCreateList($filter: ModelSubscriptionListFilterInput) {
@@ -23,8 +23,8 @@ export const onCreateList = /* GraphQL */ `subscription OnCreateList($filter: Mo
   }
 }
 ` as GeneratedSubscription<
-  APITypes.OnCreateListSubscriptionVariables,
-  APITypes.OnCreateListSubscription
+    APITypes.OnCreateListSubscriptionVariables,
+    APITypes.OnCreateListSubscription
 >;
 export const onUpdateList = /* GraphQL */ `subscription OnUpdateList($filter: ModelSubscriptionListFilterInput) {
   onUpdateList(filter: $filter) {
@@ -41,8 +41,8 @@ export const onUpdateList = /* GraphQL */ `subscription OnUpdateList($filter: Mo
   }
 }
 ` as GeneratedSubscription<
-  APITypes.OnUpdateListSubscriptionVariables,
-  APITypes.OnUpdateListSubscription
+    APITypes.OnUpdateListSubscriptionVariables,
+    APITypes.OnUpdateListSubscription
 >;
 export const onDeleteList = /* GraphQL */ `subscription OnDeleteList($filter: ModelSubscriptionListFilterInput) {
   onDeleteList(filter: $filter) {
@@ -59,8 +59,8 @@ export const onDeleteList = /* GraphQL */ `subscription OnDeleteList($filter: Mo
   }
 }
 ` as GeneratedSubscription<
-  APITypes.OnDeleteListSubscriptionVariables,
-  APITypes.OnDeleteListSubscription
+    APITypes.OnDeleteListSubscriptionVariables,
+    APITypes.OnDeleteListSubscription
 >;
 export const onCreateAlbum = /* GraphQL */ `subscription OnCreateAlbum($filter: ModelSubscriptionAlbumFilterInput) {
   onCreateAlbum(filter: $filter) {
@@ -92,8 +92,8 @@ export const onCreateAlbum = /* GraphQL */ `subscription OnCreateAlbum($filter: 
   }
 }
 ` as GeneratedSubscription<
-  APITypes.OnCreateAlbumSubscriptionVariables,
-  APITypes.OnCreateAlbumSubscription
+    APITypes.OnCreateAlbumSubscriptionVariables,
+    APITypes.OnCreateAlbumSubscription
 >;
 export const onUpdateAlbum = /* GraphQL */ `subscription OnUpdateAlbum($filter: ModelSubscriptionAlbumFilterInput) {
   onUpdateAlbum(filter: $filter) {
@@ -125,8 +125,8 @@ export const onUpdateAlbum = /* GraphQL */ `subscription OnUpdateAlbum($filter: 
   }
 }
 ` as GeneratedSubscription<
-  APITypes.OnUpdateAlbumSubscriptionVariables,
-  APITypes.OnUpdateAlbumSubscription
+    APITypes.OnUpdateAlbumSubscriptionVariables,
+    APITypes.OnUpdateAlbumSubscription
 >;
 export const onDeleteAlbum = /* GraphQL */ `subscription OnDeleteAlbum($filter: ModelSubscriptionAlbumFilterInput) {
   onDeleteAlbum(filter: $filter) {
@@ -158,8 +158,8 @@ export const onDeleteAlbum = /* GraphQL */ `subscription OnDeleteAlbum($filter: 
   }
 }
 ` as GeneratedSubscription<
-  APITypes.OnDeleteAlbumSubscriptionVariables,
-  APITypes.OnDeleteAlbumSubscription
+    APITypes.OnDeleteAlbumSubscriptionVariables,
+    APITypes.OnDeleteAlbumSubscription
 >;
 export const onCreateAlbumList = /* GraphQL */ `subscription OnCreateAlbumList($filter: ModelSubscriptionAlbumListFilterInput) {
   onCreateAlbumList(filter: $filter) {
@@ -196,8 +196,8 @@ export const onCreateAlbumList = /* GraphQL */ `subscription OnCreateAlbumList($
   }
 }
 ` as GeneratedSubscription<
-  APITypes.OnCreateAlbumListSubscriptionVariables,
-  APITypes.OnCreateAlbumListSubscription
+    APITypes.OnCreateAlbumListSubscriptionVariables,
+    APITypes.OnCreateAlbumListSubscription
 >;
 export const onUpdateAlbumList = /* GraphQL */ `subscription OnUpdateAlbumList($filter: ModelSubscriptionAlbumListFilterInput) {
   onUpdateAlbumList(filter: $filter) {
@@ -234,8 +234,8 @@ export const onUpdateAlbumList = /* GraphQL */ `subscription OnUpdateAlbumList($
   }
 }
 ` as GeneratedSubscription<
-  APITypes.OnUpdateAlbumListSubscriptionVariables,
-  APITypes.OnUpdateAlbumListSubscription
+    APITypes.OnUpdateAlbumListSubscriptionVariables,
+    APITypes.OnUpdateAlbumListSubscription
 >;
 export const onDeleteAlbumList = /* GraphQL */ `subscription OnDeleteAlbumList($filter: ModelSubscriptionAlbumListFilterInput) {
   onDeleteAlbumList(filter: $filter) {
@@ -272,8 +272,8 @@ export const onDeleteAlbumList = /* GraphQL */ `subscription OnDeleteAlbumList($
   }
 }
 ` as GeneratedSubscription<
-  APITypes.OnDeleteAlbumListSubscriptionVariables,
-  APITypes.OnDeleteAlbumListSubscription
+    APITypes.OnDeleteAlbumListSubscriptionVariables,
+    APITypes.OnDeleteAlbumListSubscription
 >;
 export const onCreateListeningPileEntry = /* GraphQL */ `subscription OnCreateListeningPileEntry(
   $filter: ModelSubscriptionListeningPileEntryFilterInput
@@ -303,8 +303,8 @@ export const onCreateListeningPileEntry = /* GraphQL */ `subscription OnCreateLi
   }
 }
 ` as GeneratedSubscription<
-  APITypes.OnCreateListeningPileEntrySubscriptionVariables,
-  APITypes.OnCreateListeningPileEntrySubscription
+    APITypes.OnCreateListeningPileEntrySubscriptionVariables,
+    APITypes.OnCreateListeningPileEntrySubscription
 >;
 export const onUpdateListeningPileEntry = /* GraphQL */ `subscription OnUpdateListeningPileEntry(
   $filter: ModelSubscriptionListeningPileEntryFilterInput
@@ -334,8 +334,8 @@ export const onUpdateListeningPileEntry = /* GraphQL */ `subscription OnUpdateLi
   }
 }
 ` as GeneratedSubscription<
-  APITypes.OnUpdateListeningPileEntrySubscriptionVariables,
-  APITypes.OnUpdateListeningPileEntrySubscription
+    APITypes.OnUpdateListeningPileEntrySubscriptionVariables,
+    APITypes.OnUpdateListeningPileEntrySubscription
 >;
 export const onDeleteListeningPileEntry = /* GraphQL */ `subscription OnDeleteListeningPileEntry(
   $filter: ModelSubscriptionListeningPileEntryFilterInput
@@ -365,6 +365,6 @@ export const onDeleteListeningPileEntry = /* GraphQL */ `subscription OnDeleteLi
   }
 }
 ` as GeneratedSubscription<
-  APITypes.OnDeleteListeningPileEntrySubscriptionVariables,
-  APITypes.OnDeleteListeningPileEntrySubscription
+    APITypes.OnDeleteListeningPileEntrySubscriptionVariables,
+    APITypes.OnDeleteListeningPileEntrySubscription
 >;

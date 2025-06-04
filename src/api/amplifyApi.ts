@@ -11,898 +11,884 @@ import { customDeleteAlbumList, toggleHidden, togglePlayed } from '../graphql/cu
 import { uploadData } from '@aws-amplify/storage';
 
 export const updateAlbumDetails = async (albumData: AlbumData): Promise<GraphQLResult<any>> => {
-  try {
-    const graphqlParams = graphqlOperation(updateAlbum, { input: albumData });
-
-    const response = await GraphQLAPI.graphql(
-      Amplify as any, // Pass the Amplify class instance
-      graphqlParams,  // GraphQL options
-      {}              // Additional headers
-    );
-
-    // Check if the result is a Promise or Observable
-    if (response instanceof Observable) {
-      throw new Error('Expected a non-subscription query/mutation but received a subscription.');
-    }
-
-    const typedResponse = response as GraphQLResult<any>;
-
-    if (typedResponse.data?.updateAlbum) {
-      return typedResponse.data.updateAlbum;
-    } else {
-      throw new Error('Unexpected response structure.');
-    }
-  } catch (error) {
-    console.error('Error updating album:', error);
-    throw new Error('Error updating album');
-  }
-};
-
-export const addAlbum = async (albumData: AlbumData, userId: string): Promise<GraphQLResult<any>> => {
-  try {
-
-    const graphqlParams = graphqlOperation(createAlbum, {
-      input: {
-        ...albumData,
-        userId
-      },
-    });
-
-    const result = await GraphQLAPI.graphql(
-      Amplify as any, // Pass the Amplify class instance
-      graphqlParams,  // GraphQL options
-      {}              // Additional headers
-    );
-
-    // Check if the result is a Promise or Observable
-    if (result instanceof Observable) {
-      throw new Error('Expected a non-subscription query/mutation but received a subscription.');
-    }
-
-    return result;
-  } catch (error) {
-    console.error('Error adding album:', error);
-    throw new Error('Error adding album', error!);
-  }
-};
-
-export const fetchAlbumById = async(albumId: string): Promise<AlbumData | null> => {
-  try {
-    const response = await GraphQLAPI.graphql(
-      Amplify as any, 
-      graphqlOperation(getAlbum, { id : albumId }),
-      {}
-    );
-
-    // Check if the result is a Promise or Observable
-    if (response instanceof Observable) {
-      throw new Error('Expected a non-subscription query/mutation but received a subscription.');
-    }
-
-    // Ensure response is properly typed
-    const typedResponse = response as GraphQLResult<any>;
-
-    // Access the `data` field
-    if (typedResponse.data && typedResponse.data.getAlbum) {
-      const album = typedResponse.data.getAlbum;
-      return {
-        id: album.id,
-        name: album.name,
-        artist: album.artist,
-        release_date: album.release_date,
-        genres: album.genres,
-        spotifyUrl: album.spotifyUrl,
-        imageUrl: album.imageUrl,
-        hideAlbum: album.hideAlbum,
-        userId: album.userId
-      };
-    }
-
-    return null;
-  } catch (error) {
-    console.error('Error fetching album by ID:', error);
-    return null;
-  }
-}
-
-export const fetchAlbums = async (userId: string) => {
-  console.log('User id', userId);
-  let allAlbums: AlbumData[] = [];
-  let nextToken: string | null = null;
-
-  do {
     try {
-      const response = await GraphQLAPI.graphql(
-        Amplify as any,
-        graphqlOperation(albumsByUser, { userId: userId, limit: 100, nextToken }),
-        {}
-      );
-      console.log('Response', response);
+        const graphqlParams = graphqlOperation(updateAlbum, { input: albumData });
 
-      if (response instanceof Observable) {
-        throw new Error('Expected a non-subscription query/mutation but received a subscription.');
-      }
-
-      const typedResponse = response as GraphQLResult<any>;
-      if (typedResponse.data?.albumsByUser) {
-        allAlbums = allAlbums.concat(
-          typedResponse.data.albumsByUser.items.map((item: AlbumData) => ({
-            id: item.id,
-            name: item.name,
-            artist: item.artist,
-            release_date: item.release_date,
-            genres: item.genres,
-            spotifyUrl: item.spotifyUrl,
-            imageUrl: item.imageUrl,
-            hideAlbum: item.hideAlbum
-          }))
-        );
-        nextToken = typedResponse.data.albumsByUser.nextToken;
-      } else {
-        throw new Error('Unexpected response structure.');
-      }
-    } catch (error) {
-      console.error('Error fetching albums:', error);
-      break;
-    }
-  } while (nextToken);
-
-  return allAlbums;
-};
-
-export const fetchLists = async (userId: string) => {
-  let allLists: any[] = [];
-  let nextToken: string | null = null;
-
-  do {
-    try {
-      const response = await GraphQLAPI.graphql(
-        Amplify as any,
-        graphqlOperation(customAlbumListsByUser, { userId: userId, albumLimit: 100, albumNextToken: nextToken }),
-        {}
-      );
-
-      if (response instanceof Observable) {
-        throw new Error('Expected a non-subscription query/mutation but received a subscription.');
-      }
-
-      const typedResponse = response as GraphQLResult<any>;
-      if (typedResponse.data?.listsByUser) {
-        allLists = allLists.concat(
-          typedResponse.data.listsByUser.items.map((item: List) => ({
-            id: item.id,
-            name: item.name,
-            albums: item.albums?.items.map((albumListItem: any) => ({
-              id: albumListItem.album.id,
-              name: albumListItem.album.name,
-              artist: albumListItem.album.artist,
-              spotifyUrl: albumListItem.album.spotifyUrl,
-              releaseDate: albumListItem.album.release_date,
-              genres: albumListItem.album.genres,
-              imageUrl: albumListItem.album.imageUrl,
-              played: albumListItem.played,
-              hideAlbum: albumListItem.album.hideAlbum,
-            })),
-          }))
-        );
-        nextToken = typedResponse.data.listsByUser.nextToken;
-      } else {
-        throw new Error('Unexpected response structure.');
-      }
-    } catch (error) {
-      console.error('Error fetching lists:', error);
-      break;
-    }
-  } while (nextToken);
-
-  return allLists;
-};
-
-export const fetchAlbumsByListId = async (listId: string): Promise<ListData> => {
-  let allAlbums: any[] = [];
-  let albumNextToken: string | null = null;
-
-  const fetchAlbumsForList = async () => {
-    let albumName = null;
-    do {
-      try {
         const response = await GraphQLAPI.graphql(
-          Amplify as any,
-          graphqlOperation(listListsWithAlbums, {
-            filter: { id: { eq: listId } },
-            albumLimit: 100,
-            albumNextToken,
-          })
+            Amplify as any, // Pass the Amplify class instance
+            graphqlParams,  // GraphQL options
+            {}              // Additional headers
         );
 
+        // Check if the result is a Promise or Observable
         if (response instanceof Observable) {
-          throw new Error('Expected a query but received a subscription.');
+            throw new Error('Expected a non-subscription query/mutation but received a subscription.');
         }
 
         const typedResponse = response as GraphQLResult<any>;
-        const listData = typedResponse.data?.listLists?.items[0];
 
-        if (listData?.albums) {
-          albumName = listData.name;
-          allAlbums = allAlbums.concat(
-            listData.albums.items.map((albumListItem: AlbumListData) => ({
-              album: {
-                id: albumListItem.album.id,
-                name: albumListItem.album.name,
-                artist: albumListItem.album.artist,
-                spotifyUrl: albumListItem.album.spotifyUrl,
-                releaseDate: albumListItem.album.release_date,
-                genres: albumListItem.album.genres,
-                hideAlbum: albumListItem.album.hideAlbum,
-                imageUrl: albumListItem.album.imageUrl,
-              },
-              played: albumListItem.played,
-            }))
-          );
-          albumNextToken = listData.albums.nextToken;
+        if (typedResponse.data?.updateAlbum) {
+            return typedResponse.data.updateAlbum;
         } else {
-          throw new Error('Unexpected response structure for albums.');
+            throw new Error('Unexpected response structure.');
         }
-      } catch (error) {
-        console.error(`Error fetching albums for list ${listId}:`, error);
+    } catch (error) {
+        console.error('Error updating album:', error);
+        throw new Error('Error updating album');
+    }
+};
+
+export const addAlbum = async (albumData: AlbumData, userId: string): Promise<GraphQLResult<any>> => {
+    try {
+
+        const graphqlParams = graphqlOperation(createAlbum, {
+            input: {
+                ...albumData,
+                userId
+            },
+        });
+
+        const result = await GraphQLAPI.graphql(
+            Amplify as any, // Pass the Amplify class instance
+            graphqlParams,  // GraphQL options
+            {}              // Additional headers
+        );
+
+        // Check if the result is a Promise or Observable
+        if (result instanceof Observable) {
+            throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+        }
+
+        return result;
+    } catch (error) {
+        console.error('Error adding album:', error);
+        throw new Error('Error adding album', error!);
+    }
+};
+
+export const fetchAlbumById = async (albumId: string): Promise<AlbumData | null> => {
+    try {
+        const response = await GraphQLAPI.graphql(
+            Amplify as any,
+            graphqlOperation(getAlbum, { id: albumId }),
+            {}
+        );
+
+        // Check if the result is a Promise or Observable
+        if (response instanceof Observable) {
+            throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+        }
+
+        // Ensure response is properly typed
+        const typedResponse = response as GraphQLResult<any>;
+
+        // Access the `data` field
+        if (typedResponse.data && typedResponse.data.getAlbum) {
+            const album = typedResponse.data.getAlbum;
+            return {
+                id: album.id,
+                name: album.name,
+                artist: album.artist,
+                release_date: album.release_date,
+                genres: album.genres,
+                spotifyUrl: album.spotifyUrl,
+                imageUrl: album.imageUrl,
+                hideAlbum: album.hideAlbum,
+                userId: album.userId
+            };
+        }
+
+        return null;
+    } catch (error) {
+        console.error('Error fetching album by ID:', error);
+        return null;
+    }
+}
+
+export const fetchAlbums = async (userId: string) => {
+    console.log('User id', userId);
+    let allAlbums: AlbumData[] = [];
+    let nextToken: string | null = null;
+
+    do {
+        try {
+            const response = await GraphQLAPI.graphql(
+                Amplify as any,
+                graphqlOperation(albumsByUser, { userId: userId, limit: 100, nextToken }),
+                {}
+            );
+            console.log('Response', response);
+
+            if (response instanceof Observable) {
+                throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+            }
+
+            const typedResponse = response as GraphQLResult<any>;
+            if (typedResponse.data?.albumsByUser) {
+                allAlbums = allAlbums.concat(
+                    typedResponse.data.albumsByUser.items.map((item: AlbumData) => ({
+                        id: item.id,
+                        name: item.name,
+                        artist: item.artist,
+                        release_date: item.release_date,
+                        genres: item.genres,
+                        spotifyUrl: item.spotifyUrl,
+                        imageUrl: item.imageUrl,
+                        hideAlbum: item.hideAlbum
+                    }))
+                );
+                nextToken = typedResponse.data.albumsByUser.nextToken;
+            } else {
+                throw new Error('Unexpected response structure.');
+            }
+        } catch (error) {
+            console.error('Error fetching albums:', error);
+            break;
+        }
+    } while (nextToken);
+
+    return allAlbums;
+};
+
+export const fetchLists = async (userId: string) => {
+    let allLists: any[] = [];
+    let nextToken: string | null = null;
+
+    do {
+        try {
+            const response = await GraphQLAPI.graphql(
+                Amplify as any,
+                graphqlOperation(customAlbumListsByUser, { userId: userId, albumLimit: 100, albumNextToken: nextToken }),
+                {}
+            );
+
+            if (response instanceof Observable) {
+                throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+            }
+
+            const typedResponse = response as GraphQLResult<any>;
+            if (typedResponse.data?.listsByUser) {
+                allLists = allLists.concat(
+                    typedResponse.data.listsByUser.items.map((item: List) => ({
+                        id: item.id,
+                        name: item.name,
+                        albums: item.albums?.items.map((albumListItem: any) => ({
+                            id: albumListItem.album.id,
+                            name: albumListItem.album.name,
+                            artist: albumListItem.album.artist,
+                            spotifyUrl: albumListItem.album.spotifyUrl,
+                            releaseDate: albumListItem.album.release_date,
+                            genres: albumListItem.album.genres,
+                            imageUrl: albumListItem.album.imageUrl,
+                            played: albumListItem.played,
+                            hideAlbum: albumListItem.album.hideAlbum,
+                        })),
+                    }))
+                );
+                nextToken = typedResponse.data.listsByUser.nextToken;
+            } else {
+                throw new Error('Unexpected response structure.');
+            }
+        } catch (error) {
+            console.error('Error fetching lists:', error);
+            break;
+        }
+    } while (nextToken);
+
+    return allLists;
+};
+
+export const fetchAlbumsByListId = async (listId: string): Promise<ListData> => {
+    let allAlbums: any[] = [];
+    let albumNextToken: string | null = null;
+
+    const fetchAlbumsForList = async () => {
+        let albumName = null;
+        do {
+            try {
+                const response = await GraphQLAPI.graphql(
+                    Amplify as any,
+                    graphqlOperation(listListsWithAlbums, {
+                        filter: { id: { eq: listId } },
+                        albumLimit: 100,
+                        albumNextToken,
+                    })
+                );
+
+                if (response instanceof Observable) {
+                    throw new Error('Expected a query but received a subscription.');
+                }
+
+                const typedResponse = response as GraphQLResult<any>;
+                const listData = typedResponse.data?.listLists?.items[0];
+
+                if (listData?.albums) {
+                    albumName = listData.name;
+                    allAlbums = allAlbums.concat(
+                        listData.albums.items.map((albumListItem: AlbumListData) => ({
+                            album: {
+                                id: albumListItem.album.id,
+                                name: albumListItem.album.name,
+                                artist: albumListItem.album.artist,
+                                spotifyUrl: albumListItem.album.spotifyUrl,
+                                releaseDate: albumListItem.album.release_date,
+                                genres: albumListItem.album.genres,
+                                hideAlbum: albumListItem.album.hideAlbum,
+                                imageUrl: albumListItem.album.imageUrl,
+                            },
+                            played: albumListItem.played,
+                        }))
+                    );
+                    albumNextToken = listData.albums.nextToken;
+                } else {
+                    throw new Error('Unexpected response structure for albums.');
+                }
+            } catch (error) {
+                console.error(`Error fetching albums for list ${listId}:`, error);
+                throw error;
+            }
+        } while (albumNextToken);
+
+        return {
+            id: listId,
+            name: albumName,
+            albums: allAlbums
+        };
+    };
+
+    try {
+        const albums = await fetchAlbumsForList();
+        return {
+            id: albums.id,
+            name: albums.name,
+            albums: albums.albums
+        };
+    } catch (error) {
+        console.error('Error fetching list and albums:', error);
         throw error;
-      }
-    } while (albumNextToken);
-
-    return {
-        id: listId,
-        name: albumName,
-        albums: allAlbums
-    };
-  };
-
-  try {
-    const albums = await fetchAlbumsForList();
-    return {
-      id: albums.id,
-      name: albums.name,
-      albums: albums.albums
-    };
-  } catch (error) {
-    console.error('Error fetching list and albums:', error);
-    throw error;
-  }
+    }
 };
 
 
 export const addList = async (name: string, userId: string) => {
-    const response = await GraphQLAPI.graphql(Amplify as any, 
-      graphqlOperation(createList, { input: { name, userId } } ),
-      {}
+    const response = await GraphQLAPI.graphql(Amplify as any,
+        graphqlOperation(createList, { input: { name, userId } }),
+        {}
     );
     // Check if the result is a Promise or Observable
     if (response instanceof Observable) {
-      throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+        throw new Error('Expected a non-subscription query/mutation but received a subscription.');
     }
 
     return response.data.createList;
 };
 
 export const removeAlbum = async (id: string) => {
-  try {
-    const response = await GraphQLAPI.graphql(
-      Amplify as any,
-      graphqlOperation(deleteAlbum, { input: { id } }),
-      {}
-    );
+    try {
+        const response = await GraphQLAPI.graphql(
+            Amplify as any,
+            graphqlOperation(deleteAlbum, { input: { id } }),
+            {}
+        );
 
-    if (response instanceof Observable) {
-      throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+        if (response instanceof Observable) {
+            throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+        }
+
+        const typedResponse = response as GraphQLResult<any>;
+
+        if (typedResponse.data?.deleteAlbum) {
+            return typedResponse.data.deleteAlbum;
+        } else {
+            throw new Error('Unexpected response structure.');
+        }
+    } catch (error) {
+        console.error('Error deleting album:', error);
+        throw error;
     }
-
-    const typedResponse = response as GraphQLResult<any>;
-
-    if (typedResponse.data?.deleteAlbum) {
-      return typedResponse.data.deleteAlbum;
-    } else {
-      throw new Error('Unexpected response structure.');
-    }
-  } catch (error) {
-    console.error('Error deleting album:', error);
-    throw error;
-  }
 };
 
 export const removeList = async (id: string) => {
-  try {
-    const response = await GraphQLAPI.graphql(
-      Amplify as any,
-      graphqlOperation(deleteList, { input: { id } }),
-      {}
-    );
+    try {
+        const response = await GraphQLAPI.graphql(
+            Amplify as any,
+            graphqlOperation(deleteList, { input: { id } }),
+            {}
+        );
 
-    if (response instanceof Observable) {
-      throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+        if (response instanceof Observable) {
+            throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+        }
+
+        const typedResponse = response as GraphQLResult<any>;
+
+        if (typedResponse.data?.deleteList) {
+            return typedResponse.data.deleteList;
+        } else {
+            throw new Error('Unexpected response structure.');
+        }
+    } catch (error) {
+        console.error('Error deleting list:', error);
+        throw error;
     }
-
-    const typedResponse = response as GraphQLResult<any>;
-
-    if (typedResponse.data?.deleteList) {
-      return typedResponse.data.deleteList;
-    } else {
-      throw new Error('Unexpected response structure.');
-    }
-  } catch (error) {
-    console.error('Error deleting list:', error);
-    throw error;
-  }
 };
 
 export const fetchAlbumListsWithNames = async (albumId: string) => {
-  let allEntries: any[] = [];
-  let nextToken: string | null = null;
+    let allEntries: any[] = [];
+    let nextToken: string | null = null;
 
-  do {
-    try {
-      const response = await GraphQLAPI.graphql(
-        Amplify as any,
-        graphqlOperation(customAlbumListsByAlbumIdAndId, { albumId, limit: 100, nextToken }),
-        {}
-      );
+    do {
+        try {
+            const response = await GraphQLAPI.graphql(
+                Amplify as any,
+                graphqlOperation(customAlbumListsByAlbumIdAndId, { albumId, limit: 100, nextToken }),
+                {}
+            );
 
-      if (response instanceof Observable) {
-        throw new Error('Expected a non-subscription query/mutation but received a subscription.');
-      }
+            if (response instanceof Observable) {
+                throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+            }
 
-      const typedResponse = response as GraphQLResult<any>;
+            const typedResponse = response as GraphQLResult<any>;
 
-      if (typedResponse.data?.albumListsByAlbumIdAndId?.items?.length) {
-        const entriesWithNames = typedResponse.data.albumListsByAlbumIdAndId.items.map((entry: { list: { name: any; }; }) => ({
-          ...entry,
-          listName: entry.list?.name, // Extract list name
-        }));
+            if (typedResponse.data?.albumListsByAlbumIdAndId?.items?.length) {
+                const entriesWithNames = typedResponse.data.albumListsByAlbumIdAndId.items.map((entry: { list: { name: any; }; }) => ({
+                    ...entry,
+                    listName: entry.list?.name, // Extract list name
+                }));
 
-        allEntries = allEntries.concat(entriesWithNames);
-        nextToken = typedResponse.data.albumListsByAlbumIdAndId.nextToken;
-      } else {
-        nextToken = null;
-      }
-    } catch (error) {
-      console.error('Error fetching AlbumList entries with names:', error);
-      break;
-    }
-  } while (nextToken);
+                allEntries = allEntries.concat(entriesWithNames);
+                nextToken = typedResponse.data.albumListsByAlbumIdAndId.nextToken;
+            } else {
+                nextToken = null;
+            }
+        } catch (error) {
+            console.error('Error fetching AlbumList entries with names:', error);
+            break;
+        }
+    } while (nextToken);
 
-  console.log('All entries with list names', allEntries);
-  return allEntries;
+    console.log('All entries with list names', allEntries);
+    return allEntries;
 };
 
 
 export const fetchAlbumListEntriesForAlbumId = async (albumId: string) => {
-  let allEntries: any[] = [];
-  let nextToken: string | null = null;
+    let allEntries: any[] = [];
+    let nextToken: string | null = null;
 
-  do {
-    try {
-      const response = await GraphQLAPI.graphql(
-        Amplify as any,
-        graphqlOperation(albumListsByAlbumIdAndId, { albumId, limit: 100, nextToken }),
-        {}
-      );
+    do {
+        try {
+            const response = await GraphQLAPI.graphql(
+                Amplify as any,
+                graphqlOperation(albumListsByAlbumIdAndId, { albumId, limit: 100, nextToken }),
+                {}
+            );
 
-      if (response instanceof Observable) {
-        throw new Error('Expected a non-subscription query/mutation but received a subscription.');
-      }
+            if (response instanceof Observable) {
+                throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+            }
 
-      const typedResponse = response as GraphQLResult<any>;
-      if (typedResponse.data?.albumListsByAlbumIdAndId?.items?.length) {
-        allEntries = allEntries.concat(typedResponse.data.albumListsByAlbumIdAndId.items);
-        nextToken = typedResponse.data.albumListsByAlbumIdAndId.nextToken;
-      } else {
-        nextToken = null;
-      }
-    } catch (error) {
-      console.error('Error fetching AlbumList entries:', error);
-      break;
-    }
-  } while (nextToken);
+            const typedResponse = response as GraphQLResult<any>;
+            if (typedResponse.data?.albumListsByAlbumIdAndId?.items?.length) {
+                allEntries = allEntries.concat(typedResponse.data.albumListsByAlbumIdAndId.items);
+                nextToken = typedResponse.data.albumListsByAlbumIdAndId.nextToken;
+            } else {
+                nextToken = null;
+            }
+        } catch (error) {
+            console.error('Error fetching AlbumList entries:', error);
+            break;
+        }
+    } while (nextToken);
 
-  console.log('All entries', allEntries);
-  return allEntries;
+    console.log('All entries', allEntries);
+    return allEntries;
 };
 
 export const fetchAlbumListEntriesForListId = async (listId: string) => {
-  let allEntries: any[] = [];
-  let nextToken: string | null = null;
+    let allEntries: any[] = [];
+    let nextToken: string | null = null;
 
-  do {
-    try {
-      const response = await GraphQLAPI.graphql(
-        Amplify as any,
-        graphqlOperation(albumListsByListIdAndId, { listId, limit: 100, nextToken }),
-        {}
-      );
+    do {
+        try {
+            const response = await GraphQLAPI.graphql(
+                Amplify as any,
+                graphqlOperation(albumListsByListIdAndId, { listId, limit: 100, nextToken }),
+                {}
+            );
 
-      if (response instanceof Observable) {
-        throw new Error('Expected a non-subscription query/mutation but received a subscription.');
-      }
+            if (response instanceof Observable) {
+                throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+            }
 
-      const typedResponse = response as GraphQLResult<any>;
-      if (typedResponse.data?.albumListsByListIdAndId?.items?.length) {
-        allEntries = allEntries.concat(typedResponse.data.albumListsByListIdAndId.items);
-        nextToken = typedResponse.data.albumListsByListIdAndId.nextToken;
-      } else {
-        nextToken = null;
-      }
-    } catch (error) {
-      console.error('Error fetching AlbumList entries:', error);
-      break;
-    }
-  } while (nextToken);
+            const typedResponse = response as GraphQLResult<any>;
+            if (typedResponse.data?.albumListsByListIdAndId?.items?.length) {
+                allEntries = allEntries.concat(typedResponse.data.albumListsByListIdAndId.items);
+                nextToken = typedResponse.data.albumListsByListIdAndId.nextToken;
+            } else {
+                nextToken = null;
+            }
+        } catch (error) {
+            console.error('Error fetching AlbumList entries:', error);
+            break;
+        }
+    } while (nextToken);
 
-  return allEntries;
+    return allEntries;
 };
 
 export const fetchAlbumListEntry = async (listId: string, albumId: string) => {
-  try {
-    let nextToken = null;
-    do {
-      const response = await GraphQLAPI.graphql(
-        Amplify as any,
-        graphqlOperation(albumListsByListIdAndId, {
-          listId,
-          filter: { albumId: { eq: albumId } },
-          nextToken,
-        }),
-        {}
-      );
+    try {
+        let nextToken = null;
+        do {
+            const response = await GraphQLAPI.graphql(
+                Amplify as any,
+                graphqlOperation(albumListsByListIdAndId, {
+                    listId,
+                    filter: { albumId: { eq: albumId } },
+                    nextToken,
+                }),
+                {}
+            );
 
-      const typedResponse = response as GraphQLResult<any>;
-      if (typedResponse.data?.albumListsByListIdAndId?.items?.length) {
-        return typedResponse.data.albumListsByListIdAndId.items[0]; // Return the first match
-      }
-      nextToken = typedResponse.data?.albumListsByListIdAndId?.nextToken;
-    } while (nextToken);
-    throw new Error('AlbumList entry not found');
-  } catch (error) {
-    console.error('Error fetching AlbumList entry:', error);
-    throw error;
-  }
+            const typedResponse = response as GraphQLResult<any>;
+            if (typedResponse.data?.albumListsByListIdAndId?.items?.length) {
+                return typedResponse.data.albumListsByListIdAndId.items[0]; // Return the first match
+            }
+            nextToken = typedResponse.data?.albumListsByListIdAndId?.nextToken;
+        } while (nextToken);
+        throw new Error('AlbumList entry not found');
+    } catch (error) {
+        console.error('Error fetching AlbumList entry:', error);
+        throw error;
+    }
 };
 
 export const removeAlbumFromList = async (id: string) => {
 
-  try {
-    const response = await GraphQLAPI.graphql(
-      Amplify as any,
-      graphqlOperation(customDeleteAlbumList, { input: { id } }),
-      {}
-    );
+    try {
+        const response = await GraphQLAPI.graphql(
+            Amplify as any,
+            graphqlOperation(customDeleteAlbumList, { input: { id } }),
+            {}
+        );
 
-    if (response instanceof Observable) {
-      throw new Error('Expected a non-subscription query/mutation but received a subscription.');
-    }
+        if (response instanceof Observable) {
+            throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+        }
 
-    const typedResponse = response as GraphQLResult<any>;
-    if (typedResponse.data?.deleteAlbumList) {
-      return typedResponse.data.deleteAlbumList;
-    } else {
-      throw new Error('Unexpected response structure.');
+        const typedResponse = response as GraphQLResult<any>;
+        if (typedResponse.data?.deleteAlbumList) {
+            return typedResponse.data.deleteAlbumList;
+        } else {
+            throw new Error('Unexpected response structure.');
+        }
+    } catch (error) {
+        console.error('Error removing album from list:', error);
+        throw error;
     }
-  } catch (error) {
-    console.error('Error removing album from list:', error);
-    throw error;
-  }
 
 };
 
 export const removeListeningPileEntry = async (albumId: string, userId: string) => {
-  try {
-    const existingEntries = await fetchAllListeningPileEntriesByAlbumId(albumId, userId);
+    try {
+        const existingEntries = await fetchAllListeningPileEntriesByAlbumId(albumId, userId);
 
-    if (existingEntries.length === 0) {
-      return;
+        if (existingEntries.length === 0) {
+            return;
+        }
+
+        return await removeFromListeningPile(existingEntries[0].id);
+    } catch (error) {
+        console.error('Error removing ListeningPile entry:', error);
+        throw error;
     }
-
-    return await removeFromListeningPile(existingEntries[0].id);
-  } catch (error) {
-    console.error('Error removing ListeningPile entry:', error);
-    throw error;
-  }
 };
 
 async function fetchAllAlbumListEntriesByAlbumIdAndListIdByUser(albumId: string, listId: string, userId: string) {
-  const allEntries = [];
-  let nextToken: string | null = null;
+    const allEntries = [];
+    let nextToken: string | null = null;
 
-  do {
-    const response = await GraphQLAPI.graphql(Amplify as any, 
-      graphqlOperation(CustomAlbumListsByUserFiltered, {
-        userId,
-        albumId,
-        listId,
-        nextToken, // Pass pagination token
-      })
-    );
+    do {
+        const response = await GraphQLAPI.graphql(Amplify as any,
+            graphqlOperation(CustomAlbumListsByUserFiltered, {
+                userId,
+                albumId,
+                listId,
+                nextToken, // Pass pagination token
+            })
+        );
 
-    if (response instanceof Observable) {
-      throw new Error('Expected a non-subscription query/mutation but received a subscription.');
-    }
+        if (response instanceof Observable) {
+            throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+        }
 
-    const existingEntries = response as GraphQLResult<any>;
+        const existingEntries = response as GraphQLResult<any>;
 
-    if (!existingEntries || !existingEntries.data?.albumListsByUser) {
-      throw new Error('Failed to fetch album list entries.');
-    }
+        if (!existingEntries || !existingEntries.data?.albumListsByUser) {
+            throw new Error('Failed to fetch album list entries.');
+        }
 
-    // Collect items from the current page
-    const currentItems = existingEntries.data.albumListsByUser.items || [];
-    allEntries.push(...currentItems);
+        // Collect items from the current page
+        const currentItems = existingEntries.data.albumListsByUser.items || [];
+        allEntries.push(...currentItems);
 
-    // Update token for pagination
-    nextToken = existingEntries.data.albumListsByUser.nextToken;
+        // Update token for pagination
+        nextToken = existingEntries.data.albumListsByUser.nextToken;
 
-  } while (nextToken); // Continue pagination until no more results
+    } while (nextToken); // Continue pagination until no more results
 
-  return allEntries;
+    return allEntries;
 }
 
-async function fetchAllAlbumListEntriesByAlbumIdAndListId(albumId: string, listId: string) {
-  const allEntries = [];
-  let nextToken: string | null = null;
+// Optimized: fetch only the first matching entry for existence check
+async function fetchFirstAlbumListEntryByAlbumIdAndListId(albumId: string, listId: string) {
+    const response = await GraphQLAPI.graphql(Amplify as any,
+        graphqlOperation(listAlbumLists, {
+            filter: {
+                albumId: { eq: albumId },
+                listId: { eq: listId },
+            },
+            limit: 1,
+        }),
+        {}
 
-  do {
-
-    const response = await GraphQLAPI.graphql(Amplify as any, 
-      graphqlOperation(listAlbumLists, {
-        filter: {
-          albumId: { eq: albumId },
-          listId: { eq: listId },
-        },
-        nextToken, // Pass the current token to fetch the next page
-      }),
-      {}
     );
 
     if (response instanceof Observable) {
-      throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+        throw new Error('Expected a non-subscription query/mutation but received a subscription.');
     }
 
-    const existingEntries = response as GraphQLResult<any>;
-
-    if (!existingEntries || !existingEntries.data?.listAlbumLists) {
-      throw new Error('Failed to fetch album list entries.');
+    const result = response as GraphQLResult<any>;
+    if (!result || !result.data?.listAlbumLists) {
+        throw new Error('Failed to fetch album list entries.');
     }
 
-    // Collect items from the current page
-    const currentItems = existingEntries.data.listAlbumLists.items || [];
-    allEntries.push(...currentItems);
-
-    // Update the token for the next page
-    nextToken = existingEntries.data.listAlbumLists.nextToken;
-
-  } while (nextToken); // Continue until there's no next page
-
-  return allEntries;
+    return (result.data.listAlbumLists.items && result.data.listAlbumLists.items.length > 0)
+        ? result.data.listAlbumLists.items[0]
+        : null;
 }
 
 export const addAlbumToList = async (albumId: string, listId: string, userId: string) => {
+    const existingEntry = await fetchFirstAlbumListEntryByAlbumIdAndListId(albumId, listId);
+    if (existingEntry) {
+        throw new Error('This album is already in the list.');
+    }
 
-  console.log('User id', userId);
-  const existingEntries = await fetchAllAlbumListEntriesByAlbumIdAndListIdByUser(albumId, listId, userId);
+    const response = await GraphQLAPI.graphql(Amplify as any,
+        graphqlOperation(createAlbumList, { input: { albumId, listId, userId, played: false } }),
+        {}
+    );
+    // Check if the result is a Promise or Observable
+    if (response instanceof Observable) {
+        throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+    }
 
-  if (existingEntries.length > 0) {
-    throw new Error('This album is already in the list.');
-  }
-
-  const response = await GraphQLAPI.graphql(Amplify as any, 
-    graphqlOperation(createAlbumList, { input: { albumId, listId, userId, played: false } }),
-    {}
-  );
-  // Check if the result is a Promise or Observable
-  if (response instanceof Observable) {
-    throw new Error('Expected a non-subscription query/mutation but received a subscription.');
-  }
-
-  return response;
+    return response;
 };
 
 export { listLists };
 
 export const fetchWikipediaLink = async (albumName: string, artistName: string): Promise<string | null> => {
-  const queries = [
-    `${albumName}`,                // Search for album name first
-    `${albumName} ${artistName}`,  // Album and artist name combined
-    `${artistName}`                // Artist name as fallback
-  ];
+    const queries = [
+        `${albumName}`,                // Search for album name first
+        `${albumName} ${artistName}`,  // Album and artist name combined
+        `${artistName}`                // Artist name as fallback
+    ];
 
-  const wikipediaApiUrl = (query: string) =>
-    `https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&list=search&srsearch=${encodeURIComponent(query)}`;
+    const wikipediaApiUrl = (query: string) =>
+        `https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&list=search&srsearch=${encodeURIComponent(query)}`;
 
-  try {
-    for (const query of queries) {
-      const response = await fetch(wikipediaApiUrl(query));
-      const data = await response.json();
+    try {
+        for (const query of queries) {
+            const response = await fetch(wikipediaApiUrl(query));
+            const data = await response.json();
 
-      if (data.query && data.query.search && data.query.search.length > 0) {
-        // Search results found
-        const searchResults = data.query.search;
+            if (data.query && data.query.search && data.query.search.length > 0) {
+                // Search results found
+                const searchResults = data.query.search;
 
-        // Attempt to find the most relevant page
-        for (const result of searchResults) {
-          const pageTitle = result.title;
+                // Attempt to find the most relevant page
+                for (const result of searchResults) {
+                    const pageTitle = result.title;
 
-          // Check if the page title matches closely with the album name
-          if (
-            pageTitle.toLowerCase().includes(albumName.toLowerCase()) ||
-            pageTitle.toLowerCase().includes(artistName.toLowerCase())
-          ) {
-            return `https://en.wikipedia.org/wiki/${encodeURIComponent(pageTitle)}`;
-          }
+                    // Check if the page title matches closely with the album name
+                    if (
+                        pageTitle.toLowerCase().includes(albumName.toLowerCase()) ||
+                        pageTitle.toLowerCase().includes(artistName.toLowerCase())
+                    ) {
+                        return `https://en.wikipedia.org/wiki/${encodeURIComponent(pageTitle)}`;
+                    }
+                }
+            }
         }
-      }
-    }
 
-    return null; // No relevant Wikipedia page found
-  } catch (error) {
-    console.error('Error fetching Wikipedia link:', error);
-    return null;
-  }
+        return null; // No relevant Wikipedia page found
+    } catch (error) {
+        console.error('Error fetching Wikipedia link:', error);
+        return null;
+    }
 };
 
 export const togglePlayedAlbumList = async (albumListId: string, played: boolean) => {
-  try {
-    const response = await GraphQLAPI.graphql(
-      Amplify as any,
-      graphqlOperation(togglePlayed, { id: albumListId, played }), // Use `id` as expected by the mutation
-      {}
-    );
+    try {
+        const response = await GraphQLAPI.graphql(
+            Amplify as any,
+            graphqlOperation(togglePlayed, { id: albumListId, played }), // Use `id` as expected by the mutation
+            {}
+        );
 
-    if (response instanceof Observable) {
-      throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+        if (response instanceof Observable) {
+            throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+        }
+
+        return response;
+    } catch (error) {
+        console.error('Error toggling played album list:', error);
+        return null;
     }
-
-    return response;
-  } catch (error) {
-    console.error('Error toggling played album list:', error);
-    return null;
-  }
 };
 
 export const toggleHideAlbum = async (albumId: string, hideAlbum: boolean) => {
-  try {
-    const response = await GraphQLAPI.graphql(
-      Amplify as any,
-      graphqlOperation(toggleHidden, { id: albumId, hideAlbum }), // Use `id` as expected by the mutation
-      {}
-    );
+    try {
+        const response = await GraphQLAPI.graphql(
+            Amplify as any,
+            graphqlOperation(toggleHidden, { id: albumId, hideAlbum }), // Use `id` as expected by the mutation
+            {}
+        );
 
-    if (response instanceof Observable) {
-      throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+        if (response instanceof Observable) {
+            throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+        }
+
+        return response;
+    } catch (error) {
+        console.error('Error toggling hide album:', error);
+        return null;
     }
-
-    return response;
-  } catch (error) {
-    console.error('Error toggling hide album:', error);
-    return null;
-  }
 };
 
 
 export const getUnplayedAlbumsInList = async (listId: string) => {
-  let allUnplayedAlbums: any[] = [];
-  let nextToken: string | null = null;
+    let allUnplayedAlbums: any[] = [];
+    let nextToken: string | null = null;
 
-  do {
-    try {
-      const response = await GraphQLAPI.graphql(
-        Amplify as any,
-        graphqlOperation(getUnplayedAlbums, { listId, nextToken, limit: 10000 }),
-        {}
-      );
+    do {
+        try {
+            const response = await GraphQLAPI.graphql(
+                Amplify as any,
+                graphqlOperation(getUnplayedAlbums, { listId, nextToken, limit: 10000 }),
+                {}
+            );
 
-      if (response instanceof Observable) {
-        throw new Error('Expected a non-subscription query/mutation but received a subscription.');
-      }
+            if (response instanceof Observable) {
+                throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+            }
 
-      const typedResponse = response as GraphQLResult<any>;
-      const items = typedResponse.data?.listAlbumLists?.items || [];
-      nextToken = typedResponse.data.listAlbumLists?.nextToken || null;
+            const typedResponse = response as GraphQLResult<any>;
+            const items = typedResponse.data?.listAlbumLists?.items || [];
+            nextToken = typedResponse.data.listAlbumLists?.nextToken || null;
 
-      allUnplayedAlbums = allUnplayedAlbums.concat(items);
+            allUnplayedAlbums = allUnplayedAlbums.concat(items);
 
-    } catch (err) {
-      console.error('Error fetching unplayed albums:', err);
-      break;
-    }
-  } while (nextToken);
+        } catch (err) {
+            console.error('Error fetching unplayed albums:', err);
+            break;
+        }
+    } while (nextToken);
 
-  return allUnplayedAlbums;
+    return allUnplayedAlbums;
 };
 
 export async function fetchListeningPile(userId: string) {
-  const allEntries: ListeningPileEntry[] = [];
-  let nextToken: string | null = null;
+    const allEntries: ListeningPileEntry[] = [];
+    let nextToken: string | null = null;
 
-  do {
-    const response = await GraphQLAPI.graphql(
-      Amplify as any,
-      graphqlOperation(listListeningPileEntries, {
-        filter: { userId: { eq: userId } },
-        limit: 50, // Adjust limit as needed
-        nextToken,
-      }),
-      {}
-    );
+    do {
+        const response = await GraphQLAPI.graphql(
+            Amplify as any,
+            graphqlOperation(listListeningPileEntries, {
+                filter: { userId: { eq: userId } },
+                limit: 50, // Adjust limit as needed
+                nextToken,
+            }),
+            {}
+        );
 
-    if (response instanceof Observable) {
-      throw new Error('Expected a non-subscription query/mutation but received a subscription.');
-    }
+        if (response instanceof Observable) {
+            throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+        }
 
-    const existingEntries = response as GraphQLResult<any>;
+        const existingEntries = response as GraphQLResult<any>;
 
-    if (!existingEntries || !existingEntries.data?.listListeningPileEntries) {
-      throw new Error('Failed to fetch listening pile.');
-    }
+        if (!existingEntries || !existingEntries.data?.listListeningPileEntries) {
+            throw new Error('Failed to fetch listening pile.');
+        }
 
-    const currentItems = existingEntries.data.listListeningPileEntries.items || [];
-    allEntries.push(...currentItems);
+        const currentItems = existingEntries.data.listListeningPileEntries.items || [];
+        allEntries.push(...currentItems);
 
-    nextToken = existingEntries.data.listListeningPileEntries.nextToken;
-  } while (nextToken);
+        nextToken = existingEntries.data.listListeningPileEntries.nextToken;
+    } while (nextToken);
 
-  return allEntries.sort((a, b) => a.order - b.order); // Ensure sorting
+    return allEntries.sort((a, b) => a.order - b.order); // Ensure sorting
 }
 
 export async function reorderListeningPile(entryId: string, newOrder: number) {
-  const response = await GraphQLAPI.graphql(
-    Amplify as any,
-    graphqlOperation(reorderListeningPile, {
-      input: {
-        id: entryId,
-        order: newOrder,
-      },
-    }),
-    {}
-  );
-
-  if (response instanceof Observable) {
-    throw new Error('Expected a non-subscription query/mutation but received a subscription.');
-  }
-
-  return response as GraphQLResult<any>;
-}
-
-export async function removeFromListeningPile(entryId: string) {
-  const response = await GraphQLAPI.graphql(
-    Amplify as any,
-    graphqlOperation(deleteListeningPileEntry, {
-      input: { id: entryId },
-    }),
-    {}
-  );
-
-  if (response instanceof Observable) {
-    throw new Error('Expected a non-subscription query/mutation but received a subscription.');
-  }
-
-  return response as GraphQLResult<any>;
-}
-
-async function fetchAllListeningPileEntriesByAlbumId(albumId: string, userId: string) {
-  const allEntries: any[] = [];
-  let nextToken: string | null = null;
-
-  do {
     const response = await GraphQLAPI.graphql(
-      Amplify as any,
-      graphqlOperation(listListeningPileEntries, {
-        filter: { albumId: { eq: albumId }, userId: { eq: userId} },
-        nextToken,
-      }),
-      {}
+        Amplify as any,
+        graphqlOperation(reorderListeningPile, {
+            input: {
+                id: entryId,
+                order: newOrder,
+            },
+        }),
+        {}
     );
 
     if (response instanceof Observable) {
-      throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+        throw new Error('Expected a non-subscription query/mutation but received a subscription.');
     }
 
-    const existingEntries = response as GraphQLResult<any>;
+    return response as GraphQLResult<any>;
+}
 
-    if (!existingEntries || !existingEntries.data?.listListeningPileEntries) {
-      throw new Error('Failed to fetch listening pile entries.');
+export async function removeFromListeningPile(entryId: string) {
+    const response = await GraphQLAPI.graphql(
+        Amplify as any,
+        graphqlOperation(deleteListeningPileEntry, {
+            input: { id: entryId },
+        }),
+        {}
+    );
+
+    if (response instanceof Observable) {
+        throw new Error('Expected a non-subscription query/mutation but received a subscription.');
     }
 
-    const currentItems = existingEntries.data.listListeningPileEntries.items || [];
-    allEntries.push(...currentItems);
+    return response as GraphQLResult<any>;
+}
 
-    nextToken = existingEntries.data.listListeningPileEntries.nextToken;
-  } while (nextToken);
+async function fetchAllListeningPileEntriesByAlbumId(albumId: string, userId: string) {
+    const allEntries: any[] = [];
+    let nextToken: string | null = null;
 
-  return allEntries;
+    do {
+        const response = await GraphQLAPI.graphql(
+            Amplify as any,
+            graphqlOperation(listListeningPileEntries, {
+                filter: { albumId: { eq: albumId }, userId: { eq: userId } },
+                nextToken,
+            }),
+            {}
+        );
+
+        if (response instanceof Observable) {
+            throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+        }
+
+        const existingEntries = response as GraphQLResult<any>;
+
+        if (!existingEntries || !existingEntries.data?.listListeningPileEntries) {
+            throw new Error('Failed to fetch listening pile entries.');
+        }
+
+        const currentItems = existingEntries.data.listListeningPileEntries.items || [];
+        allEntries.push(...currentItems);
+
+        nextToken = existingEntries.data.listListeningPileEntries.nextToken;
+    } while (nextToken);
+
+    return allEntries;
 }
 
 async function getHighestListeningPileOrder(userId: string): Promise<number> {
-  const response = await GraphQLAPI.graphql(
-    Amplify as any,
-    graphqlOperation(listListeningPileEntries, {
-      filter: { userId: { eq: userId } },
-      limit: 1,  // Only fetch one item, sorted by order in descending order to get the highest one
-      sortDirection: 'DESC',
-    }),
-    {}
-  );
+    const response = await GraphQLAPI.graphql(
+        Amplify as any,
+        graphqlOperation(listListeningPileEntries, {
+            filter: { userId: { eq: userId } },
+            limit: 1,  // Only fetch one item, sorted by order in descending order to get the highest one
+            sortDirection: 'DESC',
+        }),
+        {}
+    );
 
-  if (response instanceof Observable) {
-    throw new Error('Expected a non-subscription query/mutation but received a subscription.');
-  }
+    if (response instanceof Observable) {
+        throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+    }
 
-  const result = response as GraphQLResult<any>;
+    const result = response as GraphQLResult<any>;
 
-  if (!result || !result.data || !result.data.listListeningPileEntries) {
-    throw new Error('Failed to fetch listening pile entries.');
-  }
+    if (!result || !result.data || !result.data.listListeningPileEntries) {
+        throw new Error('Failed to fetch listening pile entries.');
+    }
 
-  // If no entries exist, return 0 (start at the first position)
-  const highestOrder = result.data.listListeningPileEntries.items.length > 0
-    ? result.data.listListeningPileEntries.items[0].order
-    : 0;
+    // If no entries exist, return 0 (start at the first position)
+    const highestOrder = result.data.listListeningPileEntries.items.length > 0
+        ? result.data.listListeningPileEntries.items[0].order
+        : 0;
 
-  return highestOrder;
+    return highestOrder;
 }
 
 export async function addAlbumToListeningPile(albumId: string, userId: string): Promise<GraphQLResult<any>> {
 
-  const highestOrder = await getHighestListeningPileOrder(userId);  // Get the highest order value
+    const highestOrder = await getHighestListeningPileOrder(userId);  // Get the highest order value
 
-  console.log('Highest order in pile is:', highestOrder);
-  // Check if the album is already in the listening pile
-  const existingEntries = await fetchAllListeningPileEntriesByAlbumId(albumId, userId);
+    console.log('Highest order in pile is:', highestOrder);
+    // Check if the album is already in the listening pile
+    const existingEntries = await fetchAllListeningPileEntriesByAlbumId(albumId, userId);
 
-  if (existingEntries.length > 0) {
-    throw new Error('This album is already in the listening pile.');
-  }
+    if (existingEntries.length > 0) {
+        throw new Error('This album is already in the listening pile.');
+    }
 
-  const newOrder = highestOrder + 1;
-  console.log(`Adding album to listening pile with order ${newOrder} and albumId ${albumId}`);
-  const response = await GraphQLAPI.graphql(
-    Amplify as any,
-    graphqlOperation(createListeningPileEntry, {
-      input: { 
-        albumId: albumId, 
-        userId: userId,
-        order: newOrder 
-      },
-    }),
-    {}
-  );
+    const newOrder = highestOrder + 1;
+    console.log(`Adding album to listening pile with order ${newOrder} and albumId ${albumId}`);
+    const response = await GraphQLAPI.graphql(
+        Amplify as any,
+        graphqlOperation(createListeningPileEntry, {
+            input: {
+                albumId: albumId,
+                userId: userId,
+                order: newOrder
+            },
+        }),
+        {}
+    );
 
-  if (response instanceof Observable) {
-    throw new Error('Expected a non-subscription query/mutation but received a subscription.');
-  }
+    if (response instanceof Observable) {
+        throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+    }
 
-  const result = response as GraphQLResult<any>;
+    const result = response as GraphQLResult<any>;
 
-  if (!result || !result.data || !result.data.createListeningPileEntry) {
-    throw new Error('Failed to add album to listening pile.');
-  }
+    if (!result || !result.data || !result.data.createListeningPileEntry) {
+        throw new Error('Failed to add album to listening pile.');
+    }
 
-  return result;
+    return result;
 }
 
 export const uploadImageToS3 = async (file: File, albumId: string): Promise<string> => {
-  try {
-    const fileExtension = file.name.split('.').pop;
-    const fileKey = `album-art/${albumId}.${fileExtension}`;
+    try {
+        const fileExtension = file.name.split('.').pop;
+        const fileKey = `album-art/${albumId}.${fileExtension}`;
 
-    const result = await uploadData({
-      path: fileKey, 
-      data: file
-    }).result;
+        const result = await uploadData({
+            path: fileKey,
+            data: file
+        }).result;
 
-    console.log('Result is ', result);
+        console.log('Result is ', result);
 
-    const imageUrl = `https://dev-albumgenerator-albumartbucketc60ec-dev.s3.eu-west-2.amazonaws.com/${fileKey}`;
+        const imageUrl = `https://dev-albumgenerator-albumartbucketc60ec-dev.s3.eu-west-2.amazonaws.com/${fileKey}`;
 
-    // Return the image URL
-    return imageUrl;
-  } catch (error) {
-    console.error('Error uploading image to S3:', error);
-    throw new Error('Image upload failed.');
-  }
+        // Return the image URL
+        return imageUrl;
+    } catch (error) {
+        console.error('Error uploading image to S3:', error);
+        throw new Error('Image upload failed.');
+    }
 };

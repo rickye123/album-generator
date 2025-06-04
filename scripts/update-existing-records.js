@@ -1,41 +1,37 @@
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, ScanCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
+const AWS = require('aws-sdk');
+AWS.config.update({ region: 'eu-west-2' });
 
-const client = new DynamoDBClient({ region: "eu-west-2" });
-const dynamoDB = DynamoDBDocumentClient.from(client);
-const tableName = "Album-f6kgrv6o2vdklagtebobyob3s4-dev";
-const appendString = "-8662c254-f081-70a5-2b87-0d7dab2307e8";
-const targetLength = "6D3RQD5AQZ4P2aDzsZmBI4".length;
+const dynamoDB = new AWS.DynamoDB.DocumentClient();
+const tableName = 'Album-nghmy3wjsra6rkbt7ijpvfrima-dev';
 
-const updateAlbumIds = async () => {
-  let scanParams = { TableName: tableName };
-  let count = 0;
+const updateAllAlbums = async () => {
+    const scanParams = {
+        TableName: tableName,
+    };
 
-  do {
-    const items = await dynamoDB.send(new ScanCommand(scanParams));
-    
-    for (const item of items.Items || []) {
-      count++;
-      console.log(`Processing item ${count}: ${JSON.stringify(item)}`);
-      
-      if (item.albumId && item.albumId.length === targetLength) {
-        const newAlbumId = item.albumId + appendString;
+    let items;
+    do {
+        items = await dynamoDB.scan(scanParams).promise();
 
-        const updateParams = new UpdateCommand({
-          TableName: tableName,
-          Key: { id: item.id },
-          UpdateExpression: "SET albumId = :newAlbumId",
-          ExpressionAttributeValues: { ":newAlbumId": newAlbumId },
-        });
+        for (const item of items.Items) {
+            if (item.hideAlbum === undefined) {
+                const updateParams = {
+                    TableName: tableName,
+                    Key: { id: item.id },
+                    UpdateExpression: 'SET hideAlbum = :hideAlbum',
+                    ExpressionAttributeValues: {
+                        ':hideAlbum': false,
+                    },
+                };
 
-        await dynamoDB.send(updateParams);
-        console.log(`Updated albumId for item ${item.id}: ${newAlbumId}`);
-      }
-    }
-    scanParams.ExclusiveStartKey = items.LastEvaluatedKey;
-  } while (scanParams.ExclusiveStartKey);
+                await dynamoDB.update(updateParams).promise();
+            }
+        }
 
-  console.log(`Album IDs updated successfully! Total items processed: ${count}`);
+        scanParams.ExclusiveStartKey = items.LastEvaluatedKey;
+    } while (items.LastEvaluatedKey);
+
+    console.log('All albums updated successfully!');
 };
 
-updateAlbumIds().catch(console.error);
+updateAllAlbums().catch(console.error);

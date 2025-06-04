@@ -114,12 +114,15 @@ const BulkAddAlbums = () => {
 
                         try {
                             const lists = await fetchLists(userId);
+                            // Batch add to lists for this album
+                            const addToListPromises = [];
                             for (const list of lists) {
                                 const listIndex = headers.indexOf(list.name); // Get the index of the current list column
                                 if (listIndex !== -1 && (row as string[])[listIndex]?.trim() === '1') {
-                                    await addAlbumToList(newAlbum.id, list.id, userId);
+                                    addToListPromises.push(addAlbumToList(newAlbum.id, list.id, userId));
                                 }
                             }
+                            await Promise.all(addToListPromises);
                         } catch (err) {
                             console.error('Error adding album to list:', err);
                         }
@@ -151,11 +154,7 @@ const BulkAddAlbums = () => {
             const results = await fetchAlbumListEntriesForAlbumId(albumId);
             if (results) {
                 if (results) {
-                    for (const element of results) {
-                        console.log(`Deleting AlbumList entry ${element.id} for album ${albumId}`);
-                        await removeAlbumFromList(element.id);
-
-                    }
+                    await Promise.all(results.map((element) => removeAlbumFromList(element.id)));
                 }
             }
 

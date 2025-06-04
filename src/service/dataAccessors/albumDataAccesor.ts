@@ -11,17 +11,17 @@ export const createAlbum = async (albumData: AlbumData, userId: string): Promise
 }
 
 export const getRandomAlbum = async (userId: string) => {
-  const albums = await getAlbumsByUser(userId);
-  if (albums.length > 0) {
-    const hideAlbumsFlag = localStorage.getItem('hideAlbums') === 'true';
+    const albums = await getAlbumsByUser(userId);
+    if (albums.length > 0) {
+        const hideAlbumsFlag = localStorage.getItem('hideAlbums') === 'true';
 
-    const albumsToUse = hideAlbumsFlag
-      ? albums.filter((album: AlbumData) => album.hideAlbum !== true)
-      : albums;
-    const randomIndex = Math.floor(Math.random() * albumsToUse.length);
-    return albumsToUse[randomIndex];
-  }
-  return null;
+        const albumsToUse = hideAlbumsFlag
+            ? albums.filter((album: AlbumData) => album.hideAlbum !== true)
+            : albums;
+        const randomIndex = Math.floor(Math.random() * albumsToUse.length);
+        return albumsToUse[randomIndex];
+    }
+    return null;
 };
 
 export const getAlbumsByUser = async (userId: string) => {
@@ -42,7 +42,7 @@ export const deleteAlbum = async (albumId: string, userId: string) => {
 export const deleteAlbumByUser = async (albumId: string, userId: string) => {
 
     const results = await getAlbumListEntriesForAlbumId(albumId);
-    if(results) {
+    if (results) {
         if (results) {
             for (const element of results) {
                 console.log(`Deleting AlbumList entry ${element.id} for album ${albumId}`);
@@ -50,10 +50,10 @@ export const deleteAlbumByUser = async (albumId: string, userId: string) => {
             }
         }
     }
-    
+
     console.log('Deleting ListeningPile entry for album:', albumId);
     await removeListeningPileEntry(albumId, userId);
-    
+
     await deleteAlbum(albumId, userId);
 }
 

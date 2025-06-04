@@ -10,7 +10,7 @@ async function fetchAllItems() {
 
     const itemsToDelete = scanResponse.Items.map(item => ({
         DeleteRequest: {
-            Key: { id: { S : item.id.S } }
+            Key: { id: { S: item.id.S } }
         }
     }));
 

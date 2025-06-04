@@ -2,21 +2,21 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100px; /* Adjust as needed */
-  }
-  
-  .spinner {
+    height: 100px;
+    /* Adjust as needed */
+}
+
+.spinner {
     width: 50px;
     height: 50px;
     border: 5px solid rgba(0, 255, 21, 0.3);
     border-top-color: var(--spotify-green);
     border-radius: 50%;
     animation: spin 1s linear infinite;
-  }
-  
-  @keyframes spin {
+}
+
+@keyframes spin {
     to {
-      transform: rotate(360deg);
+        transform: rotate(360deg);
     }
-  }
-  
+}

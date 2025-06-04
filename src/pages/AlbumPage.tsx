@@ -15,99 +15,99 @@ import { getCurrentUserId } from '../core/users';
 import { updateAlbumDetailsByUser } from '../service/dataAccessors/albumDataAccesor';
 
 const AlbumPage = () => {
-  const { id } = useParams<{ id: string }>();
-  const [userId, setUserId] = useState<string | null>(null);
-  const [album, setAlbum] = useState<AlbumData | null>(null);
-  const [spotifyDetails, setSpotifyDetails] = useState<SpotifyAlbumDetails | null>(null);
-  const [wikipediaLink, setWikipediaLink] = useState<string | null>(null);
-  const [theme] = useState<'light' | 'dark'>(() => {
-    // Load theme preference from localStorage or default to 'light'
-    return (localStorage.getItem('theme') as 'light' | 'dark') || 'light';
-  });
+    const { id } = useParams<{ id: string }>();
+    const [userId, setUserId] = useState<string | null>(null);
+    const [album, setAlbum] = useState<AlbumData | null>(null);
+    const [spotifyDetails, setSpotifyDetails] = useState<SpotifyAlbumDetails | null>(null);
+    const [wikipediaLink, setWikipediaLink] = useState<string | null>(null);
+    const [theme] = useState<'light' | 'dark'>(() => {
+        // Load theme preference from localStorage or default to 'light'
+        return (localStorage.getItem('theme') as 'light' | 'dark') || 'light';
+    });
 
-  // Use the appropriate styles based on the current theme
-  const styles = theme === 'dark' ? darkStyles : lightStyles;
+    // Use the appropriate styles based on the current theme
+    const styles = theme === 'dark' ? darkStyles : lightStyles;
 
-  useEffect(() => {
-    const loadAlbum = async () => {
-      if (id) {
-        const userId = await getCurrentUserId();
-        setUserId(userId || null);
-        const fetchedAlbum = await fetchAlbumById(id);
-        setAlbum(fetchedAlbum);
-      }
-    };
-    loadAlbum();
-  }, [id]);
+    useEffect(() => {
+        const loadAlbum = async () => {
+            if (id) {
+                const userId = await getCurrentUserId();
+                setUserId(userId || null);
+                const fetchedAlbum = await fetchAlbumById(id);
+                setAlbum(fetchedAlbum);
+            }
+        };
+        loadAlbum();
+    }, [id]);
 
-  useEffect(() => {
-    const loadDetails = async () => {
-      if (album) {
-        if (album.spotifyUrl) {
-          console.log('Fetching Spotify details for album:', album.spotifyUrl);
-          const spotifyInfo = await fetchSpotifyAlbumDetails(extractSpotifyAlbumId(album.spotifyUrl));
-          console.log('Spotify info:', spotifyInfo);
-          setSpotifyDetails(spotifyInfo);
+    useEffect(() => {
+        const loadDetails = async () => {
+            if (album) {
+                if (album.spotifyUrl) {
+                    console.log('Fetching Spotify details for album:', album.spotifyUrl);
+                    const spotifyInfo = await fetchSpotifyAlbumDetails(extractSpotifyAlbumId(album.spotifyUrl));
+                    console.log('Spotify info:', spotifyInfo);
+                    setSpotifyDetails(spotifyInfo);
+                }
+
+                const wikiLink = await fetchWikipediaLink(album.name, album.artist);
+                setWikipediaLink(wikiLink);
+            }
+        };
+        loadDetails();
+    }, [album]);
+
+    const handleEditName = async (updatedName: string, updatedGenres: string[], updatedReleaseDate: string) => {
+        if (album) {
+            const updatedAlbum = { ...album, name: updatedName, genres: updatedGenres, release_date: updatedReleaseDate };
+            setAlbum(updatedAlbum);
+
+            try {
+                await updateAlbumDetailsByUser(updatedAlbum, userId!);
+                console.log('Album updated successfully');
+            } catch (error) {
+                console.error('Failed to update album:', error);
+            }
         }
-
-        const wikiLink = await fetchWikipediaLink(album.name, album.artist);
-        setWikipediaLink(wikiLink);
-      }
     };
-    loadDetails();
-  }, [album]);
 
-  const handleEditName = async (updatedName: string, updatedGenres: string[], updatedReleaseDate: string) => {
-    if (album) {
-      const updatedAlbum = { ...album, name: updatedName, genres: updatedGenres, release_date: updatedReleaseDate };
-      setAlbum(updatedAlbum);
+    if (!album) return <Loader />;
 
-      try {
-        await updateAlbumDetailsByUser(updatedAlbum, userId!);
-        console.log('Album updated successfully');
-      } catch (error) {
-        console.error('Failed to update album:', error);
-      }
-    }
-  };
+    return (
+        <div className={styles['album-page']}>
+            <AlbumDetails
+                imageUrl={album.imageUrl}
+                name={album.name}
+                artist={album.artist}
+                releaseDate={album.release_date?.toString()}
+                spotifyUrl={album.spotifyUrl}
+                genres={album.genres ?? []}
+                onEdit={handleEditName}
+            />
 
-  if (!album) return <Loader />;
+            {album.spotifyUrl && (<CollapsibleSection title="Listen">
+                <iframe title="Spotify Album"
+                    src={`https://open.spotify.com/embed/album/${extractSpotifyAlbumId(album.spotifyUrl)}`}
+                    width="100%"
+                    height="352"
+                />
+            </CollapsibleSection>
+            )
+            }
 
-  return (
-    <div className={styles['album-page']}>
-      <AlbumDetails
-        imageUrl={album.imageUrl}
-        name={album.name}
-        artist={album.artist}
-        releaseDate={album.release_date?.toString()}
-        spotifyUrl={album.spotifyUrl}
-        genres={album.genres ?? []}
-        onEdit={handleEditName}
-      />
-
-      {album.spotifyUrl && (<CollapsibleSection title="Listen">
-        <iframe title="Spotify Album"
-          src={`https://open.spotify.com/embed/album/${extractSpotifyAlbumId(album.spotifyUrl)}`}
-          width="100%"
-          height="352"
-        />
-      </CollapsibleSection>
-      )
-      }
-
-      {spotifyDetails?.tracks && (
-        <CollapsibleSection title="Track Listing">
-          <TrackList tracks={spotifyDetails.tracks} />
-        </CollapsibleSection>
-      )}
-      <CollapsibleSection title="Wikipedia">
-        {wikipediaLink && <Wikipedia wikipediaUrl={wikipediaLink} />}
-      </CollapsibleSection>
-      <CollapsibleSection title="Discogs">
-        <Discogs albumName={album.name} artistName={album.artist} />
-      </CollapsibleSection>
-    </div>
-  );
+            {spotifyDetails?.tracks && (
+                <CollapsibleSection title="Track Listing">
+                    <TrackList tracks={spotifyDetails.tracks} />
+                </CollapsibleSection>
+            )}
+            <CollapsibleSection title="Wikipedia">
+                {wikipediaLink && <Wikipedia wikipediaUrl={wikipediaLink} />}
+            </CollapsibleSection>
+            <CollapsibleSection title="Discogs">
+                <Discogs albumName={album.name} artistName={album.artist} />
+            </CollapsibleSection>
+        </div>
+    );
 };
 
 const extractSpotifyAlbumId = (url: string) => url.match(/album\/([a-zA-Z0-9]+)/)?.[1] || '';

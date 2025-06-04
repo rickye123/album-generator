@@ -1,32 +1,32 @@
 {
-  "dev": {
-    "awscloudformation": {
-      "AuthRoleName": "amplify-albumgenerator-dev-c60ec-authRole",
-      "UnauthRoleArn": "arn:aws:iam::383452018402:role/amplify-albumgenerator-dev-c60ec-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::383452018402:role/amplify-albumgenerator-dev-c60ec-authRole",
-      "Region": "eu-west-2",
-      "DeploymentBucketName": "amplify-albumgenerator-dev-c60ec-deployment",
-      "UnauthRoleName": "amplify-albumgenerator-dev-c60ec-unauthRole",
-      "StackName": "amplify-albumgenerator-dev-c60ec",
-      "StackId": "arn:aws:cloudformation:eu-west-2:383452018402:stack/amplify-albumgenerator-dev-c60ec/2cf1d080-f2a7-11ef-ad1c-0a80995c55ad",
-      "AmplifyAppId": "d1hr1yairbqs5f"
-    },
-    "categories": {
-      "api": {
-        "albumgenerator": {}
-      },
-      "auth": {
-        "albumgenerator25ef2256": {}
-      },
-      "hosting": {
-        "amplifyhosting": {
-          "appId": "d1hr1yairbqs5f",
-          "type": "manual"
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-albumgenerator-dev-c60ec-authRole",
+            "UnauthRoleArn": "arn:aws:iam::383452018402:role/amplify-albumgenerator-dev-c60ec-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::383452018402:role/amplify-albumgenerator-dev-c60ec-authRole",
+            "Region": "eu-west-2",
+            "DeploymentBucketName": "amplify-albumgenerator-dev-c60ec-deployment",
+            "UnauthRoleName": "amplify-albumgenerator-dev-c60ec-unauthRole",
+            "StackName": "amplify-albumgenerator-dev-c60ec",
+            "StackId": "arn:aws:cloudformation:eu-west-2:383452018402:stack/amplify-albumgenerator-dev-c60ec/2cf1d080-f2a7-11ef-ad1c-0a80995c55ad",
+            "AmplifyAppId": "d1hr1yairbqs5f"
+        },
+        "categories": {
+            "api": {
+                "albumgenerator": {}
+            },
+            "auth": {
+                "albumgenerator25ef2256": {}
+            },
+            "hosting": {
+                "amplifyhosting": {
+                    "appId": "d1hr1yairbqs5f",
+                    "type": "manual"
+                }
+            },
+            "storage": {
+                "albumArtBucket": {}
+            }
         }
-      },
-      "storage": {
-        "albumArtBucket": {}
-      }
     }
-  }
 }

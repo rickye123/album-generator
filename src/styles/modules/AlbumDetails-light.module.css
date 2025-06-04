@@ -1,76 +1,77 @@
 .album-details {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 20px;
-  max-width: 600px;
-  background: var(--light-page-background-color);
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    max-width: 600px;
+    background: var(--light-page-background-color);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
-  
+
 .album-link {
-  text-decoration: none;
-  font-weight: bold;
-  transition: color 0.3s ease;
-  color: #333;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+    color: #333;
 }
 
 .album-link:hover {
-  color: var(--hover-color); /* Darker green for hover */
-  text-decoration: underline;
+    color: var(--hover-color);
+    /* Darker green for hover */
+    text-decoration: underline;
 }
 
-  .album-cover {
+.album-cover {
     width: 300px;
     height: 300px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  }
-  
-  .album-details p {
+}
+
+.album-details p {
     font-size: 1.2rem;
     color: #666;
     margin: 0;
-  }
+}
 
-  .album-artist {
+.album-artist {
     font-size: 1.2rem;
     color: #555;
-  }
-  
-  .release-date {
+}
+
+.release-date {
     font-size: 1rem;
     color: #555;
-  }
-  
-  .spotify-link {
+}
+
+.spotify-link {
     display: flex;
     align-items: center;
     text-decoration: none;
-    color: var(--spotify-green); /* Spotify green */
+    color: var(--spotify-green);
+    /* Spotify green */
     font-weight: bold;
-  }
-  
-  .spotify-icon {
+}
+
+.spotify-icon {
     width: 24px;
     height: 24px;
-  }
-  
-  .wikipedia-link {
+}
+
+.wikipedia-link {
     margin-top: 10px;
-  }
-  
-  .wikipedia-icon {
+}
+
+.wikipedia-icon {
     width: 30px;
     height: auto;
     transition: opacity 0.3s, transform 0.3s;
-  }
-  
-  .wikipedia-link:hover .wikipedia-icon {
+}
+
+.wikipedia-link:hover .wikipedia-icon {
     opacity: 0.8;
     transform: scale(1.1);
-  }
-  
+}

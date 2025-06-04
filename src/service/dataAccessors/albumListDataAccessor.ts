@@ -24,7 +24,7 @@ export const getAlbumListsWithNames = async (albumId: string) => {
 
 export const getUnplayedAlbumsInList = async (listId: string) => {
     const cachedUnplayedAlbums = await getCachedData(unplayedAlbumsStore, listId);
-    if (cachedUnplayedAlbums) { 
+    if (cachedUnplayedAlbums) {
         return cachedUnplayedAlbums;
     }
     const albumList = await fetchUnplayedAlbumsInList(listId);

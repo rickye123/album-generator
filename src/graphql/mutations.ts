@@ -4,8 +4,8 @@
 
 import * as APITypes from "../API";
 type GeneratedMutation<InputType, OutputType> = string & {
-  __generatedMutationInput: InputType;
-  __generatedMutationOutput: OutputType;
+    __generatedMutationInput: InputType;
+    __generatedMutationOutput: OutputType;
 };
 
 export const addAlbumToList = /* GraphQL */ `mutation AddAlbumToList($albumId: ID!, $listId: ID!) {
@@ -23,8 +23,8 @@ export const addAlbumToList = /* GraphQL */ `mutation AddAlbumToList($albumId: I
   }
 }
 ` as GeneratedMutation<
-  APITypes.AddAlbumToListMutationVariables,
-  APITypes.AddAlbumToListMutation
+    APITypes.AddAlbumToListMutationVariables,
+    APITypes.AddAlbumToListMutation
 >;
 export const createList = /* GraphQL */ `mutation CreateList(
   $input: CreateListInput!
@@ -44,8 +44,8 @@ export const createList = /* GraphQL */ `mutation CreateList(
   }
 }
 ` as GeneratedMutation<
-  APITypes.CreateListMutationVariables,
-  APITypes.CreateListMutation
+    APITypes.CreateListMutationVariables,
+    APITypes.CreateListMutation
 >;
 export const updateList = /* GraphQL */ `mutation UpdateList(
   $input: UpdateListInput!
@@ -65,8 +65,8 @@ export const updateList = /* GraphQL */ `mutation UpdateList(
   }
 }
 ` as GeneratedMutation<
-  APITypes.UpdateListMutationVariables,
-  APITypes.UpdateListMutation
+    APITypes.UpdateListMutationVariables,
+    APITypes.UpdateListMutation
 >;
 export const deleteList = /* GraphQL */ `mutation DeleteList(
   $input: DeleteListInput!
@@ -86,8 +86,8 @@ export const deleteList = /* GraphQL */ `mutation DeleteList(
   }
 }
 ` as GeneratedMutation<
-  APITypes.DeleteListMutationVariables,
-  APITypes.DeleteListMutation
+    APITypes.DeleteListMutationVariables,
+    APITypes.DeleteListMutation
 >;
 export const createAlbum = /* GraphQL */ `mutation CreateAlbum(
   $input: CreateAlbumInput!
@@ -122,8 +122,8 @@ export const createAlbum = /* GraphQL */ `mutation CreateAlbum(
   }
 }
 ` as GeneratedMutation<
-  APITypes.CreateAlbumMutationVariables,
-  APITypes.CreateAlbumMutation
+    APITypes.CreateAlbumMutationVariables,
+    APITypes.CreateAlbumMutation
 >;
 export const updateAlbum = /* GraphQL */ `mutation UpdateAlbum(
   $input: UpdateAlbumInput!
@@ -158,8 +158,8 @@ export const updateAlbum = /* GraphQL */ `mutation UpdateAlbum(
   }
 }
 ` as GeneratedMutation<
-  APITypes.UpdateAlbumMutationVariables,
-  APITypes.UpdateAlbumMutation
+    APITypes.UpdateAlbumMutationVariables,
+    APITypes.UpdateAlbumMutation
 >;
 export const deleteAlbum = /* GraphQL */ `mutation DeleteAlbum(
   $input: DeleteAlbumInput!
@@ -194,8 +194,8 @@ export const deleteAlbum = /* GraphQL */ `mutation DeleteAlbum(
   }
 }
 ` as GeneratedMutation<
-  APITypes.DeleteAlbumMutationVariables,
-  APITypes.DeleteAlbumMutation
+    APITypes.DeleteAlbumMutationVariables,
+    APITypes.DeleteAlbumMutation
 >;
 export const createAlbumList = /* GraphQL */ `mutation CreateAlbumList(
   $input: CreateAlbumListInput!
@@ -235,8 +235,8 @@ export const createAlbumList = /* GraphQL */ `mutation CreateAlbumList(
   }
 }
 ` as GeneratedMutation<
-  APITypes.CreateAlbumListMutationVariables,
-  APITypes.CreateAlbumListMutation
+    APITypes.CreateAlbumListMutationVariables,
+    APITypes.CreateAlbumListMutation
 >;
 export const updateAlbumList = /* GraphQL */ `mutation UpdateAlbumList(
   $input: UpdateAlbumListInput!
@@ -276,8 +276,8 @@ export const updateAlbumList = /* GraphQL */ `mutation UpdateAlbumList(
   }
 }
 ` as GeneratedMutation<
-  APITypes.UpdateAlbumListMutationVariables,
-  APITypes.UpdateAlbumListMutation
+    APITypes.UpdateAlbumListMutationVariables,
+    APITypes.UpdateAlbumListMutation
 >;
 export const deleteAlbumList = /* GraphQL */ `mutation DeleteAlbumList(
   $input: DeleteAlbumListInput!
@@ -317,8 +317,8 @@ export const deleteAlbumList = /* GraphQL */ `mutation DeleteAlbumList(
   }
 }
 ` as GeneratedMutation<
-  APITypes.DeleteAlbumListMutationVariables,
-  APITypes.DeleteAlbumListMutation
+    APITypes.DeleteAlbumListMutationVariables,
+    APITypes.DeleteAlbumListMutation
 >;
 export const createListeningPileEntry = /* GraphQL */ `mutation CreateListeningPileEntry(
   $input: CreateListeningPileEntryInput!
@@ -349,8 +349,8 @@ export const createListeningPileEntry = /* GraphQL */ `mutation CreateListeningP
   }
 }
 ` as GeneratedMutation<
-  APITypes.CreateListeningPileEntryMutationVariables,
-  APITypes.CreateListeningPileEntryMutation
+    APITypes.CreateListeningPileEntryMutationVariables,
+    APITypes.CreateListeningPileEntryMutation
 >;
 export const updateListeningPileEntry = /* GraphQL */ `mutation UpdateListeningPileEntry(
   $input: UpdateListeningPileEntryInput!
@@ -381,8 +381,8 @@ export const updateListeningPileEntry = /* GraphQL */ `mutation UpdateListeningP
   }
 }
 ` as GeneratedMutation<
-  APITypes.UpdateListeningPileEntryMutationVariables,
-  APITypes.UpdateListeningPileEntryMutation
+    APITypes.UpdateListeningPileEntryMutationVariables,
+    APITypes.UpdateListeningPileEntryMutation
 >;
 export const deleteListeningPileEntry = /* GraphQL */ `mutation DeleteListeningPileEntry(
   $input: DeleteListeningPileEntryInput!
@@ -413,6 +413,6 @@ export const deleteListeningPileEntry = /* GraphQL */ `mutation DeleteListeningP
   }
 }
 ` as GeneratedMutation<
-  APITypes.DeleteListeningPileEntryMutationVariables,
-  APITypes.DeleteListeningPileEntryMutation
+    APITypes.DeleteListeningPileEntryMutationVariables,
+    APITypes.DeleteListeningPileEntryMutation
 >;

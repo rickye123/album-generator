@@ -2,46 +2,46 @@
     width: 100%;
     border-collapse: collapse;
     font-size: 1rem;
-  }
-  
-  .track-table th {
+}
+
+.track-table th {
     text-align: right;
     padding: 8px;
-  }
-  
-  .track-table th.track-header {
+}
+
+.track-table th.track-header {
     text-align: left;
-  }
-  
-  .track-table th.duration-header {
+}
+
+.track-table th.duration-header {
     text-align: right;
-  }
-  
-  .track-table td {
+}
+
+.track-table td {
     padding: 8px 12px;
-  }
-  
-  .track-table td:first-child {
+}
+
+.track-table td:first-child {
     text-align: left;
-  }
-  
-  .track-table td:last-child {
+}
+
+.track-table td:last-child {
     text-align: right;
-  }
-  
-  .even-row {
+}
+
+.even-row {
     background-color: #242424;
-  }
-  
-  .odd-row {
+}
+
+.odd-row {
     background-color: #000000;
-  }
-  
-  .track-table tr:hover {
+}
+
+.track-table tr:hover {
     background-color: #0a0b0c;
     cursor: pointer;
-  }
-  
-  .duration {
+}
+
+.duration {
     text-align: right;
-  }
+}
