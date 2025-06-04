@@ -1,8 +1,12 @@
 import axios from 'axios';
 import { SpotifyAlbumDetails } from '../model';
 
-const SPOTIFY_CLIENT_ID = "fdd4506a23df430aacb2c4aa3b87bd24";
-const SPOTIFY_CLIENT_SECRET = "56672579f0aa42e5b9c53b155bf28c15";
+const SPOTIFY_CLIENT_ID = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
+const SPOTIFY_CLIENT_SECRET = process.env.REACT_APP_SPOTIFY_CLIENT_SECRET;
+
+if (!SPOTIFY_CLIENT_ID || !SPOTIFY_CLIENT_SECRET) {
+    throw new Error("API Key and secret not found! Please check your .env file or environment variables are set.");
+}
 
 export const getSpotifyToken = async (): Promise<string> => {
     const response = await axios.post(

@@ -42,7 +42,10 @@ const AddAlbumPage = () => {
                 if (userId) {
                     setUserId(userId);
                     const result = await getListsByUser(userId);
-                    setLists(result || []);
+                    const sortedLists = result
+                        ? result.sort((a: ListData, b: ListData) => a.name.localeCompare(b.name))
+                        : [];
+                    setLists(sortedLists);
                 } else {
                     setError('User ID not found.');
                 }

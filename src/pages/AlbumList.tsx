@@ -99,7 +99,10 @@ const AlbumList = () => {
     const openOverlay = async (album: AlbumData) => {
         try {
             const listData = await getListsByUser(userId);
-            setLists(listData);
+            const sortedLists = listData
+                ? listData.sort((a: ListData, b: ListData) => a.name.localeCompare(b.name))
+                : [];
+            setLists(sortedLists);
             setSelectedAlbum(album);
             setShowOverlay(true);
             setError('');
