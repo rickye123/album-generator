@@ -29,7 +29,9 @@ const AlbumList = () => {
     const { year } = useParams<{ year: string }>();
     const { genre } = useParams<{ genre: string }>();
     const [randomAlbum, setRandomAlbum] = useState<any | null>(null);
-    const [view, setView] = useState<'table' | 'list' | 'block'>('table'); // State to manage view
+    const [view, setView] = useState<'table' | 'list' | 'block'>(() => {
+        return (localStorage.getItem('defaultView') as 'table' | 'list' | 'block') || 'table';
+    }); // State to manage view
     const [theme] = useState<'light' | 'dark'>(() => {
         // Load theme preference from localStorage or default to 'light'
         return (localStorage.getItem('theme') as 'light' | 'dark') || 'light';

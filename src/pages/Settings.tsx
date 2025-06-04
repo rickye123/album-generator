@@ -14,9 +14,11 @@ const Settings: React.FC = () => {
         const savedTheme = localStorage.getItem('theme') || 'light';
         const savedHideAlbums = localStorage.getItem('hideAlbums') || 'false';
         const savedListStats = localStorage.getItem('listStats') || 'false';
+        const savedDefaultView = localStorage.getItem('defaultView') || 'list';
         setTheme(savedTheme as 'light' | 'dark');
         setHideAlbums(savedHideAlbums === 'true');
         setListStats(savedListStats === 'true');
+        setDefaultView(savedDefaultView as 'list' | 'table' | 'block');
 
         // CSS Modules will handle class scoping, so no need for dynamic imports
         document.documentElement.setAttribute('data-theme', savedTheme);
@@ -36,6 +38,11 @@ const Settings: React.FC = () => {
     const handleListStatsChange = (checked: boolean) => {
         setListStats(checked);
         localStorage.setItem('listStats', JSON.stringify(checked));
+    };
+
+    const handleDefaultViewChange = (newView: 'list' | 'table' | 'block') => {
+        setDefaultView(newView);
+        localStorage.setItem('defaultView', newView);
     };
 
     // Use the appropriate styles based on the current theme
@@ -77,19 +84,9 @@ const Settings: React.FC = () => {
                         <input
                             type="radio"
                             name="defaultView"
-                            value="list"
-                            checked={defaultView === 'list'}
-                            onChange={() => setDefaultView('list')}
-                        />
-                        List
-                    </label>
-                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <input
-                            type="radio"
-                            name="defaultView"
                             value="table"
                             checked={defaultView === 'table'}
-                            onChange={() => setDefaultView('table')}
+                            onChange={() => handleDefaultViewChange('table')}
                         />
                         Table
                     </label>
@@ -97,9 +94,19 @@ const Settings: React.FC = () => {
                         <input
                             type="radio"
                             name="defaultView"
+                            value="list"
+                            checked={defaultView === 'list'}
+                            onChange={() => handleDefaultViewChange('list')}
+                        />
+                        List
+                    </label>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <input
+                            type="radio"
+                            name="defaultView"
                             value="block"
                             checked={defaultView === 'block'}
-                            onChange={() => setDefaultView('block')}
+                            onChange={() => handleDefaultViewChange('block')}
                         />
                         Block
                     </label>

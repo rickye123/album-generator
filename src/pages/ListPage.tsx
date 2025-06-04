@@ -30,7 +30,9 @@ const ListPage: React.FC = () => {
     const [error, setError] = useState('');
     const [randomAlbum, setRandomAlbum] = useState<any | null>(null);
     const [menuOpen, setMenuOpen] = useState<{ [key: string]: boolean }>({});
-    const [view, setView] = useState<'table' | 'list' | 'block'>('table'); // State to manage view
+    const [view, setView] = useState<'table' | 'list' | 'block'>(() => {
+        return (localStorage.getItem('defaultView') as 'table' | 'list' | 'block') || 'table';
+    }); // State to manage view
     const [theme] = useState<'light' | 'dark'>(() => {
         // Load theme preference from localStorage or default to 'light'
         return (localStorage.getItem('theme') as 'light' | 'dark') || 'light';
