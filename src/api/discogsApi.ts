@@ -2,8 +2,8 @@ import axios from 'axios';
 
 // Replace with your Discogs API consumer key
 const DISCOGS_API_URL = "https://api.discogs.com";
-const CONSUMER_KEY = process.env.REACT_APP_DISCOGS_CONSUMER_KEY;
-const CONSUMER_SECRET = process.env.REACT_APP_DISCOGS_CONSUMER_SECRET;
+const CONSUMER_KEY = process.env.REACT_APP_DISCOGS_CONSUMER_KEY || "nsppNOZgnVkOpzkpiMfV";
+const CONSUMER_SECRET = process.env.REACT_APP_DISCOGS_CONSUMER_SECRET || "SnKZTMBUEbOLcBBRkIzVIwlTmsZmjSHX";
 
 if (!CONSUMER_KEY || !CONSUMER_SECRET) {
     throw new Error("API Key and secret not found! Please check your .env file or environment variables are set.");

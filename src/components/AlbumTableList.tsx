@@ -124,7 +124,7 @@ const AlbumTableList: React.FC<AlbumTableListProps> = ({
                                         )}
                                         {!listId && menuOpen && menuOpen[albumList.album.id] && (
                                             <div className={styles['dropdown-menu']}>
-                                                {hideAlbum && (<button onClick={() => hideAlbum(albumList.album.id, albumList.album.hideAlbum)}>{albumList.album.hideAlbum ? 'Unhide' : 'Hide'}</button>)} {/* Add hideAlbum button */}
+                                                {localStorage.getItem('hideAlbums') === 'true' && hideAlbum && (<button onClick={() => hideAlbum(albumList.album.id, albumList.album.hideAlbum)}>{albumList.album.hideAlbum ? 'Unhide' : 'Hide'}</button>)} {/* Add hideAlbum button */}
                                                 <button onClick={() => handleRemove(albumList.album.id, "")}>Delete</button>
                                                 {openOverlay && (<button onClick={() => openOverlay(albumList.album)}>Add to List</button>)}
                                                 {handleAddToListeningPile && <button onClick={() => handleAddToListeningPile(albumList.album.id, userId)}>Add to Listening Pile</button>}

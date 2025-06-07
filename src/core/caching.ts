@@ -33,7 +33,7 @@ export const cacheData = async (store: string, userId: string, data: any) => {
     await db.put(store, { data, timestamp: Date.now() }, userId);
 };
 
-export const getCachedData = async (store: string, userId: string, cacheDuration = 1440 * 60 * 1000) => {
+export const getCachedData = async (store: string, userId: string, cacheDuration = 7 * 1440 * 60 * 1000) => {
     const db = await dbPromise;
     try {
         const cachedData = await db.get(store, userId);
