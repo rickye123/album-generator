@@ -45,13 +45,11 @@ export const deleteAlbumByUser = async (albumId: string, userId: string) => {
     if (results) {
         if (results) {
             for (const element of results) {
-                console.log(`Deleting AlbumList entry ${element.id} for album ${albumId}`);
                 await deleteAlbumFromList(element.id, userId);
             }
         }
     }
 
-    console.log('Deleting ListeningPile entry for album:', albumId);
     await removeListeningPileEntry(albumId, userId);
 
     await deleteAlbum(albumId, userId);

@@ -24,7 +24,6 @@ const App = () => {
     });
 
     const styles = theme === 'dark' ? darkStyles : lightStyles;
-    console.log('Styles is', styles);
     return (
         <ThemeProvider>
             <Authenticator>

@@ -93,9 +93,7 @@ const useAlbumTable = (albums: AlbumListData[]) => {
     const retrieveStats = async (albumId: string) => {
         if (lists.length <= 0) {
             const lists = await getAlbumListsWithNames(albumId);
-            console.log('Lists:', lists);
             const listNames = lists.map((list: { list: { name: any; }; }) => list.list.name).join(', ');
-            console.log('List names:', listNames);
             setLists(listNames);
         }
     };

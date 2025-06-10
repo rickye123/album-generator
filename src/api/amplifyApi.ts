@@ -106,7 +106,6 @@ export const fetchAlbumById = async (albumId: string): Promise<AlbumData | null>
 }
 
 export const fetchAlbums = async (userId: string) => {
-    console.log('User id', userId);
     let allAlbums: AlbumData[] = [];
     let nextToken: string | null = null;
 
@@ -117,7 +116,6 @@ export const fetchAlbums = async (userId: string) => {
                 graphqlOperation(albumsByUser, { userId: userId, limit: 100, nextToken }),
                 {}
             );
-            console.log('Response', response);
 
             if (response instanceof Observable) {
                 throw new Error('Expected a non-subscription query/mutation but received a subscription.');
@@ -368,7 +366,6 @@ export const fetchAlbumListsWithNames = async (albumId: string) => {
         }
     } while (nextToken);
 
-    console.log('All entries with list names', allEntries);
     return allEntries;
 };
 
@@ -836,7 +833,6 @@ export async function addAlbumToListeningPile(albumId: string, userId: string): 
 
     const highestOrder = await getHighestListeningPileOrder(userId);  // Get the highest order value
 
-    console.log('Highest order in pile is:', highestOrder);
     // Check if the album is already in the listening pile
     const existingEntries = await fetchAllListeningPileEntriesByAlbumId(albumId, userId);
 
@@ -845,7 +841,6 @@ export async function addAlbumToListeningPile(albumId: string, userId: string): 
     }
 
     const newOrder = highestOrder + 1;
-    console.log(`Adding album to listening pile with order ${newOrder} and albumId ${albumId}`);
     const response = await GraphQLAPI.graphql(
         Amplify as any,
         graphqlOperation(createListeningPileEntry, {
@@ -880,8 +875,6 @@ export const uploadImageToS3 = async (file: File, albumId: string): Promise<stri
             path: fileKey,
             data: file
         }).result;
-
-        console.log('Result is ', result);
 
         const imageUrl = `https://dev-albumgenerator-albumartbucketc60ec-dev.s3.eu-west-2.amazonaws.com/${fileKey}`;
 

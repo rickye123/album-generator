@@ -27,12 +27,6 @@ const Genres = () => {
                 setLoading(true);
                 const userId = (await getCurrentUserId()) || '';
                 const albums: AlbumData[] = await getAlbumsByUser(userId);
-                for (const album of albums) {
-                    if (album.genres === null || album.genres === undefined) {
-                        console.log('Album:', album);
-                    }
-                    console.log('Genre:', album.genres);
-                }
                 const uniqueGenres = Array.from(
                     new Set(
                         albums

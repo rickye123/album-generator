@@ -39,11 +39,8 @@ export const getCachedData = async (store: string, userId: string, cacheDuration
         const cachedData = await db.get(store, userId);
 
         if (cachedData && Date.now() - cachedData.timestamp < cacheDuration) {
-            console.log(`Cache hit for ${store}!`);
             return cachedData.data;
         }
-
-        console.log(`Cache miss or expired for ${store}.`);
         return null;
     } catch (error) {
         console.error(`Error getting cached data for ${store}:`, error);
@@ -54,7 +51,6 @@ export const getCachedData = async (store: string, userId: string, cacheDuration
 export const clearCache = async (store: string, userId: string) => {
     const db = await dbPromise;
     await db.delete(store, userId);
-    console.log(`Cache cleared for ${store} (user: ${userId})`);
 };
 
 export const clearAlbumCache = async (userId: string, albumId: string) => {
@@ -80,6 +76,5 @@ export const clearAllCachesForUser = async (userId: string) => {
     // Iterate through all stores to clear data for the specific userId
     for (let store of [listStore, albumStore, albumListStore, listeningPileStore, unplayedAlbumsStore, albumListWithNamesStore, albumListEntriesStore, albumListEntryStore]) {
         await db.delete(store, userId);
-        console.log(`Cache cleared for ${store} (user: ${userId})`);
     }
 };
