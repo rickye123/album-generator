@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { AlbumListData } from '../model';
 import { getAlbumListsWithNames } from '../service/dataAccessors/albumListDataAccessor';
 import { useSearchParams } from 'react-router-dom';

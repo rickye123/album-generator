@@ -1,15 +1,14 @@
 import { GraphQLAPI, graphqlOperation } from '@aws-amplify/api-graphql';
 import { createAlbum, createList, deleteList, deleteAlbum, createAlbumList, updateAlbum, deleteListeningPileEntry, createListeningPileEntry } from '../graphql/mutations';
-import { albumListsByAlbumIdAndId, albumListsByListIdAndId, albumsByUser, getAlbum, listAlbumLists, listAlbums, listLists } from '../graphql/queries';
+import { albumListsByAlbumIdAndId, albumListsByListIdAndId, albumsByUser, getAlbum, listAlbumLists, listLists } from '../graphql/queries';
 import { GraphQLResult } from '@aws-amplify/api-graphql';
 import { Amplify } from '@aws-amplify/core';
 import { Observable } from 'rxjs';
 import { AlbumData, AlbumListData, ListData, ListeningPileEntry } from '../model';
 import { List } from '../API';
-import { getUnplayedAlbums, customListListeningPileEntries as listListeningPileEntries, listListsWithAlbums, customAlbumListsByUser, customAlbumListsByAlbumIdAndId, CustomAlbumListsByUserFiltered, albumsByUserByCreatedAt } from '../graphql/customQueries';
+import { getUnplayedAlbums, customListListeningPileEntries as listListeningPileEntries, listListsWithAlbums, customAlbumListsByUser, customAlbumListsByAlbumIdAndId } from '../graphql/customQueries';
 import { customDeleteAlbumList, toggleHidden, togglePlayed } from '../graphql/customMutations';
 import { uploadData } from '@aws-amplify/storage';
-import { create } from 'domain';
 
 export const updateAlbumDetails = async (albumData: AlbumData): Promise<GraphQLResult<any>> => {
     try {
@@ -504,42 +503,6 @@ export const removeListeningPileEntry = async (albumId: string, userId: string) 
     }
 };
 
-async function fetchAllAlbumListEntriesByAlbumIdAndListIdByUser(albumId: string, listId: string, userId: string) {
-    const allEntries = [];
-    let nextToken: string | null = null;
-
-    do {
-        const response = await GraphQLAPI.graphql(Amplify as any,
-            graphqlOperation(CustomAlbumListsByUserFiltered, {
-                userId,
-                albumId,
-                listId,
-                nextToken, // Pass pagination token
-            })
-        );
-
-        if (response instanceof Observable) {
-            throw new Error('Expected a non-subscription query/mutation but received a subscription.');
-        }
-
-        const existingEntries = response as GraphQLResult<any>;
-
-        if (!existingEntries || !existingEntries.data?.albumListsByUser) {
-            throw new Error('Failed to fetch album list entries.');
-        }
-
-        // Collect items from the current page
-        const currentItems = existingEntries.data.albumListsByUser.items || [];
-        allEntries.push(...currentItems);
-
-        // Update token for pagination
-        nextToken = existingEntries.data.albumListsByUser.nextToken;
-
-    } while (nextToken); // Continue pagination until no more results
-
-    return allEntries;
-}
-
 // Optimized: fetch only the first matching entry for existence check
 async function fetchFirstAlbumListEntryByAlbumIdAndListId(albumId: string, listId: string) {
     const response = await GraphQLAPI.graphql(Amplify as any,
@@ -876,6 +839,8 @@ export const uploadImageToS3 = async (file: File, albumId: string): Promise<stri
             path: fileKey,
             data: file
         }).result;
+
+        console.log('Image uploaded successfully:', result);
 
         const imageUrl = `https://dev-albumgenerator-albumartbucketc60ec-dev.s3.eu-west-2.amazonaws.com/${fileKey}`;
 

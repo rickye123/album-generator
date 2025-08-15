@@ -1,5 +1,5 @@
 import { addList, fetchLists, removeAlbumFromList, removeList } from "../../api/amplifyApi";
-import { cacheData, clearCache, clearListCache, getCachedData, listStore, unplayedAlbumsStore } from "../../core/caching";
+import { cacheData, clearCache, clearListCache, getCachedData, listStore } from "../../core/caching";
 
 export const deleteList = async (listId: string, userId: string) => {
     clearListCache(userId, listId);

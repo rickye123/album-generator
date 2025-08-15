@@ -198,37 +198,3 @@ export const CustomAlbumListsByUserFiltered = /* GraphQL */ `query AlbumListsByU
   }
 }
 `;
-
-export const albumsByUserByCreatedAt = /* GraphQL */ `query AlbumsByUserByCreatedAt(
-  $userId: String!
-  $createdAt: ModelStringKeyConditionInput
-  $sortDirection: ModelSortDirection
-  $limit: Int
-  $nextToken: String
-) {
-  albumsByUserByCreatedAt(
-    userId: $userId
-    createdAt: $createdAt
-    sortDirection: $sortDirection
-    limit: $limit
-    nextToken: $nextToken
-  ) {
-    items {
-      id
-      name
-      artist
-      spotifyUrl
-      release_date
-      imageUrl
-      genres
-      hideAlbum
-      userId
-      createdAt
-      updatedAt
-      __typename
-    }
-    nextToken
-    __typename
-  }
-}
-`;

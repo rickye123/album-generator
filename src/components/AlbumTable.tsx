@@ -58,7 +58,6 @@ const AlbumTable: React.FC<AlbumTableProps> = ({
         totalPages,
     } = useAlbumTable(albums);
 
-    const albumsPerPage = 10; // Define albumsPerPage
     const [theme] = useState<'light' | 'dark'>(() => {
         // Load theme preference from localStorage or default to 'light'
         return (localStorage.getItem('theme') as 'light' | 'dark') || 'light';
