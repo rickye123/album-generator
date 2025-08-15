@@ -18,6 +18,7 @@ interface AlbumTableProps {
     handleAdd?: (albumId: string) => void;
     renderCustomButton?: (albumId: string) => JSX.Element | null; // New prop
     handleAddToListeningPile?: (albumId: string, userId: string) => void;
+    readOnly?: boolean; // New prop for read-only mode
 }
 
 const AlbumTable: React.FC<AlbumTableProps> = ({
@@ -32,7 +33,8 @@ const AlbumTable: React.FC<AlbumTableProps> = ({
     hideAlbum,
     handleAdd,
     renderCustomButton,
-    handleAddToListeningPile
+    handleAddToListeningPile,
+    readOnly // Destructure readOnly prop
 }) => {
     const {
         currentPage,
@@ -101,7 +103,7 @@ const AlbumTable: React.FC<AlbumTableProps> = ({
                             onMouseEnter={() => handleMouseEnter(albumList.album.id)}
                             onMouseLeave={handleMouseLeave}
                             onTouchStart={() => handleTouchStart(albumList.album.id)}
-                            onTouchEnd={handleTouchEnd}>
+                            onTouchEnd={() => handleTouchEnd}>
                             <td className={styles['artist-album-cell']}>
                                 <Link to={`/albums/${albumList.album.id}`}>
                                     <img src={albumList.album.imageUrl} alt={albumList.album.name} className={styles['list-page-album-image']} />
@@ -150,7 +152,7 @@ const AlbumTable: React.FC<AlbumTableProps> = ({
                                             className={styles['spotify-link-disabled']}
                                         />
                                     )}
-                                    {toggleMenu && (
+                                    {!readOnly && toggleMenu && (
                                         <button
                                             className={styles['more-options-button']}
                                             onClick={() => toggleMenu(albumList.album.id)}
@@ -158,14 +160,14 @@ const AlbumTable: React.FC<AlbumTableProps> = ({
                                             ⋮
                                         </button>
                                     )}
-                                    {handleRemove && listId && menuOpen && menuOpen[albumList.album.id] && (
+                                    {!readOnly && handleRemove && listId && menuOpen && menuOpen[albumList.album.id] && (
                                         <div className={styles['dropdown-menu']}>
                                             <button onClick={() => handleRemove(albumList.album.id, listId)}>Remove</button>
                                         </div>
                                     )}
-                                    {handleRemove && !listId && menuOpen && menuOpen[albumList.album.id] && (
+                                    {!readOnly && handleRemove && !listId && menuOpen && menuOpen[albumList.album.id] && (
                                         <div className={styles['dropdown-menu']}>
-                                            {localStorage.getItem('hideAlbums') === 'true' && hideAlbum && (<button onClick={() => hideAlbum(albumList.album.id, albumList.album.hideAlbum)}>{albumList.album.hideAlbum ? 'Unhide' : 'Hide'}</button>)} {/* Add hideAlbum button */}
+                                            {localStorage.getItem('hideAlbums') === 'true' && hideAlbum && (<button onClick={() => hideAlbum(albumList.album.id, albumList.album.hideAlbum)}>{albumList.album.hideAlbum ? 'Unhide' : 'Hide'}</button>)}
                                             <button onClick={() => handleRemove(albumList.album.id, "")}>Delete</button>
                                             {openOverlay && (<button onClick={() => openOverlay(albumList.album)}>Add to List</button>)}
                                             {handleAddToListeningPile && <button onClick={() => handleAddToListeningPile(albumList.album.id, userId)}>Add to Listening Pile</button>}

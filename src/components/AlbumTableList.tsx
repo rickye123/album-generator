@@ -16,6 +16,7 @@ interface AlbumTableListProps {
     openOverlay?: (album: AlbumData) => void; // New prop for opening overlay
     hideAlbum?: (albumId: string, hideAlbum: boolean) => void;
     handleAddToListeningPile?: (albumId: string, userId: string) => void;
+    readOnly?: boolean;
 }
 
 const AlbumTableList: React.FC<AlbumTableListProps> = ({
@@ -28,7 +29,8 @@ const AlbumTableList: React.FC<AlbumTableListProps> = ({
     menuOpen,
     openOverlay,
     hideAlbum,
-    handleAddToListeningPile
+    handleAddToListeningPile,
+    readOnly
 }) => {
     const {
         currentPage,

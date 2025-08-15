@@ -1,7 +1,7 @@
 import { GraphQLResult } from "@aws-amplify/api-graphql";
 import { AlbumData } from "../../model";
-import { addAlbum, fetchAlbums, removeAlbum, removeListeningPileEntry, updateAlbumDetails } from "../../api/amplifyApi";
-import { albumStore, cacheData, clearAlbumCache, getCachedData } from "../../core/caching";
+import { addAlbum, fetchAlbums, removeAlbum, removeListeningPileEntry, updateAlbumDetails, getRecentAlbums } from "../../api/amplifyApi";
+import { albumStore, cacheData, clearAlbumCache, getCachedData, recentAlbumsStore } from "../../core/caching";
 import { getAlbumListEntriesForAlbumId } from "./albumListDataAccessor";
 import { deleteAlbumFromList } from "./listDataAccessor";
 
@@ -33,6 +33,18 @@ export const getAlbumsByUser = async (userId: string) => {
     await cacheData(albumStore, userId, albums);
     return albums;
 }
+
+export const getRecentAlbumsByUser = async (userId: string) => {
+    const cachedAlbums = await getCachedData(recentAlbumsStore, userId);
+    console.log('Cached recent albums:', cachedAlbums);
+    if (cachedAlbums) {
+        return cachedAlbums;
+    }
+    console.log('Fetching recent albums for user:', userId);
+    const albums = await getRecentAlbums(userId);
+    await cacheData(recentAlbumsStore, userId, albums);
+    return albums;
+};
 
 export const deleteAlbum = async (albumId: string, userId: string) => {
     clearAlbumCache(userId, albumId);

@@ -6,9 +6,10 @@ import { Amplify } from '@aws-amplify/core';
 import { Observable } from 'rxjs';
 import { AlbumData, AlbumListData, ListData, ListeningPileEntry } from '../model';
 import { List } from '../API';
-import { getUnplayedAlbums, customListListeningPileEntries as listListeningPileEntries, listListsWithAlbums, customAlbumListsByUser, customAlbumListsByAlbumIdAndId, CustomAlbumListsByUserFiltered } from '../graphql/customQueries';
+import { getUnplayedAlbums, customListListeningPileEntries as listListeningPileEntries, listListsWithAlbums, customAlbumListsByUser, customAlbumListsByAlbumIdAndId, CustomAlbumListsByUserFiltered, albumsByUserByCreatedAt } from '../graphql/customQueries';
 import { customDeleteAlbumList, toggleHidden, togglePlayed } from '../graphql/customMutations';
 import { uploadData } from '@aws-amplify/storage';
+import { create } from 'domain';
 
 export const updateAlbumDetails = async (albumData: AlbumData): Promise<GraphQLResult<any>> => {
     try {
@@ -132,7 +133,8 @@ export const fetchAlbums = async (userId: string) => {
                         genres: item.genres,
                         spotifyUrl: item.spotifyUrl,
                         imageUrl: item.imageUrl,
-                        hideAlbum: item.hideAlbum
+                        hideAlbum: item.hideAlbum,
+                        createdAt: (item as any).createdAt
                     }))
                 );
                 nextToken = typedResponse.data.albumsByUser.nextToken;
@@ -399,7 +401,6 @@ export const fetchAlbumListEntriesForAlbumId = async (albumId: string) => {
         }
     } while (nextToken);
 
-    console.log('All entries', allEntries);
     return allEntries;
 };
 
@@ -885,3 +886,21 @@ export const uploadImageToS3 = async (file: File, albumId: string): Promise<stri
         throw new Error('Image upload failed.');
     }
 };
+
+export async function getRecentAlbums(userId: string) {
+    try {
+        // Fetch all albums for the user
+        const allAlbums = await fetchAlbums(userId);
+        // Sort by createdAt descending and take the first 100
+        console.log('Fetched albums:', allAlbums);
+        const result = allAlbums
+            .filter((album: any) => !!album.createdAt)
+            .sort((a: any, b: any) => (b.createdAt > a.createdAt ? 1 : -1))
+            .slice(0, 100);
+        console.log('Recent albums:', result);
+        return result;
+    } catch (error) {
+        console.error('Error fetching recent albums:', error);
+        throw new Error('Failed to fetch recent albums.');
+    }
+}

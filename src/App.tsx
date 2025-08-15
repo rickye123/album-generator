@@ -16,6 +16,7 @@ import '@aws-amplify/ui-react/styles.css';
 import { useState } from 'react';
 import darkStyles from './styles/modules/Base-dark.module.css';
 import lightStyles from './styles/modules/Base-light.module.css';
+import RecentAlbumsPage from './pages/RecentAlbumsPage';
 
 const App = () => {
     const [theme] = useState<'light' | 'dark'>(() => {
@@ -47,6 +48,7 @@ const App = () => {
                                     <Route path="/genres" element={<Genres />} />
                                     <Route path="/albums/genre/:genre" element={<AlbumList />} />
                                     <Route path="/queue" element={<ListeningPile />} />
+                                    <Route path="/recent" element={<RecentAlbumsPage />} />
                                 </Routes>
                             </div>
                         </div>

@@ -99,6 +99,7 @@ const Sidebar: React.FC<SidebarProps> = ({ user, signOut }) => {
                                 <li><Link to="/artists" onClick={toggleSidebar}>Artists</Link></li>
                                 <li><Link to="/years" onClick={toggleSidebar}>Years</Link></li>
                                 <li><Link to="/genres" onClick={toggleSidebar}>Genres</Link></li>
+                                <li><Link to="/recent" onClick={toggleSidebar}>Recently Added</Link></li>
                             </ul>
                         </li>
                         <li>

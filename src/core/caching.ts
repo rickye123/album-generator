@@ -6,6 +6,7 @@ import { openDB } from "idb";
 // cache for listeningPile by user
 // cache for albumListsWithNames by albumId
 // cache for unplayedAlbums by listId
+// cache for recent albums by user
 export const albumStore = 'albums';
 export const listStore = 'lists';
 export const albumListStore = 'albumLists';
@@ -14,6 +15,7 @@ export const listeningPileStore = 'listeningPile';
 export const unplayedAlbumsStore = 'unplayedAlbums';
 export const albumListEntriesStore = 'albumListEntries';
 export const albumListEntryStore = 'albumListEntry';
+export const recentAlbumsStore = 'recentAlbums';
 
 const dbPromise = openDB("user-cache", 1, {
     upgrade(db) {
@@ -25,6 +27,7 @@ const dbPromise = openDB("user-cache", 1, {
         if (!db.objectStoreNames.contains(unplayedAlbumsStore)) db.createObjectStore(unplayedAlbumsStore);
         if (!db.objectStoreNames.contains(albumListEntriesStore)) db.createObjectStore(albumListEntriesStore);
         if (!db.objectStoreNames.contains(albumListEntryStore)) db.createObjectStore(albumListEntryStore);
+        if (!db.objectStoreNames.contains(recentAlbumsStore)) db.createObjectStore(recentAlbumsStore);
     },
 });
 
@@ -56,6 +59,7 @@ export const clearCache = async (store: string, userId: string) => {
 export const clearAlbumCache = async (userId: string, albumId: string) => {
     clearCache(albumStore, userId);
     clearCache(albumListWithNamesStore, albumId);
+    clearCache(recentAlbumsStore, albumId);
 }
 
 export const clearListCache = async (userId: string, listId: string) => {
@@ -74,7 +78,7 @@ export const clearAllCachesForUser = async (userId: string) => {
     const db = await dbPromise;
 
     // Iterate through all stores to clear data for the specific userId
-    for (let store of [listStore, albumStore, albumListStore, listeningPileStore, unplayedAlbumsStore, albumListWithNamesStore, albumListEntriesStore, albumListEntryStore]) {
+    for (let store of [listStore, albumStore, albumListStore, listeningPileStore, unplayedAlbumsStore, albumListWithNamesStore, albumListEntriesStore, albumListEntryStore, recentAlbumsStore]) {
         await db.delete(store, userId);
     }
 };
