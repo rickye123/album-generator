@@ -82,8 +82,6 @@ const AlbumList = () => {
             const filteredByYear = year
                 ? filteredAlbums.filter((album: AlbumData) => album.release_date.split('-')[0] === decodeURIComponent(year))
                 : filteredAlbums;
-            console.log('filteredByYear', filteredByYear);
-            console.log('decodeURIComponent', decodeURIComponent(genre!));
             const filteredByGenre = genre
                 ? filteredByYear.filter((album: AlbumData) => album.genres?.includes(decodeURIComponent(genre)))
                 : filteredByYear;
@@ -152,7 +150,6 @@ const AlbumList = () => {
                 )
             );
             await toggleHideAlbumForUser(userId, albumId, !hidden); // Toggle the current state
-            console.log(`Album ${hidden ? 'unhidden' : 'hidden'} successfully!`);
         } catch (error) {
             console.error('Error hiding album:', error);
             alert('Failed to update album visibility.');
@@ -198,7 +195,6 @@ const AlbumList = () => {
     const handleAddToListeningPile = async (albumId: string, userId: string) => {
         try {
             const response = await addAlbumToListeningPile(albumId, userId);
-            console.log('Album added to listening pile:', response);
             alert('Album added to listening pile successfully!');
         } catch (error) {
             console.error('Error adding album to listening pile:', error);

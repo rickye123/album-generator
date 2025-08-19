@@ -17,6 +17,8 @@ import { useState } from 'react';
 import darkStyles from './styles/modules/Base-dark.module.css';
 import lightStyles from './styles/modules/Base-light.module.css';
 import RecentAlbumsPage from './pages/RecentAlbumsPage';
+import SharedCollectionsPage from './pages/SharedCollectionsPage';
+import SharedListPage from './pages/SharedListPage';
 
 const App = () => {
     const [theme] = useState<'light' | 'dark'>(() => {
@@ -49,6 +51,8 @@ const App = () => {
                                     <Route path="/albums/genre/:genre" element={<AlbumList />} />
                                     <Route path="/queue" element={<ListeningPile />} />
                                     <Route path="/recent" element={<RecentAlbumsPage />} />
+                                    <Route path="/shared-collections" element={<SharedCollectionsPage />} />
+                                    <Route path="/shared-list/:listId" element={<SharedListPage />} />
                                 </Routes>
                             </div>
                         </div>

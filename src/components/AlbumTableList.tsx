@@ -82,9 +82,13 @@ const AlbumTableList: React.FC<AlbumTableListProps> = ({
                         {currentAlbums.map((albumList: AlbumListData) => (
                             <tr key={albumList.album.id} className={albumList.album.hideAlbum ? styles['hidden-album'] : styles['visible-album']}>
                                 <td className={styles['artist-album-cell']} >
-                                    <Link to={`/albums/${albumList.album.id}`} className={styles['album-link']}>
-                                        {albumList.album.name}
-                                    </Link>
+                                    {!readOnly ? (
+                                        <Link to={`/albums/${albumList.album.id}`} className={styles['album-link']}>
+                                            {albumList.album.name}
+                                        </Link>
+                                    ) : (
+                                        <span>{albumList.album.name}</span>
+                                    )}
                                 </td>
                                 <td className={styles['artist-album-cell']}>
                                     <Link to={`/albums/artist/${encodeURIComponent(albumList.album.artist)}`} className={styles['album-link']}>{albumList.album.artist}</Link>

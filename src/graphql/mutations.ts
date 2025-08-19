@@ -17,6 +17,8 @@ export const addAlbumToList = /* GraphQL */ `mutation AddAlbumToList($albumId: I
       __typename
     }
     userId
+    isPublic
+    sharedWith
     createdAt
     updatedAt
     __typename
@@ -25,6 +27,66 @@ export const addAlbumToList = /* GraphQL */ `mutation AddAlbumToList($albumId: I
 ` as GeneratedMutation<
   APITypes.AddAlbumToListMutationVariables,
   APITypes.AddAlbumToListMutation
+>;
+export const shareList = /* GraphQL */ `mutation ShareList($listId: ID!, $userId: String!) {
+  shareList(listId: $listId, userId: $userId) {
+    id
+    name
+    albums {
+      nextToken
+      __typename
+    }
+    userId
+    isPublic
+    sharedWith
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.ShareListMutationVariables,
+  APITypes.ShareListMutation
+>;
+export const unshareList = /* GraphQL */ `mutation UnshareList($listId: ID!, $userId: String!) {
+  unshareList(listId: $listId, userId: $userId) {
+    id
+    name
+    albums {
+      nextToken
+      __typename
+    }
+    userId
+    isPublic
+    sharedWith
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UnshareListMutationVariables,
+  APITypes.UnshareListMutation
+>;
+export const toggleListVisibility = /* GraphQL */ `mutation ToggleListVisibility($listId: ID!, $isPublic: Boolean!) {
+  toggleListVisibility(listId: $listId, isPublic: $isPublic) {
+    id
+    name
+    albums {
+      nextToken
+      __typename
+    }
+    userId
+    isPublic
+    sharedWith
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.ToggleListVisibilityMutationVariables,
+  APITypes.ToggleListVisibilityMutation
 >;
 export const createList = /* GraphQL */ `mutation CreateList(
   $input: CreateListInput!
@@ -38,6 +100,8 @@ export const createList = /* GraphQL */ `mutation CreateList(
       __typename
     }
     userId
+    isPublic
+    sharedWith
     createdAt
     updatedAt
     __typename
@@ -59,6 +123,8 @@ export const updateList = /* GraphQL */ `mutation UpdateList(
       __typename
     }
     userId
+    isPublic
+    sharedWith
     createdAt
     updatedAt
     __typename
@@ -80,6 +146,8 @@ export const deleteList = /* GraphQL */ `mutation DeleteList(
       __typename
     }
     userId
+    isPublic
+    sharedWith
     createdAt
     updatedAt
     __typename
@@ -224,6 +292,8 @@ export const createAlbumList = /* GraphQL */ `mutation CreateAlbumList(
       id
       name
       userId
+      isPublic
+      sharedWith
       createdAt
       updatedAt
       __typename
@@ -265,6 +335,8 @@ export const updateAlbumList = /* GraphQL */ `mutation UpdateAlbumList(
       id
       name
       userId
+      isPublic
+      sharedWith
       createdAt
       updatedAt
       __typename
@@ -306,6 +378,8 @@ export const deleteAlbumList = /* GraphQL */ `mutation DeleteAlbumList(
       id
       name
       userId
+      isPublic
+      sharedWith
       createdAt
       updatedAt
       __typename

@@ -1,0 +1,157 @@
+/* Sharing Controls Styles - Light Theme */
+.sharing-controls {
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.sharing-controls h3,
+.sharing-controls h4 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #333333;
+}
+
+.visibility-control {
+    margin-bottom: 25px;
+}
+
+.visibility-control label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    color: #333333;
+    cursor: pointer;
+}
+
+.help-text {
+    font-size: 0.9em;
+    color: #666666;
+    margin-top: 5px;
+    margin-bottom: 0;
+}
+
+.share-with-user {
+    margin-bottom: 25px;
+}
+
+.share-input-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.share-input-group input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    background: #ffffff;
+    color: #333333;
+}
+
+.share-input-group input:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+.share-input-group button {
+    padding: 8px 16px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.share-input-group button:hover:not(:disabled) {
+    background: #0056b3;
+}
+
+.share-input-group button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.shared-users ul {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 0 0;
+}
+
+.shared-user-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.shared-user-item:last-child {
+    border-bottom: none;
+}
+
+.shared-user-item span {
+    color: #333333;
+}
+
+.unshare-button {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8em;
+    transition: background-color 0.2s;
+}
+
+.unshare-button:hover:not(:disabled) {
+    background: #c82333;
+}
+
+.unshare-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.list-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.list-actions button {
+    padding: 8px 16px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.list-actions button:hover {
+    background: #0056b3;
+}
+
+.list-owner {
+    font-style: italic;
+    color: #666666;
+}
+
+.list-type {
+    font-size: 0.9em;
+    color: #666666;
+}

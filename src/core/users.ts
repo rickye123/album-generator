@@ -16,3 +16,19 @@ export async function getCurrentUserId() {
     }
     return undefined;
 }
+
+export async function getCurrentUserEmail() {
+    const user = await fetchUser();
+    if (user && user.signInDetails) {
+        return user.signInDetails.loginId; // This is typically the email
+    }
+    return undefined;
+}
+
+export async function getCurrentUsername() {
+    const user = await fetchUser();
+    if (user) {
+        return user.username;
+    }
+    return undefined;
+}

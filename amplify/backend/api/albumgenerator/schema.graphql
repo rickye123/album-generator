@@ -7,6 +7,8 @@ type List @model {
   name: String!
   albums: [AlbumList] @hasMany(indexName: "byList", fields: ["id"])
   userId: String! @index(name: "byUser", queryField: "listsByUser")
+  isPublic: Boolean
+  sharedWith: [String]
 }
 
 type Album @model {
@@ -43,4 +45,7 @@ type ListeningPileEntry @model {
 
 type Mutation {
   addAlbumToList(albumId: ID!, listId: ID!): List
+  shareList(listId: ID!, userId: String!): List
+  unshareList(listId: ID!, userId: String!): List
+  toggleListVisibility(listId: ID!, isPublic: Boolean!): List
 }

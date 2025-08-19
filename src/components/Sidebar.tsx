@@ -11,6 +11,7 @@ const Sidebar: React.FC<SidebarProps> = ({ user, signOut }) => {
     const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState(false);
     const [isMediaOpen, setIsMediaOpen] = useState(false); // State for Media dropdown
+    const [isCollectionsOpen, setIsCollectionsOpen] = useState(false); // State for Collections dropdown
     const [showBurgerButton, setShowBurgerButton] = useState(true);
     const [theme] = useState<'light' | 'dark'>(() => {
         // Load theme preference from localStorage or default to 'light'
@@ -27,6 +28,10 @@ const Sidebar: React.FC<SidebarProps> = ({ user, signOut }) => {
 
     const toggleMediaDropdown = () => {
         setIsMediaOpen(!isMediaOpen);
+    };
+
+    const toggleCollectionsDropdown = () => {
+        setIsCollectionsOpen(!isCollectionsOpen);
     };
 
     const handleScroll = () => {
@@ -80,10 +85,15 @@ const Sidebar: React.FC<SidebarProps> = ({ user, signOut }) => {
                                 Albums
                             </Link>
                         </li>
-                        <li>
-                            <Link to="/lists" onClick={toggleSidebar}>
-                                Collections
-                            </Link>
+                        {/* Collections Dropdown */}
+                        <li className={styles['dropdown']}>
+                            <button className={styles['dropdown-toggle']} onClick={toggleCollectionsDropdown}>
+                                Collections {isCollectionsOpen ? '▲' : '▼'}
+                            </button>
+                            <ul className={`${styles['submenu']} ${isCollectionsOpen ? styles['open'] : ''}`}>
+                                <li><Link to="/lists" onClick={toggleSidebar}>My Collections</Link></li>
+                                <li><Link to="/shared-collections" onClick={toggleSidebar}>Shared Collections</Link></li>
+                            </ul>
                         </li>
                         <li>
                             <Link to="/queue" onClick={toggleSidebar}>

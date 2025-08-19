@@ -44,9 +44,7 @@ const AlbumPage = () => {
         const loadDetails = async () => {
             if (album) {
                 if (album.spotifyUrl) {
-                    console.log('Fetching Spotify details for album:', album.spotifyUrl);
                     const spotifyInfo = await fetchSpotifyAlbumDetails(extractSpotifyAlbumId(album.spotifyUrl));
-                    console.log('Spotify info:', spotifyInfo);
                     setSpotifyDetails(spotifyInfo);
                 }
 
@@ -64,7 +62,6 @@ const AlbumPage = () => {
 
             try {
                 await updateAlbumDetailsByUser(updatedAlbum, userId!);
-                console.log('Album updated successfully');
             } catch (error) {
                 console.error('Failed to update album:', error);
             }

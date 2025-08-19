@@ -74,7 +74,6 @@ const Lists: React.FC = () => {
             if (!confirmed) return;
             // get album list entry (if one exists) and delete it
             const results = await fetchAlbumListEntriesForListId(id);
-            console.log('Result: ', results);
             if (results) {
                 // delete each album list entry
                 results.forEach(async (element: { id: string; }) => {

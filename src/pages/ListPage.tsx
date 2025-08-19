@@ -16,6 +16,7 @@ import { getCurrentUserId } from '../core/users';
 import { getAlbumsByUser } from '../service/dataAccessors/albumDataAccesor';
 import { addAlbumToListForUser, getAlbumsByListId, getUnplayedAlbumsInList, togglePlayedAlbum } from '../service/dataAccessors/albumListDataAccessor';
 import { deleteAlbumFromListForUser } from '../service/dataAccessors/listDataAccessor';
+import SharingControls from '../components/SharingControls';
 
 const ListPage: React.FC = () => {
     const { listId } = useParams<{ listId: string }>();
@@ -39,6 +40,7 @@ const ListPage: React.FC = () => {
     });
 
     const [showAddAlbumOverlay, setShowAddAlbumOverlay] = useState(false);
+    const [showSharingControls, setShowSharingControls] = useState(false);
     // Use the appropriate styles based on the current theme
     const styles = theme === 'dark' ? darkStyles : lightStyles;
     useEffect(() => {
@@ -48,6 +50,7 @@ const ListPage: React.FC = () => {
                 setUserId(userId || null);
                 setLoading(true);
                 const foundList = await getAlbumsByListId(listId!);
+                console.log('Found list', foundList);
                 setList(foundList || null);
             } catch (err) {
                 console.error('Error fetching collection:', err);
@@ -295,14 +298,36 @@ const ListPage: React.FC = () => {
 
     return (
         <div className={styles['album-list-page']}>
-            <h1 className={styles['list-page-title']}
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
-                onTouchStart={handleTouchStart}
-                onTouchEnd={handleTouchEnd}
-            >
-                {list?.name}
-            </h1>
+            <div className={styles['list-header']}>
+                <h1 className={styles['list-page-title']}
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
+                    onTouchStart={handleTouchStart}
+                    onTouchEnd={handleTouchEnd}
+                >
+                    {list?.name}
+                </h1>
+                <div className={styles['list-actions']}>
+                    <button onClick={() => setShowSharingControls(!showSharingControls)}>
+                        Share Collection
+                    </button>
+                </div>
+            </div>
+
+            {showSharingControls && list && (
+                <SharingControls
+                    listId={list.id}
+                    isPublic={list.isPublic || false}
+                    sharedWith={list.sharedWith || []}
+                    userId={userId || ''}
+                    onUpdate={() => {
+                        // Refresh list data
+                        window.location.reload();
+                    }}
+                    theme={theme}
+                />
+            )}
+
             {!loading && showTooltip && (
                 <div className={styles['tooltip']}>
                     <p>Total Albums: {getStats().totalAlbums}</p>

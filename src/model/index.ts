@@ -39,6 +39,9 @@ export interface ListData {
     id: string;
     name: string;
     albums: AlbumListData[];
+    userId?: string;
+    isPublic?: boolean;
+    sharedWith?: string[];
 }
 
 export interface ListeningPileEntry {

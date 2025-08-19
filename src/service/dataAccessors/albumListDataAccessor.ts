@@ -1,4 +1,4 @@
-import { addAlbumToList, fetchAlbumListEntriesForAlbumId, fetchAlbumListEntry, fetchAlbumListsWithNames, fetchAlbumsByListId, getUnplayedAlbumsInList as fetchUnplayedAlbumsInList, toggleHideAlbum, togglePlayedAlbumList } from "../../api/amplifyApi";
+import { addAlbumToList, fetchAlbumListEntriesForAlbumId, fetchAlbumListEntry, fetchAlbumListsWithNames, fetchAlbumsByListId, getUnplayedAlbumsInList as fetchUnplayedAlbumsInList, toggleHideAlbum, togglePlayedAlbumList, toggleListPublicVisibility, shareListWithUser, unshareListWithUser } from "../../api/amplifyApi";
 import { albumListStore, albumListWithNamesStore, cacheData, clearAlbumCache, clearListCache, getCachedData, unplayedAlbumsStore } from "../../core/caching";
 import { ListData } from "../../model";
 
@@ -53,4 +53,19 @@ export const toggleHideAlbumForUser = async (userId: string, albumId: string, hi
 export const addAlbumToListForUser = async (albumId: string, listId: string, userId: string) => {
     clearListCache(userId, listId);
     return await addAlbumToList(albumId, listId, userId);
+}
+
+export const toggleListPublicVisibilityForUser = async (userId: string, listId: string, isPublic: boolean) => {
+    clearListCache(userId, listId);
+    return await toggleListPublicVisibility(listId, isPublic);
+}
+
+export const shareListForUser = async (userId: string, listId: string, usernameOrEmail: string) => {
+    clearListCache(userId, listId);
+    return await shareListWithUser(listId, usernameOrEmail);
+}
+
+export const unshareListForUser = async (userId: string, listId: string, usernameOrEmail: string) => {
+    clearListCache(userId, listId);
+    return await unshareListWithUser(listId, usernameOrEmail);
 }

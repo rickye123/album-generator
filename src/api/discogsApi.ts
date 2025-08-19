@@ -34,7 +34,6 @@ export const fetchVinylRecords = async (albumName: string, artistName: string) =
 
         // Step 2: Get marketplace listings for each release
         for (const release of releases) {
-            console.log(`Fetching marketplace data for release ${release.id}`);
             const releaseId = release.id;
 
             try {
@@ -44,7 +43,6 @@ export const fetchVinylRecords = async (albumName: string, artistName: string) =
                         secret: CONSUMER_SECRET,
                     }
                 });
-                console.log(`Marketplace data for release ${releaseId}:`, marketplaceResponse.data);
 
                 const listings = marketplaceResponse.data.listings;
 

@@ -66,8 +66,6 @@ const ListeningPile = () => {
 
         const updatedPile = arrayMove(listeningPile, index, index - 1);
         setListeningPile(updatedPile);
-
-        console.log(`Reordering ${id} to index ${index - 1}`);
         try {
             await reorderListeningPile(id, index - 1);
         } catch (error) {
@@ -81,8 +79,6 @@ const ListeningPile = () => {
 
         const updatedPile = arrayMove(listeningPile, index, index + 1);
         setListeningPile(updatedPile);
-
-        console.log(`Reordering ${id} to index ${index + 1}`);
         try {
             await reorderListeningPile(id, index + 1);
         } catch (error) {

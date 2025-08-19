@@ -18,7 +18,6 @@ const LandingPage = () => {
     useEffect(() => {
         const loadRandomAlbum = async () => {
             const userId = await getCurrentUserId();
-            console.log('User id is ', userId);
             setLoading(true);
             if (userId) {
                 const randomAlbum = await getRandomAlbum(userId);

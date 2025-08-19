@@ -1,14 +1,17 @@
 import { GraphQLAPI, graphqlOperation } from '@aws-amplify/api-graphql';
-import { createAlbum, createList, deleteList, deleteAlbum, createAlbumList, updateAlbum, deleteListeningPileEntry, createListeningPileEntry } from '../graphql/mutations';
-import { albumListsByAlbumIdAndId, albumListsByListIdAndId, albumsByUser, getAlbum, listAlbumLists, listLists } from '../graphql/queries';
+import { createAlbum, createList, deleteList, deleteAlbum, createAlbumList, updateAlbum, deleteListeningPileEntry, createListeningPileEntry, shareList, unshareList, toggleListVisibility } from '../graphql/mutations';
+import { albumListsByAlbumIdAndId, albumListsByListIdAndId, albumsByUser, getAlbum, listAlbumLists, listLists, getList } from '../graphql/queries';
 import { GraphQLResult } from '@aws-amplify/api-graphql';
 import { Amplify } from '@aws-amplify/core';
 import { Observable } from 'rxjs';
 import { AlbumData, AlbumListData, ListData, ListeningPileEntry } from '../model';
 import { List } from '../API';
-import { getUnplayedAlbums, customListListeningPileEntries as listListeningPileEntries, listListsWithAlbums, customAlbumListsByUser, customAlbumListsByAlbumIdAndId } from '../graphql/customQueries';
+import { getUnplayedAlbums, customListListeningPileEntries as listListeningPileEntries, listListsWithAlbums, customAlbumListsByUser, customAlbumListsByAlbumIdAndId, sharedListsByUser } from '../graphql/customQueries';
 import { customDeleteAlbumList, toggleHidden, togglePlayed } from '../graphql/customMutations';
 import { uploadData } from '@aws-amplify/storage';
+import { updateList } from '../graphql/mutations';
+import { getCurrentUserEmail, getCurrentUsername } from '../core/users';
+import { albumStore } from '../core/caching';
 
 export const updateAlbumDetails = async (albumData: AlbumData): Promise<GraphQLResult<any>> => {
     try {
@@ -203,6 +206,8 @@ export const fetchAlbumsByListId = async (listId: string): Promise<ListData> => 
 
     const fetchAlbumsForList = async () => {
         let albumName = null;
+        let sharedWith = null;
+        let isPublic = null;
         do {
             try {
                 const response = await GraphQLAPI.graphql(
@@ -221,8 +226,11 @@ export const fetchAlbumsByListId = async (listId: string): Promise<ListData> => 
                 const typedResponse = response as GraphQLResult<any>;
                 const listData = typedResponse.data?.listLists?.items[0];
 
+                console.log('List Data:', listData);
                 if (listData?.albums) {
                     albumName = listData.name;
+                    sharedWith = listData.sharedWith;
+                    isPublic = listData.isPublic;
                     allAlbums = allAlbums.concat(
                         listData.albums.items.map((albumListItem: AlbumListData) => ({
                             album: {
@@ -251,7 +259,9 @@ export const fetchAlbumsByListId = async (listId: string): Promise<ListData> => 
         return {
             id: listId,
             name: albumName,
-            albums: allAlbums
+            sharedWith,
+            isPublic,
+            albums: allAlbums,
         };
     };
 
@@ -260,7 +270,9 @@ export const fetchAlbumsByListId = async (listId: string): Promise<ListData> => 
         return {
             id: albums.id,
             name: albums.name,
-            albums: albums.albums
+            albums: albums.albums,
+            sharedWith: albums.sharedWith,
+            isPublic: albums.isPublic
         };
     } catch (error) {
         console.error('Error fetching list and albums:', error);
@@ -869,3 +881,205 @@ export async function getRecentAlbums(userId: string) {
         throw new Error('Failed to fetch recent albums.');
     }
 }
+
+export const shareListWithUser = async (listId: string, usernameOrEmail: string) => {
+    try {
+        // For now, we'll use the usernameOrEmail as the identifier
+        // In a real implementation, you'd resolve this to a userId
+        // This is a simplified approach until we have proper user lookup
+
+        // First get the current list to see existing sharedWith array
+        const getResponse = await GraphQLAPI.graphql(
+            Amplify as any,
+            graphqlOperation(getList, { id: listId }),
+            {}
+        );
+
+        if (getResponse instanceof Observable) {
+            throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+        }
+
+        console.log('getResponse:', getResponse);
+        const typedResponse = getResponse as GraphQLResult<any>;
+        const existingList = typedResponse.data?.getList;
+
+        if (!existingList) {
+            throw new Error('List not found');
+        }
+
+        // Add the username/email to sharedWith array if not already present
+        const currentSharedWith = existingList.sharedWith || [];
+        if (!currentSharedWith.includes(usernameOrEmail)) {
+            const updatedSharedWith = [...currentSharedWith, usernameOrEmail];
+
+            const response = await GraphQLAPI.graphql(
+                Amplify as any,
+                graphqlOperation(updateList, {
+                    input: {
+                        id: listId,
+                        sharedWith: updatedSharedWith
+                    }
+                }),
+                {}
+            );
+
+            if (response instanceof Observable) {
+                throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+            }
+
+            return response;
+        }
+
+        return { data: { updateList: existingList } };
+    } catch (error) {
+        console.error('Error sharing list:', error);
+        throw error;
+    }
+};
+
+export const unshareListWithUser = async (listId: string, usernameOrEmail: string) => {
+    try {
+        // First get the current list to see existing sharedWith array
+        const getResponse = await GraphQLAPI.graphql(
+            Amplify as any,
+            graphqlOperation(getList, { id: listId }),
+            {}
+        );
+
+        if (getResponse instanceof Observable) {
+            throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+        }
+
+        const typedResponse = getResponse as GraphQLResult<any>;
+        const existingList = typedResponse.data?.getList;
+
+        if (!existingList) {
+            throw new Error('List not found');
+        }
+
+        // Remove the username/email from sharedWith array
+        const currentSharedWith = existingList.sharedWith || [];
+        const updatedSharedWith = currentSharedWith.filter((id: string) => id !== usernameOrEmail);
+
+        const response = await GraphQLAPI.graphql(
+            Amplify as any,
+            graphqlOperation(updateList, {
+                input: {
+                    id: listId,
+                    sharedWith: updatedSharedWith
+                }
+            }),
+            {}
+        );
+
+        if (response instanceof Observable) {
+            throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+        }
+
+        return response;
+    } catch (error) {
+        console.error('Error unsharing list:', error);
+        throw error;
+    }
+};
+
+export const toggleListPublicVisibility = async (listId: string, isPublic: boolean) => {
+    try {
+        const response = await GraphQLAPI.graphql(
+            Amplify as any,
+            graphqlOperation(updateList, {
+                input: {
+                    id: listId,
+                    isPublic: isPublic
+                }
+            }),
+            {}
+        );
+
+        if (response instanceof Observable) {
+            throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+        }
+
+        return response;
+    } catch (error) {
+        console.error('Error toggling list visibility:', error);
+        throw error;
+    }
+};
+
+export const fetchSharedLists = async (currentUserId: string) => {
+    try {
+        const username = await getCurrentUsername();
+        const email = await getCurrentUserEmail();
+
+        console.log('Fetching shared lists for username:', username, 'and email:', email);
+
+        let allLists: any[] = [];
+        let nextToken: string | null = null;
+
+        // Check for lists shared with username
+        if (username) {
+            do {
+                const response = await GraphQLAPI.graphql(
+                    Amplify as any,
+                    graphqlOperation(sharedListsByUser, { usernameOrEmail: username, limit: 100, nextToken }),
+                    {}
+                );
+
+                console.log('Response from sharedListsByUser:', response);
+
+                if (response instanceof Observable) {
+                    throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+                }
+
+                const typedResponse = response as GraphQLResult<any>;
+                if (typedResponse.data?.listLists) {
+                    // Filter out lists owned by current user
+                    const filteredLists = typedResponse.data.listLists.items.filter(
+                        (list: any) => list.userId !== currentUserId
+                    );
+                    allLists = allLists.concat(filteredLists);
+                    nextToken = typedResponse.data.listLists.nextToken;
+                } else {
+                    nextToken = null;
+                }
+            } while (nextToken);
+        }
+
+        // Check for lists shared with email (if different from username)
+        if (email && email !== username) {
+            nextToken = null;
+            do {
+                const response = await GraphQLAPI.graphql(
+                    Amplify as any,
+                    graphqlOperation(sharedListsByUser, { usernameOrEmail: email, limit: 100, nextToken }),
+                    {}
+                );
+
+                console.log('Response from sharedListsByUser with email:', response);
+
+                if (response instanceof Observable) {
+                    throw new Error('Expected a non-subscription query/mutation but received a subscription.');
+                }
+
+                const typedResponse = response as GraphQLResult<any>;
+                if (typedResponse.data?.listLists) {
+                    // Filter out lists owned by current user and duplicates
+                    const filteredLists = typedResponse.data.listLists.items.filter(
+                        (list: any) => list.userId !== currentUserId &&
+                            !allLists.some((existing: any) => existing.id === list.id)
+                    );
+                    allLists = allLists.concat(filteredLists);
+                    nextToken = typedResponse.data.listLists.nextToken;
+                } else {
+                    nextToken = null;
+                }
+            } while (nextToken);
+        }
+
+        return allLists;
+    } catch (error) {
+        console.error('Error fetching shared lists:', error);
+        return [];
+    }
+};

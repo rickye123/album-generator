@@ -28,7 +28,6 @@ const ArtistsPage = () => {
 
                     return stripThePrefix(a).localeCompare(stripThePrefix(b));
                 });
-                console.log('Unique artists:', uniqueArtists);
                 setArtists(uniqueArtists);
             } catch (error) {
                 console.error('Error fetching artists', error);

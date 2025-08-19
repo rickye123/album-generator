@@ -17,6 +17,8 @@ export const getList = /* GraphQL */ `query GetList($id: ID!) {
       __typename
     }
     userId
+    isPublic
+    sharedWith
     createdAt
     updatedAt
     __typename
@@ -33,6 +35,8 @@ export const listLists = /* GraphQL */ `query ListLists(
       id
       name
       userId
+      isPublic
+      sharedWith
       createdAt
       updatedAt
       __typename
@@ -124,6 +128,8 @@ export const getAlbumList = /* GraphQL */ `query GetAlbumList($id: ID!) {
       id
       name
       userId
+      isPublic
+      sharedWith
       createdAt
       updatedAt
       __typename
@@ -236,6 +242,8 @@ export const listsByUser = /* GraphQL */ `query ListsByUser(
       id
       name
       userId
+      isPublic
+      sharedWith
       createdAt
       updatedAt
       __typename

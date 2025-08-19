@@ -4,6 +4,8 @@ query ListListsWithAlbums($filter: ModelListFilterInput, $limit: Int, $nextToken
     items {
       id
       name
+      sharedWith
+      isPublic
       albums(limit: $albumLimit, nextToken: $albumNextToken) {
         items {
           id
@@ -29,7 +31,7 @@ query ListListsWithAlbums($filter: ModelListFilterInput, $limit: Int, $nextToken
   }
 }`;
 
-export const customAlbumListsByUser = /* GraphQL */ `query AlbumListsByUser(
+export const customAlbumListsByUser = /* GraphQL */ `query CustomAlbumListsByUser(
   $userId: String!
   $sortDirection: ModelSortDirection
   $filter: ModelListFilterInput
@@ -46,6 +48,8 @@ export const customAlbumListsByUser = /* GraphQL */ `query AlbumListsByUser(
     items {
       id
       name
+      sharedWith
+      isPublic
       albums(limit: $albumLimit, nextToken: $albumNextToken) {
         items {
           id
@@ -198,3 +202,33 @@ export const CustomAlbumListsByUserFiltered = /* GraphQL */ `query AlbumListsByU
   }
 }
 `;
+
+export const sharedListsByUser = /* GraphQL */ `query SharedListsByUser(
+  $usernameOrEmail: String!
+  $limit: Int
+  $nextToken: String
+) {
+  listLists(
+    filter: {
+      or: [
+        { isPublic: { eq: true } }
+        { sharedWith: { contains: $usernameOrEmail } }
+      ]
+    }
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      name
+      userId
+      isPublic
+      sharedWith
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}`;

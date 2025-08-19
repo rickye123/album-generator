@@ -104,10 +104,14 @@ const AlbumTable: React.FC<AlbumTableProps> = ({
                             onTouchStart={() => handleTouchStart(albumList.album.id)}
                             onTouchEnd={() => handleTouchEnd}>
                             <td className={styles['artist-album-cell']}>
-                                <Link to={`/albums/${albumList.album.id}`}>
+                                {!readOnly ? (
+                                    <Link to={`/albums/${albumList.album.id}`}>
+                                        <img src={albumList.album.imageUrl} alt={albumList.album.name} className={styles['list-page-album-image']} />
+                                    </Link>
+                                ) : (
                                     <img src={albumList.album.imageUrl} alt={albumList.album.name} className={styles['list-page-album-image']} />
-                                </Link>
-                                {activeTooltip === albumList.album.id && lists && (
+                                )}
+                                {!readOnly && activeTooltip === albumList.album.id && lists && (
                                     <div className={styles['tooltip-inline']}>
                                         <p>{lists}</p>
                                     </div>

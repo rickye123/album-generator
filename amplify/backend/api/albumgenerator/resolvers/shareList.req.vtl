@@ -1,0 +1,19 @@
+## Request mapping template for shareList mutation
+## File: shareList.req.vtl
+{
+  "version": "2017-02-28",
+  "operation": "UpdateItem",
+  "key": {
+    "id": $util.dynamodb.toDynamoDBJson($ctx.args.listId)
+  },
+  "update": {
+    "expression": "SET #sharedWith = list_append(if_not_exists(#sharedWith, :empty_list), :userId)",
+    "expressionNames": {
+      "#sharedWith": "sharedWith"
+    },
+    "expressionValues": {
+      ":userId": $util.dynamodb.toDynamoDBJson([$ctx.args.userId]),
+      ":empty_list": $util.dynamodb.toDynamoDBJson([])
+    }
+  }
+}
